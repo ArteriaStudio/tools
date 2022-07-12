@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "DataConsole (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "DataConsole (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
