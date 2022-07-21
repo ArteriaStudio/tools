@@ -5,26 +5,9 @@
     xmlns:local="using:DataConsole"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
-	xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
     mc:Ignorable="d">
 
-    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-		
-
-		<muxc:TreeView>
-			<muxc:TreeView.RootNodes>
-				<muxc:TreeViewNode Content="Flavors">
-					<muxc:TreeViewNode.Children>
-						<muxc:TreeViewNode Content="Vanilla"/>
-					</muxc:TreeViewNode.Children>
-				</muxc:TreeViewNode>
-			</muxc:TreeView.RootNodes>
-		</muxc:TreeView>
-
-		<Button x:Name="myButton" Click="myButton_Click">Click Me</Button>
-
-		<controls:DataGrid x:Name="WinUI3DataGrid" />
-
+	<StackPanel >
+		<TextBox Width="500" Header="Notes" PlaceholderText="Type your notes here"/>
 	</StackPanel>
 </Window>
