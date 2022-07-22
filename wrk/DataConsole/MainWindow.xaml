@@ -4,10 +4,36 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:DataConsole"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:muxc="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	mc:Ignorable="d">
 
-	<StackPanel >
-		<TextBox Width="500" Header="Notes" PlaceholderText="Type your notes here"/>
-	</StackPanel>
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="3*"/>
+			<ColumnDefinition Width="5*"/>
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="2*"/>
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
+
+		<Border Background="#2f5cb6"/>
+		<Border Grid.Column ="1" Background="#1f3d7a"/>
+		<Border Grid.Row="1" Grid.ColumnSpan="2" Background="#152951"/>
+
+		<Image Grid.Column="0" Margin="8" Source="Assets/LandscapeImage8.jpg"/>
+		<Image Grid.Column="0" Grid.Row="1" Margin="8" Source="Assets/Portlate.jpg"/>
+		
+		<StackPanel Grid.Column="1" Margin="40,0,0,0" VerticalAlignment="Center">
+			<TextBlock Foreground="White" FontSize="25" Text="親切な人に"/>
+			<TextBlock Foreground="White" FontSize="25" Text="見つけてもらってね。"/>
+			<TextBlock Foreground="White" FontSize="25" Text=""/>
+		</StackPanel>
+
+		<StackPanel Grid.Row="1" Grid.ColumnSpan="2" Orientation="Horizontal"
+            HorizontalAlignment="Center" VerticalAlignment="Center">
+			<TextBlock Foreground="White" FontSize="25" Text="優しそうに聞こえても、"/>
+			<TextBlock Foreground="White" FontSize="25" Text="これは 犯罪者の台詞です。"/>
+		</StackPanel>
+	</Grid>
 </Window>
