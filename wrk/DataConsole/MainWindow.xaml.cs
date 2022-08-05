@@ -32,34 +32,34 @@ namespace DataConsole
 		{
 			//myButton.Content = "Clicked";
 		}
-        private void TwoPaneView_ModeChanged(Microsoft.UI.Xaml.Controls.TwoPaneView sender, object args)
-        {
-            /*
-            // Remove details content from it's parent panel.
-            ((Panel)DetailsContent.Parent).Children.Remove(DetailsContent);
-            // Set Normal visual state.
-            Windows.UI.Xaml.VisualStateManager.GoToState(this, "Normal", true);
+		private void TwoPaneView_ModeChanged(Microsoft.UI.Xaml.Controls.TwoPaneView sender, object args)
+		{
+			/*
+			// Remove details content from it's parent panel.
+			((Panel)DetailsContent.Parent).Children.Remove(DetailsContent);
+			// Set Normal visual state.
+			Windows.UI.Xaml.VisualStateManager.GoToState(this, "Normal", true);
 
-            // Single pane
-            if (sender.Mode == Microsoft.UI.Xaml.Controls.TwoPaneViewMode.SinglePane)
-            {
-                // Add the details content to Pane1.
-                Pane1StackPanel.Children.Add(DetailsContent);
-            }
-            // Dual pane.
-            else
-            {
-                // Put details content in Pane2.
-                Pane2Root.Children.Add(DetailsContent);
+			// Single pane
+			if (sender.Mode == Microsoft.UI.Xaml.Controls.TwoPaneViewMode.SinglePane)
+			{
+				// Add the details content to Pane1.
+				Pane1StackPanel.Children.Add(DetailsContent);
+			}
+			// Dual pane.
+			else
+			{
+				// Put details content in Pane2.
+				Pane2Root.Children.Add(DetailsContent);
 
-                // If also in Wide mode, set Wide visual state
-                // to constrain the width of the image to 2*.
-                if (sender.Mode == Microsoft.UI.Xaml.Controls.TwoPaneViewMode.Wide)
-                {
-                    Windows.UI.Xaml.VisualStateManager.GoToState(this, "Wide", true);
-                }
-            }
-            */
-        }
-    }
+				// If also in Wide mode, set Wide visual state
+				// to constrain the width of the image to 2*.
+				if (sender.Mode == Microsoft.UI.Xaml.Controls.TwoPaneViewMode.Wide)
+				{
+					Windows.UI.Xaml.VisualStateManager.GoToState(this, "Wide", true);
+				}
+			}
+			*/
+		}
+	}
 }

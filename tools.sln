@@ -7,7 +7,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DeleteProfile", "wrk\Delete
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CheckStatus", "wrk\CheckStatus\CheckStatus.vcxproj", "{E6EA92DA-15A1-4E60-9170-B355A2910DE4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataConsole", "wrk\DataConsole\DataConsole.csproj", "{9B963DC7-D11F-406F-AFF6-28190044C3EA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataConsole", "wrk\DataConsole\DataConsole.csproj", "{9B963DC7-D11F-406F-AFF6-28190044C3EA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LookupBookmark", "wrk\LookupBookmark\LookupBookmark.csproj", "{922189CC-25C7-4BD7-AE1E-3591205E5BB4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -93,6 +95,36 @@ Global
 		{9B963DC7-D11F-406F-AFF6-28190044C3EA}.Release|x86.ActiveCfg = Release|x86
 		{9B963DC7-D11F-406F-AFF6-28190044C3EA}.Release|x86.Build.0 = Release|x86
 		{9B963DC7-D11F-406F-AFF6-28190044C3EA}.Release|x86.Deploy.0 = Release|x86
+		{922189CC-25C7-4BD7-AE1E-3591205E5BB4}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{922189CC-25C7-4BD7-AE1E-3591205E5BB4}.Debug|Any CPU.Build.0 = Debug|x64
+		{922189CC-25C7-4BD7-AE1E-3591205E5BB4}.Debug|Any CPU.Deploy.0 = Debug|x64
+		{922189CC-25C7-4BD7-AE1E-3591205E5BB4}.Debug|ARM.ActiveCfg = Debug|x64
+		{922189CC-25C7-4BD7-AE1E-3591205E5BB4}.Debug|ARM.Build.0 = Debug|x64
+		{922189CC-25C7-4BD7-AE1E-3591205E5BB4}.Debug|ARM.Deploy.0 = Debug|x64
+		{922189CC-25C7-4BD7-AE1E-3591205E5BB4}.Debug|ARM64.ActiveCfg = Debug|arm64
+		{922189CC-25C7-4BD7-AE1E-3591205E5BB4}.Debug|ARM64.Build.0 = Debug|arm64
+		{922189CC-25C7-4BD7-AE1E-3591205E5BB4}.Debug|ARM64.Deploy.0 = Debug|arm64
+		{922189CC-25C7-4BD7-AE1E-3591205E5BB4}.Debug|x64.ActiveCfg = Debug|x64
+		{922189CC-25C7-4BD7-AE1E-3591205E5BB4}.Debug|x64.Build.0 = Debug|x64
+		{922189CC-25C7-4BD7-AE1E-3591205E5BB4}.Debug|x64.Deploy.0 = Debug|x64
+		{922189CC-25C7-4BD7-AE1E-3591205E5BB4}.Debug|x86.ActiveCfg = Debug|x86
+		{922189CC-25C7-4BD7-AE1E-3591205E5BB4}.Debug|x86.Build.0 = Debug|x86
+		{922189CC-25C7-4BD7-AE1E-3591205E5BB4}.Debug|x86.Deploy.0 = Debug|x86
+		{922189CC-25C7-4BD7-AE1E-3591205E5BB4}.Release|Any CPU.ActiveCfg = Release|x64
+		{922189CC-25C7-4BD7-AE1E-3591205E5BB4}.Release|Any CPU.Build.0 = Release|x64
+		{922189CC-25C7-4BD7-AE1E-3591205E5BB4}.Release|Any CPU.Deploy.0 = Release|x64
+		{922189CC-25C7-4BD7-AE1E-3591205E5BB4}.Release|ARM.ActiveCfg = Release|x64
+		{922189CC-25C7-4BD7-AE1E-3591205E5BB4}.Release|ARM.Build.0 = Release|x64
+		{922189CC-25C7-4BD7-AE1E-3591205E5BB4}.Release|ARM.Deploy.0 = Release|x64
+		{922189CC-25C7-4BD7-AE1E-3591205E5BB4}.Release|ARM64.ActiveCfg = Release|arm64
+		{922189CC-25C7-4BD7-AE1E-3591205E5BB4}.Release|ARM64.Build.0 = Release|arm64
+		{922189CC-25C7-4BD7-AE1E-3591205E5BB4}.Release|ARM64.Deploy.0 = Release|arm64
+		{922189CC-25C7-4BD7-AE1E-3591205E5BB4}.Release|x64.ActiveCfg = Release|x64
+		{922189CC-25C7-4BD7-AE1E-3591205E5BB4}.Release|x64.Build.0 = Release|x64
+		{922189CC-25C7-4BD7-AE1E-3591205E5BB4}.Release|x64.Deploy.0 = Release|x64
+		{922189CC-25C7-4BD7-AE1E-3591205E5BB4}.Release|x86.ActiveCfg = Release|x86
+		{922189CC-25C7-4BD7-AE1E-3591205E5BB4}.Release|x86.Build.0 = Release|x86
+		{922189CC-25C7-4BD7-AE1E-3591205E5BB4}.Release|x86.Deploy.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

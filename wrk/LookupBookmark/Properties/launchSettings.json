@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "LookupBookmark (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "LookupBookmark (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
