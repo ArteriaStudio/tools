@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "StatusBook (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "StatusBook (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
