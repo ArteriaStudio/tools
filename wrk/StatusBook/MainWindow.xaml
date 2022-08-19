@@ -7,42 +7,13 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	mc:Ignorable="d">
 
-	<Grid>
-
-		<Grid.RowDefinitions>
-			<RowDefinition Height="*" />
-			<RowDefinition Height="*" />
-			<RowDefinition Height="*" />
-		</Grid.RowDefinitions>
-		
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="240" />
-			<ColumnDefinition Width="*" />
-			<ColumnDefinition Width="240" />
-		</Grid.ColumnDefinitions>
-
-		<StackPanel Orientation="Vertical" Grid.Column="0">
-			<TextBlock>テキストブロック 1</TextBlock>
-			<TextBlock>テキストブロック 2</TextBlock>
-			<TextBlock>テキストブロック 3</TextBlock>
-			<TextBlock>テキストブロック 4</TextBlock>
-			<TextBlock>テキストブロック 5</TextBlock>
-		</StackPanel>
-		<StackPanel Orientation="Vertical" Grid.Column="1">
-			<TextBlock>テキストブロック 6</TextBlock>
-			<TextBlock>テキストブロック 7</TextBlock>
-			<TextBlock>テキストブロック 8</TextBlock>
-			<TextBlock>テキストブロック 9</TextBlock>
-			<TextBlock>テキストブロック 10</TextBlock>
-		</StackPanel>
-		<StackPanel Orientation="Vertical" Grid.Column="2">
-			<TextBlock>テキストブロック 6</TextBlock>
-			<TextBlock>テキストブロック 7</TextBlock>
-			<TextBlock>テキストブロック 8</TextBlock>
-			<TextBlock>テキストブロック 9</TextBlock>
-			<TextBlock>テキストブロック 10</TextBlock>
-		</StackPanel>
-
-	</Grid>
+	<StackPanel Orientation="Horizontal">
+		<NavigationView Width="320">
+			
+		</NavigationView>
+		<Frame Name="FragmentsFrame">
+			
+		</Frame>
+	</StackPanel>
 	
 </Window>

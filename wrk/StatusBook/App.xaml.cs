@@ -42,8 +42,37 @@ namespace StatusBook
 		/// <param name="args">Details about the launch request and process.</param>
 		protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
 		{
+			/*
+			Frame rootFrame = Window.Current.Content as Frame;
+			if (rootFrame == null) {
+				rootFrame = new Frame();
+				rootFrame.NavigationFailed += RootFrame_NavigationFailed;
+
+				/*
+				ApplicationExecutionState	eState = args.PreviousExecutionState;
+				if (args.PreviousExecutionState == ApplicationExecutionState.Terminated)
+				{
+					//
+				}
+				*
+				Window.Current.Content = rootFrame;
+			}
+
+			if (rootFrame.Content == null)
+			{
+				rootFrame.Navigate(typeof(StartPage), args.Arguments);
+			}
+
+			Window.Current.Activate();
+			*/
+
 			m_window = new MainWindow();
 			m_window.Activate();
+		}
+
+		protected void RootFrame_NavigationFailed(object sender, NavigationFailedEventArgs e)
+		{
+			throw new NotImplementedException();
 		}
 
 		private Window m_window;

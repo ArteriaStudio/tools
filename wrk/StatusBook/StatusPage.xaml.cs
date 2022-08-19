@@ -20,24 +20,17 @@ using Windows.Foundation.Collections;
 namespace StatusBook
 {
 	/// <summary>
-	/// An empty window that can be used on its own or navigated to within a Frame.
+	/// An empty page that can be used on its own or navigated to within a Frame.
 	/// </summary>
-	public sealed partial class MainWindow : Window
+	public sealed partial class StatusPage : Page
 	{
-		public MainWindow()
+		public StatusPage()
 		{
 			this.InitializeComponent();
-			this.FragmentsFrame.Navigate(typeof(StartPage));
 		}
-
 		private void myButton_Click(object sender, RoutedEventArgs e)
 		{
-			this.FragmentsFrame.Navigate(typeof(StatusPage));
-			/*
-			var pFrame = new Frame();
-//			pFrame.Navigate(typeof(StatusPage));
-			pFrame.Navigate(typeof(StatusPage), null, new DrillInNavigationTransitionInfo());
-			*/
+			this.Frame.Navigate(typeof(StartPage), null, new DrillInNavigationTransitionInfo());
 		}
 	}
 }

@@ -4,7 +4,6 @@ using Microsoft.UI.Xaml.Controls.Primitives;
 using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Media.Animation;
 using Microsoft.UI.Xaml.Navigation;
 using System;
 using System.Collections.Generic;
@@ -20,24 +19,24 @@ using Windows.Foundation.Collections;
 namespace StatusBook
 {
 	/// <summary>
-	/// An empty window that can be used on its own or navigated to within a Frame.
+	/// An empty page that can be used on its own or navigated to within a Frame.
 	/// </summary>
-	public sealed partial class MainWindow : Window
+	public sealed partial class StartPage : Page
 	{
-		public MainWindow()
+		public StartPage()
 		{
 			this.InitializeComponent();
-			this.FragmentsFrame.Navigate(typeof(StartPage));
 		}
 
 		private void myButton_Click(object sender, RoutedEventArgs e)
 		{
-			this.FragmentsFrame.Navigate(typeof(StatusPage));
+			this.Frame.Navigate(typeof(StatusPage));
 			/*
 			var pFrame = new Frame();
 //			pFrame.Navigate(typeof(StatusPage));
 			pFrame.Navigate(typeof(StatusPage), null, new DrillInNavigationTransitionInfo());
 			*/
 		}
+
 	}
 }
