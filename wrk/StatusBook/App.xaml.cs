@@ -75,6 +75,6 @@ namespace StatusBook
 			throw new NotImplementedException();
 		}
 
-		private Window m_window;
+		public Window m_window;
 	}
 }

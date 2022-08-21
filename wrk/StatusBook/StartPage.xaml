@@ -1,30 +1,37 @@
 ﻿<Page
-    x:Class="StatusBook.StartPage"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:StatusBook"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+	x:Class="StatusBook.StartPage"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:local="using:StatusBook"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	mc:Ignorable="d"
+	Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid>
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="1" />
+		</Grid.ColumnDefinitions>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="*" />
 		</Grid.RowDefinitions>
 
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="192" />
-			<ColumnDefinition Width="*" />
-			<ColumnDefinition Width="320" />
-		</Grid.ColumnDefinitions>
+		<!-- 幅に関する留意事項：自動（auto/default）にした場合、配置する要素を自動改行せず、全てを並べられる幅まで拡げる挙動を取る。（ウィンドウサイズから動的に寸法を指定する必要があると思われる：2022/08/21 Rink） -->
+		<GridView ItemsSource="{x:Bind pItems}">
+			<GridView.ItemTemplate>
+				<!-- DataTemplate x:DataType ： ItemSourceに指定したコレクションの要素にアクセスする時に用いるテンプレート引数型で指定したクラス名 -->
+				<DataTemplate x:DataType="local:Person">
+					<!-- TextBlock Text：{x:Bind変数 参照するメンバ名} -->
+					<TextBlock Text="{x:Bind Name}" />
+				</DataTemplate>
+			</GridView.ItemTemplate>
 
-		<TextBlock  Grid.Column="0">開始ページ</TextBlock>
-		<TextBlock  Grid.Column="1">コンテンツ</TextBlock>
-		<StackPanel Orientation="Vertical" Grid.Column="2">
-			<Button Click="myButton_Click">
-				<Image Source="D:/home/rink/projects/assets/pictures/portlate/a28239ab2f9f1765525b0f82a112edb8_2963473782977868483.jpg" />
-			</Button>
-		</StackPanel>
+			<GridView.ItemsPanel>
+				<ItemsPanelTemplate>
+					<ItemsWrapGrid Orientation="Horizontal" HorizontalAlignment="Center" />
+				</ItemsPanelTemplate>
+			</GridView.ItemsPanel>
+		</GridView>
 	</Grid>
 </Page>

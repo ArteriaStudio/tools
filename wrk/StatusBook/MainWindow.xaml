@@ -8,12 +8,15 @@
 	mc:Ignorable="d">
 
 	<StackPanel Orientation="Horizontal">
-		<NavigationView Width="320">
-			
+		<NavigationView PaneDisplayMode="LeftCompact">
+			<NavigationView.MenuItems>
+				<NavigationViewItem Content="1" />
+				<NavigationViewItem Content="2" />
+				<NavigationViewItem Content="3" />
+				<NavigationViewItem Content="4" />
+			</NavigationView.MenuItems>
+			<Frame Name="FragmentsFrame" />
 		</NavigationView>
-		<Frame Name="FragmentsFrame">
-			
-		</Frame>
 	</StackPanel>
 	
 </Window>
