@@ -30,8 +30,9 @@ namespace StatusBook
 
 			this.m_pNavigationView = this.Navigation;
 
+			this.FragmentsFrame.Navigate(typeof(ListupPage));
 //			this.FragmentsFrame.Navigate(typeof(StartPage));
-			this.FragmentsFrame.Navigate(typeof(SettingsPage));
+//			this.FragmentsFrame.Navigate(typeof(SettingsPage));
 
 //			this.SizeChanged += MainWindow_SizeChanged;
 		}
