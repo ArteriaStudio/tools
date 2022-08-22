@@ -8,12 +8,18 @@
 	mc:Ignorable="d">
 
 	<RelativePanel HorizontalAlignment="Left">
-		<NavigationView Name="Navigation" PaneDisplayMode="LeftCompact">
+		<NavigationView Name="Navigation" PaneDisplayMode="LeftCompact" x:Uid="AppTitle">
 			<NavigationView.MenuItems>
-				<NavigationViewItem Content="ダッシュボード" />
-				<NavigationViewItem Content="2" />
-				<NavigationViewItem Content="3" />
-				<NavigationViewItem Content="4" />
+				<NavigationViewItem x:Uid="DashBoard">
+					<NavigationViewItem.Icon>
+						<ImageIcon Source="Assets/dashboard_white_24dp.svg"></ImageIcon>
+					</NavigationViewItem.Icon>
+				</NavigationViewItem>
+				<NavigationViewItem x:Uid="Persons">
+					<NavigationViewItem.Icon>
+						<ImageIcon Source="Assets/people_white_24dp.svg"></ImageIcon>
+					</NavigationViewItem.Icon>
+				</NavigationViewItem>
 			</NavigationView.MenuItems>
 			<Frame Name="FragmentsFrame" />
 		</NavigationView>
