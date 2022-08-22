@@ -17,12 +17,12 @@
 
 		<NavigationView Name="Navigation" PaneDisplayMode="LeftCompact" x:Uid="AppTitle">
 			<NavigationView.MenuItems>
-				<NavigationViewItem x:Uid="DashBoard">
+				<NavigationViewItem x:Uid="DashBoard" Tag="DashBoard">
 					<NavigationViewItem.Icon>
 						<ImageIcon Source="Assets/dashboard_white_24dp.svg"></ImageIcon>
 					</NavigationViewItem.Icon>
 				</NavigationViewItem>
-				<NavigationViewItem x:Uid="Persons">
+				<NavigationViewItem x:Uid="Persons" Tag="Persons">
 					<NavigationViewItem.Icon>
 						<ImageIcon Source="Assets/people_white_24dp.svg"></ImageIcon>
 					</NavigationViewItem.Icon>

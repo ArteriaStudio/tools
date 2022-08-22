@@ -28,13 +28,30 @@ namespace StatusBook
 		{
 			this.InitializeComponent();
 
+			this.Navigation.SelectionChanged += MainWindow_SelectionChanged;
+
+
 			this.m_pNavigationView = this.Navigation;
 
-			this.FragmentsFrame.Navigate(typeof(ListupPage));
 //			this.FragmentsFrame.Navigate(typeof(StartPage));
+			this.FragmentsFrame.Navigate(typeof(StatusPage));
+//			this.FragmentsFrame.Navigate(typeof(ListupPage));
 //			this.FragmentsFrame.Navigate(typeof(SettingsPage));
 
 //			this.SizeChanged += MainWindow_SizeChanged;
+		}
+
+		private void MainWindow_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
+		{
+			var pSelectedItem = args.SelectedItem as NavigationViewItem;
+			System.Diagnostics.Debug.WriteLine("Args.SelectedItem = " + pSelectedItem.Tag);
+			if (pSelectedItem.Tag.Equals("DashBoard") == true)
+			{
+				;
+			} else if (pSelectedItem.Tag.Equals("Persons") == true)	{
+				;
+			}
+			
 		}
 
 		private void MainWindow_SizeChanged(object sender, WindowSizeChangedEventArgs args)
