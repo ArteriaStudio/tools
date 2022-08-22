@@ -30,10 +30,10 @@ namespace StatusBook
 
 			this.Loaded += StartPage_Loaded;
 			
-			for (int i = 0; i < 25; i ++)
+			for (int i = 0; i < 49; i ++)
 			{
 				Person	pPerson = new Person();
-				pPerson.Name = "number: " + i + "x";
+				pPerson.Name = "数字: " + i + "x";
 				pItems.Add(pPerson);
 			}
 		}

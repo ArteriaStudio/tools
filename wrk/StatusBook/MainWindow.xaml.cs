@@ -27,7 +27,19 @@ namespace StatusBook
 		public MainWindow()
 		{
 			this.InitializeComponent();
-			this.FragmentsFrame.Navigate(typeof(StartPage));
+
+			this.m_pNavigationView = this.Navigation;
+
+//			this.FragmentsFrame.Navigate(typeof(StartPage));
+			this.FragmentsFrame.Navigate(typeof(SettingsPage));
+
+//			this.SizeChanged += MainWindow_SizeChanged;
+		}
+
+		private void MainWindow_SizeChanged(object sender, WindowSizeChangedEventArgs args)
+		{
+			System.Diagnostics.Debug.WriteLine("this.Bounds.Width=" + this.Bounds.Width);
+			System.Diagnostics.Debug.WriteLine("this.Bounds.Height=" + this.Bounds.Height);
 		}
 
 		private void myButton_Click(object sender, RoutedEventArgs e)
@@ -39,5 +51,7 @@ namespace StatusBook
 			pFrame.Navigate(typeof(StatusPage), null, new DrillInNavigationTransitionInfo());
 			*/
 		}
+
+		public NavigationView	m_pNavigationView = null;
 	}
 }

@@ -1,5 +1,5 @@
 ﻿<Page
-	x:Class="StatusBook.StartPage"
+	x:Class="StatusBook.SettingsPage"
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:local="using:StatusBook"
@@ -16,7 +16,6 @@
 			<RowDefinition Height="*" />
 		</Grid.RowDefinitions>
 
-		<!-- 幅に関する留意事項：自動（auto/default）にした場合、配置する要素を自動改行せず、全てを並べられる幅まで拡げる挙動を取る。（ウィンドウサイズから動的に寸法を指定する必要があると思われる：2022/08/21 Rink） -->
 		<GridView ItemsSource="{x:Bind pItems}">
 			<GridView.ItemTemplate>
 				<!-- DataTemplate x:DataType ： ItemSourceに指定したコレクションの要素にアクセスする時に用いるテンプレート引数型で指定したクラス名 -->

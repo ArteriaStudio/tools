@@ -7,16 +7,16 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	mc:Ignorable="d">
 
-	<StackPanel Orientation="Horizontal">
-		<NavigationView PaneDisplayMode="LeftCompact">
+	<RelativePanel HorizontalAlignment="Left">
+		<NavigationView Name="Navigation" PaneDisplayMode="LeftCompact">
 			<NavigationView.MenuItems>
-				<NavigationViewItem Content="1" />
+				<NavigationViewItem Content="ダッシュボード" />
 				<NavigationViewItem Content="2" />
 				<NavigationViewItem Content="3" />
 				<NavigationViewItem Content="4" />
 			</NavigationView.MenuItems>
 			<Frame Name="FragmentsFrame" />
 		</NavigationView>
-	</StackPanel>
+	</RelativePanel>
 	
 </Window>
