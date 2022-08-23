@@ -28,7 +28,6 @@ namespace StatusBook
 		{
 			this.InitializeComponent();
 
-
 			this.BreadcrumbBar.ItemsSource = new string[] { "/", "dashboard", "status" };
 
 			this.Navigation.SelectionChanged += MainWindow_SelectionChanged;
@@ -82,5 +81,10 @@ namespace StatusBook
 		}
 
 		public NavigationView	m_pNavigationView = null;
+
+		private void AppBarButton_Click(object sender, RoutedEventArgs e)
+		{
+
+		}
 	}
 }

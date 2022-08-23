@@ -1,43 +1,43 @@
 ﻿<Application
-    x:Class="StatusBook.App"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:StatusBook">
-    <Application.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />
-                <!-- Other merged dictionaries here -->
+	x:Class="StatusBook.App"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:local="using:StatusBook">
+	<Application.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />
+				<!-- Other merged dictionaries here -->
 				<ResourceDictionary>
-                    <ResourceDictionary.ThemeDictionaries>
-                        <ResourceDictionary x:Key="Default">
-                            <!-- The "Default" theme dictionary is used unless a specific
-                                 light, dark, or high contrast dictionary is provided. These
-                                 resources should be tested with both the light and dark themes,
-                                 and specific light or dark resources provided as needed. -->
-                            <AcrylicBrush x:Key="NavigationViewDefaultPaneBackground"
-                                   TintColor="LightSlateGray"
-                                   TintOpacity=".6"/>
-                            <AcrylicBrush x:Key="NavigationViewTopPaneBackground"
-                                   TintColor="{ThemeResource SystemAccentColor}"
-                                   TintOpacity=".6"/>
-                            <LinearGradientBrush x:Key="NavigationViewExpandedPaneBackground"
-                                     StartPoint="0.5,0" EndPoint="0.71,1.7">
+					<ResourceDictionary.ThemeDictionaries>
+						<ResourceDictionary x:Key="Default">
+							<!-- The "Default" theme dictionary is used unless a specific
+								 light, dark, or high contrast dictionary is provided. These
+								 resources should be tested with both the light and dark themes,
+								 and specific light or dark resources provided as needed. -->
+							<AcrylicBrush x:Key="NavigationViewDefaultPaneBackground"
+								   TintColor="LightSlateGray"
+								   TintOpacity=".6"/>
+							<AcrylicBrush x:Key="NavigationViewTopPaneBackground"
+								   TintColor="{ThemeResource SystemAccentColor}"
+								   TintOpacity=".6"/>
+							<LinearGradientBrush x:Key="NavigationViewExpandedPaneBackground"
+									 StartPoint="0.5,0" EndPoint="0.71,1.7">
 								<GradientStop Color="{ThemeResource SystemAccentColor}" Offset="0.0" />
-                                <GradientStop Color="Snow" Offset="1.0" />
-                            </LinearGradientBrush>
-                        </ResourceDictionary>
-                        <ResourceDictionary x:Key="HighContrast">
-                            <!-- Always include a "HighContrast" dictionary when you override
-                                 theme resources. This empty dictionary ensures that the 
-                                 default high contrast resources are used when the user
-                                 turns on high contrast mode. -->
-                        </ResourceDictionary>
-                    </ResourceDictionary.ThemeDictionaries>
-                </ResourceDictionary>
-            </ResourceDictionary.MergedDictionaries>
-            <!-- Other app resources here -->
+								<GradientStop Color="Snow" Offset="1.0" />
+							</LinearGradientBrush>
+						</ResourceDictionary>
+						<ResourceDictionary x:Key="HighContrast">
+							<!-- Always include a "HighContrast" dictionary when you override
+								 theme resources. This empty dictionary ensures that the 
+								 default high contrast resources are used when the user
+								 turns on high contrast mode. -->
+						</ResourceDictionary>
+					</ResourceDictionary.ThemeDictionaries>
+				</ResourceDictionary>
+			</ResourceDictionary.MergedDictionaries>
+			<!-- Other app resources here -->
 			<Color x:Key="SystemAccentColor">#100C10</Color>
-        </ResourceDictionary>
-    </Application.Resources>
+		</ResourceDictionary>
+	</Application.Resources>
 </Application>
