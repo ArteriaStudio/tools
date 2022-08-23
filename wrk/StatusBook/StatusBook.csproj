@@ -10,6 +10,8 @@
     <PublishProfile>win10-$(Platform).pubxml</PublishProfile>
     <UseWinUI>true</UseWinUI>
     <EnableMsixTooling>true</EnableMsixTooling>
+	<WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
+	<WindowsPackageType>None</WindowsPackageType>  
   </PropertyGroup>
   <ItemGroup>
     <None Remove="ApexPage.xaml" />
