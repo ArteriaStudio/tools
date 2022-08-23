@@ -9,13 +9,16 @@
 
 	<Grid HorizontalAlignment="Left">
 		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="1*" />
+			<ColumnDefinition Width="*" />
 		</Grid.ColumnDefinitions>
 		<Grid.RowDefinitions>
+			<RowDefinition Height="auto" />
 			<RowDefinition Height="*" />
 		</Grid.RowDefinitions>
 
-		<NavigationView Name="Navigation" PaneDisplayMode="LeftCompact" x:Uid="AppTitle">
+		<BreadcrumbBar Name="BreadcrumbBar" Grid.Column="0" Grid.Row="0" />
+
+		<NavigationView Name="Navigation" PaneDisplayMode="Left" x:Uid="AppTitle"  Grid.Column="0" Grid.Row="1">
 			<NavigationView.MenuItems>
 				<NavigationViewItem x:Uid="DashBoard" Tag="DashBoard">
 					<NavigationViewItem.Icon>

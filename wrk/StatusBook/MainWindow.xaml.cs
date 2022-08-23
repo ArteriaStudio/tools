@@ -28,6 +28,9 @@ namespace StatusBook
 		{
 			this.InitializeComponent();
 
+
+			this.BreadcrumbBar.ItemsSource = new string[] { "/", "dashboard", "status" };
+
 			this.Navigation.SelectionChanged += MainWindow_SelectionChanged;
 
 
@@ -38,7 +41,7 @@ namespace StatusBook
 //			this.FragmentsFrame.Navigate(typeof(ListupPage));
 //			this.FragmentsFrame.Navigate(typeof(SettingsPage));
 
-//			this.SizeChanged += MainWindow_SizeChanged;
+			this.SizeChanged += MainWindow_SizeChanged;
 		}
 
 		private void MainWindow_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
@@ -47,9 +50,9 @@ namespace StatusBook
 			System.Diagnostics.Debug.WriteLine("Args.SelectedItem = " + pSelectedItem.Tag);
 			if (pSelectedItem.Tag.Equals("DashBoard") == true)
 			{
-				;
+				this.FragmentsFrame.Navigate(typeof(StartPage));
 			} else if (pSelectedItem.Tag.Equals("Persons") == true)	{
-				;
+				this.FragmentsFrame.Navigate(typeof(StatusPage));
 			}
 			
 		}
@@ -58,6 +61,14 @@ namespace StatusBook
 		{
 			System.Diagnostics.Debug.WriteLine("this.Bounds.Width=" + this.Bounds.Width);
 			System.Diagnostics.Debug.WriteLine("this.Bounds.Height=" + this.Bounds.Height);
+
+			/*
+			if (this.Bounds.Width < 640) {
+				this.Navigation.PaneDisplayMode = NavigationViewPaneDisplayMode.LeftCompact;
+			} else {
+				this.Navigation.PaneDisplayMode = NavigationViewPaneDisplayMode.Auto;
+			}
+			*/
 		}
 
 		private void myButton_Click(object sender, RoutedEventArgs e)
