@@ -123,7 +123,13 @@
   <data name="DashBoard.Content" xml:space="preserve">
     <value>DashBoard</value>
   </data>
+  <data name="Media.Content" xml:space="preserve">
+    <value>Media</value>
+  </data>
   <data name="Persons.Content" xml:space="preserve">
     <value>Persons</value>
+  </data>
+  <data name="Settings.Content" xml:space="preserve">
+    <value>Settings</value>
   </data>
 </root>

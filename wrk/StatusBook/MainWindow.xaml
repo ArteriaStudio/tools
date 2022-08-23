@@ -24,53 +24,11 @@
 					<RowDefinition Height="auto" />
 					<RowDefinition Height="*" />
 					<RowDefinition Height="auto" />
-					<RowDefinition Height="auto" />
 				</Grid.RowDefinitions>
 
-				<BreadcrumbBar Name="BreadcrumbBar" Grid.Column="0" Grid.Row="0" />
-				<Grid Grid.Column="0" Grid.Row="1">
-					<Grid.ColumnDefinitions>
-						<ColumnDefinition Width="*" />
-					</Grid.ColumnDefinitions>
-					<Grid.RowDefinitions>
-						<RowDefinition Height="*" />
-					</Grid.RowDefinitions>
-
-					<NavigationView Name="Navigation" PaneDisplayMode="Left" x:Uid="AppTitle" Grid.Column="0" Grid.Row="0">
-						<NavigationView.MenuItems>
-							<NavigationViewItem x:Uid="DashBoard" Tag="DashBoard">
-								<NavigationViewItem.Icon>
-									<ImageIcon Source="Assets/dashboard_white_24dp.svg"></ImageIcon>
-								</NavigationViewItem.Icon>
-							</NavigationViewItem>
-							<NavigationViewItem x:Uid="Persons" Tag="Persons">
-								<NavigationViewItem.Icon>
-									<ImageIcon Source="Assets/people_white_24dp.svg"></ImageIcon>
-								</NavigationViewItem.Icon>
-							</NavigationViewItem>
-						</NavigationView.MenuItems>
-						<Frame Name="FragmentsFrame" />
-					</NavigationView>
-				</Grid>
-				<ProgressBar  Grid.Column="0" Grid.Row="2" />
-				<CommandBar Grid.Column="0" Grid.Row="3" >
-					<AppBarToggleButton Icon="Shuffle" Label="Shuffle" Click="AppBarButton_Click" />
-					<AppBarToggleButton Icon="RepeatAll" Label="Repeat" Click="AppBarButton_Click"/>
-					<AppBarSeparator/>
-					<AppBarButton Icon="Back" Label="Back" Click="AppBarButton_Click"/>
-					<AppBarButton Icon="Stop" Label="Stop" Click="AppBarButton_Click"/>
-					<AppBarButton Icon="Play" Label="Play" Click="AppBarButton_Click"/>
-					<AppBarButton Icon="Forward" Label="Forward" Click="AppBarButton_Click"/>
-
-					<CommandBar.SecondaryCommands>
-						<AppBarButton Label="Like" Click="AppBarButton_Click"/>
-						<AppBarButton Label="Dislike" Click="AppBarButton_Click"/>
-					</CommandBar.SecondaryCommands>
-
-					<CommandBar.Content>
-						<TextBlock Text="Now playing..." Margin="12,14"/>
-					</CommandBar.Content>
-				</CommandBar>
+				<Frame Name="ApexFrame" Grid.Column="0" Grid.Row="0" />
+				<Frame Name="ContentsFrame" Grid.Column="0" Grid.Row="1" />
+				<Frame Name="FooterFrame" Grid.Column="0" Grid.Row="2" />
 			</Grid>
 		</Border>
 	</Grid>

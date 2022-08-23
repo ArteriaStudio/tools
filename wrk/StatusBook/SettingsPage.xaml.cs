@@ -59,9 +59,11 @@ namespace StatusBook
 			System.Diagnostics.Debug.WriteLine("this.DesiredSize=" + this.DesiredSize);
 
 			var pWindow = pApp.m_window as MainWindow;
-			var pNavigationView = pWindow.m_pNavigationView;
+			/*
+//			var pNavigationView = pWindow.m_pNavigationView;
 			System.Diagnostics.Debug.WriteLine("pNavigationView.ActualSize=" + pNavigationView.ActualSize);
 			System.Diagnostics.Debug.WriteLine("pNavigationView.CompactModeThresholdWidth=" + pNavigationView.CompactModeThresholdWidth);
+			*/
 
 			
 
@@ -69,11 +71,6 @@ namespace StatusBook
 //			size.Width = pApp.m_window.Bounds.Width - pNavigationView.CompactModeThresholdWidth;
 
 			return (base.MeasureOverride(size));
-		}
-
-		private void SettingsPage_SizeChanged(object sender, SizeChangedEventArgs e)
-		{
-//			this.ActualSize;
 		}
 
 		ObservableCollection<Person>	pItems = new ObservableCollection<Person>();

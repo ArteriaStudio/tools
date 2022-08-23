@@ -28,32 +28,12 @@ namespace StatusBook
 		{
 			this.InitializeComponent();
 
-			this.BreadcrumbBar.ItemsSource = new string[] { "/", "dashboard", "status" };
-
-			this.Navigation.SelectionChanged += MainWindow_SelectionChanged;
-
-
-			this.m_pNavigationView = this.Navigation;
-
-//			this.FragmentsFrame.Navigate(typeof(StartPage));
-			this.FragmentsFrame.Navigate(typeof(StatusPage));
-//			this.FragmentsFrame.Navigate(typeof(ListupPage));
-//			this.FragmentsFrame.Navigate(typeof(SettingsPage));
+			//　初期表示
+			this.ApexFrame.Navigate(typeof(ApexPage));
+			this.ContentsFrame.Navigate(typeof(ContentsPage));
+			this.FooterFrame.Navigate(typeof(FooterPage));
 
 			this.SizeChanged += MainWindow_SizeChanged;
-		}
-
-		private void MainWindow_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
-		{
-			var pSelectedItem = args.SelectedItem as NavigationViewItem;
-			System.Diagnostics.Debug.WriteLine("Args.SelectedItem = " + pSelectedItem.Tag);
-			if (pSelectedItem.Tag.Equals("DashBoard") == true)
-			{
-				this.FragmentsFrame.Navigate(typeof(StartPage));
-			} else if (pSelectedItem.Tag.Equals("Persons") == true)	{
-				this.FragmentsFrame.Navigate(typeof(StatusPage));
-			}
-			
 		}
 
 		private void MainWindow_SizeChanged(object sender, WindowSizeChangedEventArgs args)
@@ -68,23 +48,6 @@ namespace StatusBook
 				this.Navigation.PaneDisplayMode = NavigationViewPaneDisplayMode.Auto;
 			}
 			*/
-		}
-
-		private void myButton_Click(object sender, RoutedEventArgs e)
-		{
-			this.FragmentsFrame.Navigate(typeof(StatusPage));
-			/*
-			var pFrame = new Frame();
-//			pFrame.Navigate(typeof(StatusPage));
-			pFrame.Navigate(typeof(StatusPage), null, new DrillInNavigationTransitionInfo());
-			*/
-		}
-
-		public NavigationView	m_pNavigationView = null;
-
-		private void AppBarButton_Click(object sender, RoutedEventArgs e)
-		{
-
 		}
 	}
 }

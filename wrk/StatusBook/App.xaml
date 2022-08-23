@@ -15,17 +15,20 @@
 								 light, dark, or high contrast dictionary is provided. These
 								 resources should be tested with both the light and dark themes,
 								 and specific light or dark resources provided as needed. -->
-							<AcrylicBrush x:Key="NavigationViewDefaultPaneBackground"
-								   TintColor="LightSlateGray"
-								   TintOpacity=".6"/>
+							<LinearGradientBrush x:Key="NavigationViewDefaultPaneBackground"
+									 StartPoint="0.5,0" EndPoint="2.0,2.0">
+								<GradientStop Color="{ThemeResource SystemAccentColor}" Offset="0.0" />
+								<GradientStop Color="Snow" Offset="1.0" />
+							</LinearGradientBrush>
 							<AcrylicBrush x:Key="NavigationViewTopPaneBackground"
 								   TintColor="{ThemeResource SystemAccentColor}"
 								   TintOpacity=".6"/>
 							<LinearGradientBrush x:Key="NavigationViewExpandedPaneBackground"
-									 StartPoint="0.5,0" EndPoint="0.71,1.7">
+									 StartPoint="0.5,0" EndPoint="0.7,1.7">
 								<GradientStop Color="{ThemeResource SystemAccentColor}" Offset="0.0" />
 								<GradientStop Color="Snow" Offset="1.0" />
 							</LinearGradientBrush>
+							<Color x:Key="TextControlSelectionHighlightColor">#1020C0</Color>
 						</ResourceDictionary>
 						<ResourceDictionary x:Key="HighContrast">
 							<!-- Always include a "HighContrast" dictionary when you override

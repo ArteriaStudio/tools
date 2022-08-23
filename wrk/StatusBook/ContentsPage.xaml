@@ -1,0 +1,47 @@
+﻿<Page
+	x:Class="StatusBook.ContentsPage"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:local="using:StatusBook"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	mc:Ignorable="d"
+	Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*" />
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*" />
+		</Grid.RowDefinitions>
+
+		<NavigationView Name="Navigation" PaneDisplayMode="LeftCompact" x:Uid="AppTitle" Grid.Column="0" Grid.Row="0" IsSettingsVisible="False">
+			<NavigationView.MenuItems>
+				<NavigationViewItem x:Uid="DashBoard" Tag="DashBoard">
+					<NavigationViewItem.Icon>
+						<ImageIcon Source="Assets/dashboard_white_24dp.svg"></ImageIcon>
+					</NavigationViewItem.Icon>
+				</NavigationViewItem>
+				<NavigationViewItem x:Uid="Persons" Tag="Persons">
+					<NavigationViewItem.Icon>
+						<ImageIcon Source="Assets/people_white_24dp.svg"></ImageIcon>
+					</NavigationViewItem.Icon>
+				</NavigationViewItem>
+				<NavigationViewItem x:Uid="Media" Tag="Media">
+					<NavigationViewItem.Icon>
+						<ImageIcon Source="Assets/people_white_24dp.svg"></ImageIcon>
+					</NavigationViewItem.Icon>
+				</NavigationViewItem>
+			</NavigationView.MenuItems>
+			<NavigationView.FooterMenuItems>
+				<NavigationViewItem x:Uid="Settings" Tag="Settings">
+					<NavigationViewItem.Icon>
+						<ImageIcon Source="Assets/settings_white_24dp.svg"></ImageIcon>
+					</NavigationViewItem.Icon>
+				</NavigationViewItem>
+			</NavigationView.FooterMenuItems>
+			<Frame Name="FragmentsFrame" />
+		</NavigationView>
+	</Grid>
+</Page>
