@@ -30,7 +30,7 @@
 				</NavigationViewItem>
 				<NavigationViewItem x:Uid="Media" Tag="Media">
 					<NavigationViewItem.Icon>
-						<ImageIcon Source="Assets/people_white_24dp.svg"></ImageIcon>
+						<ImageIcon Source="Assets/radio_white_24dp.svg"></ImageIcon>
 					</NavigationViewItem.Icon>
 				</NavigationViewItem>
 			</NavigationView.MenuItems>

@@ -8,6 +8,7 @@ using Microsoft.UI.Xaml.Media.Animation;
 using Microsoft.UI.Xaml.Navigation;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -27,10 +28,22 @@ namespace StatusBook
 		public StatusPage()
 		{
 			this.InitializeComponent();
+
+			for (int i=0; i < 13; i ++)
+			{
+				Person pPerson = new Person();
+				pPerson.Name = "名前";
+				pPerson.Number = "学籍番号";
+				pPerson.FamilyName = "行";
+				pPerson.FirstName = "秋";
+				pPerson.CompositionName = pPerson.FamilyName + pPerson.FirstName;
+				pItems.Add(pPerson);
+			}
 		}
 		private void myButton_Click(object sender, RoutedEventArgs e)
 		{
 			this.Frame.Navigate(typeof(StartPage), null, new DrillInNavigationTransitionInfo());
 		}
+		ObservableCollection<Person>	pItems = new ObservableCollection<Person>();
 	}
 }
