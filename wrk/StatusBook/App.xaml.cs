@@ -33,6 +33,9 @@ namespace StatusBook
 		public App()
 		{
 			this.InitializeComponent();
+
+			//　フォーカス
+			//this.FocusVisualKind = FocusVisualKind.Reveal;
 		}
 
 		/// <summary>

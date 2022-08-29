@@ -34,11 +34,22 @@
 				</DataTemplate>
 			</ListView.HeaderTemplate>
 			-->
+
+			<!--
+			<ListView.ItemContainerStyle>
+				<Style TargetType="ListViewItem">
+					<Setter Property="FocusVisualPrimaryBrush" Value="Aqua" />
+					<Setter Property="FocusVisualSecondaryBrush" Value="Blue" />
+					
+				</Style>
+			</ListView.ItemContainerStyle>
+			-->
+			
 			<ListView.ItemTemplate>
 				<DataTemplate x:Name="TableDataTemplate" x:DataType="local:Person">
-					<Grid Height="48" AutomationProperties.Name="{x:Bind Name}">
+					<Grid Height="24" AutomationProperties.Name="{x:Bind Name}">
 						<Grid.ColumnDefinitions>
-							<ColumnDefinition Width="48"/>
+							<ColumnDefinition Width="32"/>
 							<ColumnDefinition Width="360"/>
 							<ColumnDefinition Width="360"/>
 							<ColumnDefinition Width="360"/>

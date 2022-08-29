@@ -29,6 +29,7 @@
 								<GradientStop Color="Snow" Offset="1.0" />
 							</LinearGradientBrush>
 							<Color x:Key="TextControlSelectionHighlightColor">#1020C0</Color>
+							<Color x:Key="ListViewItemBackgroundPointerOver">#118833</Color>
 						</ResourceDictionary>
 						<ResourceDictionary x:Key="HighContrast">
 							<!-- Always include a "HighContrast" dictionary when you override
@@ -41,6 +42,7 @@
 			</ResourceDictionary.MergedDictionaries>
 			<!-- Other app resources here -->
 			<Color x:Key="SystemAccentColor">#100C10</Color>
+			<!-- Override Reveal Focus default resources. -->
 		</ResourceDictionary>
 	</Application.Resources>
 </Application>
