@@ -1,4 +1,5 @@
-﻿using Microsoft.UI.Xaml;
+﻿using LigareBook;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
 using Microsoft.UI.Xaml.Data;
@@ -34,6 +35,15 @@ namespace StatusBook
 			this.FooterFrame.Navigate(typeof(FooterPage));
 
 			this.SizeChanged += MainWindow_SizeChanged;
+			this.Closed += MainWindow_Closed;
+		}
+
+		//　メインウィンドウ破棄イベント
+		private void MainWindow_Closed(object sender, WindowEventArgs args)
+		{
+			var pApp = Application.Current as App;
+
+			ProfileProvider.Save(pApp.m_pProfile);
 		}
 
 		private void MainWindow_SizeChanged(object sender, WindowSizeChangedEventArgs args)

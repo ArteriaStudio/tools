@@ -1,4 +1,5 @@
-﻿using Microsoft.UI.Xaml;
+﻿using LigareBook;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
 using Microsoft.UI.Xaml.Data;
@@ -34,14 +35,19 @@ namespace StatusBook
 		{
 			this.InitializeComponent();
 
+			
+
+
 			//　フォーカス
 			//this.FocusVisualKind = FocusVisualKind.Reveal;
 
 			//　ユーザー別プロファイルを入力
-			m_pProfile = new Profile();
+			//　ウィンドウを作成する前にプロファイルを入力する契機はここになるが、
+			//　アプリケーションのインスタンスが削除される契機はフレームワークが提供していない。
+			m_pProfile = ProfileProvider.Load();
 		}
 
-		private Profile m_pProfile = null;
+		public ProfileData m_pProfile = null;
 
 		/// <summary>
 		/// Invoked when the application is launched normally by the end user.  Other entry points
@@ -84,5 +90,7 @@ namespace StatusBook
 		}
 
 		public Window m_window;
+
+		
 	}
 }

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Ritters
 {
-	public class Company
+	public class CompanyData
 	{
 		public string m_pCompanyName = "Arteria";
 	}
