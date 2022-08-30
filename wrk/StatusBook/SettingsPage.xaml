@@ -5,6 +5,7 @@
 	xmlns:local="using:StatusBook"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:lb="using:LigareBook"
 	mc:Ignorable="d"
 	Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
@@ -19,7 +20,7 @@
 		<GridView ItemsSource="{x:Bind pItems}">
 			<GridView.ItemTemplate>
 				<!-- DataTemplate x:DataType ： ItemSourceに指定したコレクションの要素にアクセスする時に用いるテンプレート引数型で指定したクラス名 -->
-				<DataTemplate x:DataType="local:Person">
+				<DataTemplate x:DataType="lb:Person">
 					<!-- TextBlock Text：{x:Bind変数 参照するメンバ名} -->
 					<TextBlock Text="{x:Bind Name}" />
 				</DataTemplate>

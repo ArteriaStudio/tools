@@ -1,4 +1,5 @@
-﻿using Microsoft.UI.Xaml;
+﻿using LigareBook;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
 using Microsoft.UI.Xaml.Data;
@@ -14,6 +15,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -31,16 +33,9 @@ namespace StatusBook
 
 //			this.UseSystemFocusVisuals = true;
 
-			for (int i=0; i < 13; i ++)
-			{
-				Person pPerson = new Person();
-				pPerson.Name = "名前";
-				pPerson.Number = "学籍番号";
-				pPerson.FamilyName = "行";
-				pPerson.FirstName = "秋";
-				pPerson.CompositionName = pPerson.FamilyName + pPerson.FirstName;
-				pItems.Add(pPerson);
-			}
+			//　一覧データを入力
+			var pStatusSheet = StatusSheet.GetInstance();
+			pItems = pStatusSheet.Listup();
 		}
 		private void myButton_Click(object sender, RoutedEventArgs e)
 		{

@@ -36,7 +36,12 @@ namespace StatusBook
 
 			//　フォーカス
 			//this.FocusVisualKind = FocusVisualKind.Reveal;
+
+			//　ユーザー別プロファイルを入力
+			m_pProfile = new Profile();
 		}
+
+		private Profile m_pProfile = null;
 
 		/// <summary>
 		/// Invoked when the application is launched normally by the end user.  Other entry points

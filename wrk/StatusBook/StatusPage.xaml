@@ -5,6 +5,7 @@
 	xmlns:local="using:StatusBook"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:lb="using:LigareBook"
 	mc:Ignorable="d"
 	Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
@@ -46,7 +47,7 @@
 			-->
 			
 			<ListView.ItemTemplate>
-				<DataTemplate x:Name="TableDataTemplate" x:DataType="local:Person">
+				<DataTemplate x:Name="TableDataTemplate" x:DataType="lb:Person">
 					<Grid Height="24" AutomationProperties.Name="{x:Bind Name}">
 						<Grid.ColumnDefinitions>
 							<ColumnDefinition Width="32"/>
