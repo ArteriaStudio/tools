@@ -42,45 +42,40 @@ namespace LigareBook
 		{
 			var pItems = new ObservableCollection<Person>();
 
-			var pItem = new Person();
-			pItem.FirstName = "FirstName";
-			pItem.FamilyName = "FamilyName";
-			pItem.CompositionName = "CompositionName";
+			{
+				var pItem = new Person();
+				pItem.FirstName = "FirstName";
+				pItem.FamilyName = "FamilyName";
+				pItem.CompositionName = "CompositionName";
 
-			pItems.Add(pItem);
+				pItems.Add(pItem);
+			}
 
 			//　データベースサーバからデータを入力
 			var pConnectionString = String.Format("Server={0};Port=5432;Database={1};Username={2};sslmode=disable", pProfileData.DatabaseServer, pProfileData.DatabaseName, pProfileData.SchemaName);
 
-			var pSQL = "SELECT  FROM ;";
+			var pSQL = "SELECT StateID, Name FROM MStates;";
 
 			using (var pConnection = new NpgsqlConnection(pConnectionString))
 			using (var pCommand = new NpgsqlCommand(pSQL, pConnection))
 			{
 				pConnection.Open();
 
-				/*
 				using (var pReader = pCommand.ExecuteReader())
 				{
 					while (pReader.Read())
 					{
-						System.Diagnostics.Debug.WriteLine("" + pReader.GetString(0));
+						System.Diagnostics.Debug.WriteLine("StateID: " + pReader.GetString(0));
+						System.Diagnostics.Debug.WriteLine("Name: " + pReader.GetString(1));
+
+						var pItem = new Person();
+						pItem.Number = pReader.GetString(0);
+						pItem.CompositionName = pReader.GetString(1);
+
+						pItems.Add(pItem);
 					}
 				}
-				*/
 			}
-
-
-
-
-
-
-
-
-
-
-
-
 
 			return (pItems);
 		}
