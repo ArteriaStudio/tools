@@ -8,22 +8,17 @@ using System.Threading.Tasks;
 
 namespace LigareBook
 {
-	public class ProfileData : CompanyData
+	public class ProfileData
 	{
-		public readonly string	m_pProfilePath = null;
-		public readonly string	m_pDatabaseServer = null;
-		public static readonly string	m_pAppName = "StatusBook";
+		//　プロパティ
+		public string	DatabaseServer { get; set; }
+		public string	CampusNote { get; set; }
 
 		public ProfileData()
 		{
-			var pAppDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-			System.Diagnostics.Debug.WriteLine("AppData: " + pAppDataFolder);
-
-			//　ユーザープロファイルのパス名を生成
-			m_pProfilePath += pAppDataFolder + "/" + m_pCompanyName + "/" + m_pAppName + "/" + m_pAppName + ".conf";
-
 			//　データベースサーバー名
-			m_pDatabaseServer = "stagesv";
+			DatabaseServer = "staging";
+			CampusNote = "1";
 		}
 	}
 }
