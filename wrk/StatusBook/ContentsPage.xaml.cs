@@ -28,8 +28,8 @@ namespace StatusBook
 			this.InitializeComponent();
 
 			//　初期表示
-			this.FragmentsFrame.Navigate(typeof(StartPage));
-//			this.FragmentsFrame.Navigate(typeof(StatusPage));
+//			this.FragmentsFrame.Navigate(typeof(StartPage));
+			this.FragmentsFrame.Navigate(typeof(StatusPage));
 //			this.FragmentsFrame.Navigate(typeof(ListupPage));
 //			this.FragmentsFrame.Navigate(typeof(SettingsPage));
 

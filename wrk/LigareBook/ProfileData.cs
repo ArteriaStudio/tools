@@ -12,13 +12,15 @@ namespace LigareBook
 	{
 		//　プロパティ
 		public string	DatabaseServer { get; set; }
-		public string	CampusNote { get; set; }
+		public string	DatabaseName { get; set; }
+		public string	SchemaName { get; set; }
 
 		public ProfileData()
 		{
 			//　データベースサーバー名
-			DatabaseServer = "staging";
-			CampusNote = "1";
+			DatabaseServer = "stagesv.bunri-hjs.ac.jp";
+			DatabaseName = "sbook";
+			SchemaName = "aploper";
 		}
 	}
 }

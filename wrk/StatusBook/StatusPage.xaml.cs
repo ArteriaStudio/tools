@@ -34,8 +34,10 @@ namespace StatusBook
 //			this.UseSystemFocusVisuals = true;
 
 			//　一覧データを入力
+			var pApp = Application.Current as App;
+			var pProfileData = pApp.m_pProfile as ProfileData;
 			var pStatusSheet = StatusSheet.GetInstance();
-			pItems = pStatusSheet.Listup();
+			pItems = pStatusSheet.Listup(pProfileData);
 		}
 		private void myButton_Click(object sender, RoutedEventArgs e)
 		{

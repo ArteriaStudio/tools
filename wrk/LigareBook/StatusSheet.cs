@@ -1,6 +1,10 @@
-﻿using System;
+﻿using Microsoft.UI.Xaml;
+using Npgsql;
+using SQLitePCL;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data.Common;
 using System.Linq;
 using System.Runtime.ConstrainedExecution;
 using System.Text;
@@ -34,7 +38,7 @@ namespace LigareBook
 		}
 
 		//　一覧を取得
-		public ObservableCollection<Person> 	Listup()
+		public ObservableCollection<Person> 	Listup(ProfileData  pProfileData)
 		{
 			var pItems = new ObservableCollection<Person>();
 
@@ -44,6 +48,39 @@ namespace LigareBook
 			pItem.CompositionName = "CompositionName";
 
 			pItems.Add(pItem);
+
+			//　データベースサーバからデータを入力
+			var pConnectionString = String.Format("Server={0};Port=5432;Database={1};Username={2};sslmode=disable", pProfileData.DatabaseServer, pProfileData.DatabaseName, pProfileData.SchemaName);
+
+			var pSQL = "SELECT  FROM ;";
+
+			using (var pConnection = new NpgsqlConnection(pConnectionString))
+			using (var pCommand = new NpgsqlCommand(pSQL, pConnection))
+			{
+				pConnection.Open();
+
+				/*
+				using (var pReader = pCommand.ExecuteReader())
+				{
+					while (pReader.Read())
+					{
+						System.Diagnostics.Debug.WriteLine("" + pReader.GetString(0));
+					}
+				}
+				*/
+			}
+
+
+
+
+
+
+
+
+
+
+
+
 
 			return (pItems);
 		}
