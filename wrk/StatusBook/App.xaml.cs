@@ -91,6 +91,35 @@ namespace StatusBook
 
 		public Window m_window;
 
-		
+		public void TransitView(String pTargetView)
+		{
+			var pMainWindow = Window.Current as MainWindow;
+			var pMainFrame = pMainWindow.Content;
+
+			var pUIElement = pMainWindow.Content;
+			//pUIElement;
+
+			//var pItems = this.GetXmlnsDefinitions();
+
+			//pMainWindow;
+
+
+			/*
+			if (pTargetView.Equals("DashBoard") == true)
+			{
+
+				this.FragmentsFrame.Navigate(typeof(StartPage));
+			}
+			else if (pTargetView.Equals("Persons") == true)
+			{
+				this.FragmentsFrame.Navigate(typeof(StatusPage));
+			}
+			else if (pTargetView.Equals("Media") == true)
+			{
+				this.FragmentsFrame.Navigate(typeof(MediaPage));
+			}
+			*/
+		}
+
 	}
 }

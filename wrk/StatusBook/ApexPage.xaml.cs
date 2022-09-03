@@ -28,7 +28,12 @@ namespace StatusBook
 			this.InitializeComponent();
 
 			//　初期データ入力
-			this.BreadcrumbBar.ItemsSource = new string[] { "/", "dashboard", "status" };
+			//this.BreadcrumbBar.ItemsSource = new string[] { "/", "dashboard", "status" };
+			
+			//　表示状態の変更
+			//this.Caption.Visibility = Visibility.Visible;
 		}
-	}
+		//　画面名称（プロパティ）
+		public String	ApexCaption { get { return(this.Caption.Text); } set { this.Caption.Text = value; } }
+}
 }

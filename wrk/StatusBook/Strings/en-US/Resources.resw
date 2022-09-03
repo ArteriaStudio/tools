@@ -123,13 +123,25 @@
   <data name="DashBoard.Content" xml:space="preserve">
     <value>DashBoard</value>
   </data>
+  <data name="DashBoardView" xml:space="preserve">
+    <value>DashBoard</value>
+  </data>
   <data name="Media.Content" xml:space="preserve">
+    <value>Media</value>
+  </data>
+  <data name="MediaView" xml:space="preserve">
     <value>Media</value>
   </data>
   <data name="Persons.Content" xml:space="preserve">
     <value>Persons</value>
   </data>
+  <data name="PersonsView" xml:space="preserve">
+    <value>Persons</value>
+  </data>
   <data name="Settings.Content" xml:space="preserve">
     <value>Settings</value>
+  </data>
+  <data name="SettingsView" xml:space="preserve">
+    <value>Parameters</value>
   </data>
 </root>

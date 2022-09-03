@@ -18,24 +18,24 @@
 
 		<NavigationView Name="Navigation" PaneDisplayMode="LeftCompact" x:Uid="AppTitle" Grid.Column="0" Grid.Row="0" IsSettingsVisible="False">
 			<NavigationView.MenuItems>
-				<NavigationViewItem x:Uid="DashBoard" Tag="DashBoard">
+				<NavigationViewItem x:Uid="DashBoard" Tag="DashBoardView">
 					<NavigationViewItem.Icon>
 						<ImageIcon Source="Assets/dashboard_white_24dp.svg"></ImageIcon>
 					</NavigationViewItem.Icon>
 				</NavigationViewItem>
-				<NavigationViewItem x:Uid="Persons" Tag="Persons">
+				<NavigationViewItem x:Uid="Persons" Tag="PersonsView">
 					<NavigationViewItem.Icon>
 						<ImageIcon Source="Assets/people_white_24dp.svg"></ImageIcon>
 					</NavigationViewItem.Icon>
 				</NavigationViewItem>
-				<NavigationViewItem x:Uid="Media" Tag="Media">
+				<NavigationViewItem x:Uid="Media" Tag="MediaView">
 					<NavigationViewItem.Icon>
 						<ImageIcon Source="Assets/radio_white_24dp.svg"></ImageIcon>
 					</NavigationViewItem.Icon>
 				</NavigationViewItem>
 			</NavigationView.MenuItems>
 			<NavigationView.FooterMenuItems>
-				<NavigationViewItem x:Uid="Settings" Tag="Settings">
+				<NavigationViewItem x:Uid="Settings" Tag="SettingsView">
 					<NavigationViewItem.Icon>
 						<ImageIcon Source="Assets/settings_white_24dp.svg"></ImageIcon>
 					</NavigationViewItem.Icon>

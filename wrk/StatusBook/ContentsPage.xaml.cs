@@ -41,6 +41,15 @@ namespace StatusBook
 		{
 			var pSelectedItem = args.SelectedItem as NavigationViewItem;
 			System.Diagnostics.Debug.WriteLine("Args.SelectedItem = " + pSelectedItem.Tag);
+			
+			var pSelectedItemName = pSelectedItem.Tag.ToString();
+			System.Diagnostics.Debug.WriteLine("Args.pSelectedItemName = " + pSelectedItemName);
+
+
+			this.TransitFrame(pSelectedItemName);
+
+
+/*
 			if (pSelectedItem.Tag.Equals("DashBoard") == true)
 			{
 				this.FragmentsFrame.Navigate(typeof(StartPage));
@@ -53,6 +62,31 @@ namespace StatusBook
 			{
 				this.FragmentsFrame.Navigate(typeof(MediaPage));
 			}
+*/
 		}
+
+		public void	TransitFrame(String  pTargetPage)
+		{
+			var pApp = Application.Current as App;
+			var pMainWindow = pApp.m_window as MainWindow;
+
+
+			if (pTargetPage.Equals("DashBoardView") == true)
+			{
+				this.FragmentsFrame.Navigate(typeof(StartPage));
+			}
+			else if (pTargetPage.Equals("PersonsView") == true)
+			{
+				this.FragmentsFrame.Navigate(typeof(StatusPage));
+			}
+			else if (pTargetPage.Equals("MediaView") == true)
+			{
+				this.FragmentsFrame.Navigate(typeof(MediaPage));
+			}
+			pMainWindow.SetCaption(pTargetPage);
+
+
+		}
+
 	}
 }

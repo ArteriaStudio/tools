@@ -7,6 +7,7 @@ using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Media.Animation;
 using Microsoft.UI.Xaml.Navigation;
+using Microsoft.Windows.ApplicationModel.Resources;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -59,5 +60,47 @@ namespace StatusBook
 			}
 			*/
 		}
+
+		//
+		public void SetCaption(String  pCaption)
+		{
+			var pApgexPage = this.ApexFrame.Content as ApexPage;
+
+			var pLoader = new ResourceLoader();
+			pApgexPage.ApexCaption = pLoader.GetString(pCaption);
+
+			/* BAD case. unable to get string resource. you unable to GET resource.
+			//var pWindow = 
+			var pResourceLoader = Windows.ApplicationModel.Resources.ResourceLoader.GetForCurrentView();
+			pApgexPage.ApexCaption = pResourceLoader.GetString(pCaption);
+			*/
+
+			return;
+		}
+
+
+
+		//　ビューを遷移
+		public void	TransitFrame(String pTargetView)
+		{
+			//this.ContentsFrame.TransitFrame(String pTargetView);
+
+			/*
+			if (pTargetView.Equals("DashBoard") == true)
+			{
+				this.FragmentsFrame.Navigate(typeof(StartPage));
+			}
+			else if (pTargetView.Equals("Persons") == true)
+			{
+				this.FragmentsFrame.Navigate(typeof(StatusPage));
+			}
+			else if (pTargetView.Equals("Media") == true)
+			{
+				this.FragmentsFrame.Navigate(typeof(MediaPage));
+			}
+			*/
+			return;
+		}
+
 	}
 }

@@ -56,6 +56,7 @@ namespace LigareBook
 
 			var pSQL = "SELECT StateID, Name FROM MStates;";
 
+			System.Diagnostics.Debug.WriteLine("pConnectionString: " + pConnectionString);
 			using (var pConnection = new NpgsqlConnection(pConnectionString))
 			using (var pCommand = new NpgsqlCommand(pSQL, pConnection))
 			{
