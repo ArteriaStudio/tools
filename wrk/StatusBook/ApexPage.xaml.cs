@@ -35,5 +35,5 @@ namespace StatusBook
 		}
 		//　画面名称（プロパティ）
 		public String	ApexCaption { get { return(this.Caption.Text); } set { this.Caption.Text = value; } }
-}
+	}
 }

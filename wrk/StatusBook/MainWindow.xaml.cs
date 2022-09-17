@@ -51,14 +51,6 @@ namespace StatusBook
 		{
 			System.Diagnostics.Debug.WriteLine("this.Bounds.Width=" + this.Bounds.Width);
 			System.Diagnostics.Debug.WriteLine("this.Bounds.Height=" + this.Bounds.Height);
-
-			/*
-			if (this.Bounds.Width < 640) {
-				this.Navigation.PaneDisplayMode = NavigationViewPaneDisplayMode.LeftCompact;
-			} else {
-				this.Navigation.PaneDisplayMode = NavigationViewPaneDisplayMode.Auto;
-			}
-			*/
 		}
 
 		//
@@ -75,30 +67,6 @@ namespace StatusBook
 			pApgexPage.ApexCaption = pResourceLoader.GetString(pCaption);
 			*/
 
-			return;
-		}
-
-
-
-		//　ビューを遷移
-		public void	TransitFrame(String pTargetView)
-		{
-			//this.ContentsFrame.TransitFrame(String pTargetView);
-
-			/*
-			if (pTargetView.Equals("DashBoard") == true)
-			{
-				this.FragmentsFrame.Navigate(typeof(StartPage));
-			}
-			else if (pTargetView.Equals("Persons") == true)
-			{
-				this.FragmentsFrame.Navigate(typeof(StatusPage));
-			}
-			else if (pTargetView.Equals("Media") == true)
-			{
-				this.FragmentsFrame.Navigate(typeof(MediaPage));
-			}
-			*/
 			return;
 		}
 

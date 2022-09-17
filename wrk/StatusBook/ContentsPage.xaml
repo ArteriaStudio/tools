@@ -16,7 +16,7 @@
 			<RowDefinition Height="*" />
 		</Grid.RowDefinitions>
 
-		<NavigationView Name="Navigation" PaneDisplayMode="LeftCompact" x:Uid="AppTitle" Grid.Column="0" Grid.Row="0" IsSettingsVisible="False">
+		<NavigationView Name="Navigation" PaneDisplayMode="LeftCompact" x:Uid="AppTitle" Grid.Column="0" Grid.Row="0" IsSettingsVisible="False" IsBackButtonVisible="Collapsed">
 			<NavigationView.MenuItems>
 				<NavigationViewItem x:Uid="DashBoard" Tag="DashBoardView">
 					<NavigationViewItem.Icon>
@@ -41,7 +41,21 @@
 					</NavigationViewItem.Icon>
 				</NavigationViewItem>
 			</NavigationView.FooterMenuItems>
-			<Frame Name="FragmentsFrame" />
+
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*" />
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="auto" />
+					<RowDefinition Height="1" />
+					<RowDefinition Height="*" />
+				</Grid.RowDefinitions>
+				<TextBlock Name="Caption" Text="ページのタイトル欄" Grid.Column="0" Grid.Row="0" Margin="2" Padding="2" FontSize="16" />
+				<Rectangle Grid.Column="0" Grid.Row="1" Fill="ForestGreen"></Rectangle>
+				<Frame Grid.Column="0" Grid.Row="2" Name="FragmentsFrame" />
+			</Grid>
+
 		</NavigationView>
 	</Grid>
 </Page>

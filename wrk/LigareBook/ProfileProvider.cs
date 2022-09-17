@@ -7,6 +7,7 @@ using Microsoft.Data.Sqlite;
 
 namespace LigareBook
 {
+	//　ユーザープロファイルは、SQLiteデータベースファイルに保存
 	public class ProfileProvider
 	{
 		private static String m_pProfilePath = null;

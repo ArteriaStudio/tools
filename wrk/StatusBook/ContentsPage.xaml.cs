@@ -1,4 +1,5 @@
-﻿using Microsoft.UI.Xaml;
+﻿using LigareBook;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
 using Microsoft.UI.Xaml.Data;
@@ -10,6 +11,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using Windows.ApplicationModel.Resources;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 
@@ -27,16 +29,16 @@ namespace StatusBook
 		{
 			this.InitializeComponent();
 
+			var pApp = Application.Current as App;
+
 			//　初期表示
-//			this.FragmentsFrame.Navigate(typeof(StartPage));
-			this.FragmentsFrame.Navigate(typeof(StatusPage));
-//			this.FragmentsFrame.Navigate(typeof(ListupPage));
-//			this.FragmentsFrame.Navigate(typeof(SettingsPage));
+			this.TransitFrame(pApp.m_pProfile.CurrentPage);
 
 			//　
 			this.Navigation.SelectionChanged += Navigation_SelectionChanged;
 		}
 
+		//　ナヴィゲーション項目を選択
 		private void Navigation_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
 		{
 			var pSelectedItem = args.SelectedItem as NavigationViewItem;
@@ -45,32 +47,25 @@ namespace StatusBook
 			var pSelectedItemName = pSelectedItem.Tag.ToString();
 			System.Diagnostics.Debug.WriteLine("Args.pSelectedItemName = " + pSelectedItemName);
 
-
+			//　選択されたフレームに差し替え
 			this.TransitFrame(pSelectedItemName);
 
-
-/*
-			if (pSelectedItem.Tag.Equals("DashBoard") == true)
-			{
-				this.FragmentsFrame.Navigate(typeof(StartPage));
-			}
-			else if (pSelectedItem.Tag.Equals("Persons") == true)
-			{
-				this.FragmentsFrame.Navigate(typeof(StatusPage));
-			}
-			else if (pSelectedItem.Tag.Equals("Media") == true)
-			{
-				this.FragmentsFrame.Navigate(typeof(MediaPage));
-			}
-*/
+			var pApp = Application.Current as App;
+			pApp.m_pProfile.CurrentPage = pSelectedItemName;
 		}
 
+		//　コンテンツページのキャプションを設定
+		public void SetCaption(String pCaption)
+		{
+			var pLoader = new ResourceLoader();
+			this.Caption.Text = pLoader.GetString(pCaption);
+
+			return;
+		}
+
+		//　フレームを差し替え
 		public void	TransitFrame(String  pTargetPage)
 		{
-			var pApp = Application.Current as App;
-			var pMainWindow = pApp.m_window as MainWindow;
-
-
 			if (pTargetPage.Equals("DashBoardView") == true)
 			{
 				this.FragmentsFrame.Navigate(typeof(StartPage));
@@ -83,9 +78,8 @@ namespace StatusBook
 			{
 				this.FragmentsFrame.Navigate(typeof(MediaPage));
 			}
-			pMainWindow.SetCaption(pTargetPage);
 
-
+			this.SetCaption(pTargetPage);
 		}
 
 	}

@@ -14,6 +14,7 @@ namespace LigareBook
 		public string	DatabaseServer { get; set; }
 		public string	DatabaseName { get; set; }
 		public string	SchemaName { get; set; }
+		public string	CurrentPage { get; set; }
 
 		public ProfileData()
 		{
@@ -21,6 +22,7 @@ namespace LigareBook
 			DatabaseServer = "stagesv.bunri-hjs.ac.jp";
 			DatabaseName = "sbook";
 			SchemaName = "aploper";
+			CurrentPage = "DashboardView";
 		}
 	}
 }

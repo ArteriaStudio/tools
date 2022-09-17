@@ -48,26 +48,15 @@ namespace StatusBook
 			Console.Write("Window.Width = " + pContent.ActualSize); 
 			*/
 
+#if ENABLE_TRACE
 			//　このパタンだと見かけ上のウィンドウサイズと異なる寸法が返却される。（メインウィンドウの上に仮想ウィンドウがおかれており、それを参照している気配）
 			var pApp = Application.Current as App;
 			Console.Write("App.MainWindow.Width = " + pApp.m_window.Content.ActualSize);
-
 //			Console.Write("StartPage.Width = " + this.Width); // NaN
 			Console.Write("StartPage.Width = " + this.ActualSize); // NaN
+#endif
 		}
 
 		ObservableCollection<Person> 	pItems = new ObservableCollection<Person>();
-
-		private void myButton_Click(object sender, RoutedEventArgs e)
-		{
-			this.Frame.Navigate(typeof(StatusPage));
-			/*
-			var pFrame = new Frame();
-//			pFrame.Navigate(typeof(StatusPage));
-			pFrame.Navigate(typeof(StatusPage), null, new DrillInNavigationTransitionInfo());
-			*/
-		}
-
-		
 	}
 }

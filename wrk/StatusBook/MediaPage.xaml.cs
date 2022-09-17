@@ -27,9 +27,10 @@ namespace StatusBook
 		{
 			this.InitializeComponent();
 		}
+
 		private void AppBarButton_Click(object sender, RoutedEventArgs e)
 		{
-
+			;
 		}
 	}
 }
