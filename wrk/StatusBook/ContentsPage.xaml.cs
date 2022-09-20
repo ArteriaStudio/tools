@@ -31,10 +31,21 @@ namespace StatusBook
 
 			var pApp = Application.Current as App;
 
+			//　初期選択項目を指定
+			var iList = this.Navigation.MenuItems;
+			foreach (var i in iList)
+			{
+				var iNavigationViewItem = i as NavigationViewItem;
+				if (pApp.m_pProfile.CurrentPage.Equals(iNavigationViewItem.Tag.ToString()) == true) {
+					this.Navigation.SelectedItem = iNavigationViewItem;
+					break;
+				}
+			}
+
 			//　初期表示
 			this.TransitFrame(pApp.m_pProfile.CurrentPage);
 
-			//　
+			//　イベントリスナを登録
 			this.Navigation.SelectionChanged += Navigation_SelectionChanged;
 		}
 
