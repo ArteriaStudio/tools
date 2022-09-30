@@ -30,6 +30,8 @@
 							</LinearGradientBrush>
 							<Color x:Key="TextControlSelectionHighlightColor">#1020C0</Color>
 							<Color x:Key="ListViewItemBackgroundPointerOver">#118833</Color>
+							<Color x:Key="ListViewItemBackgroundSelected">#225522</Color>
+							<Color x:Key="ListViewItemBackgroundSelectedPointerOver">#118833</Color>
 						</ResourceDictionary>
 						<ResourceDictionary x:Key="HighContrast">
 							<!-- Always include a "HighContrast" dictionary when you override

@@ -144,4 +144,10 @@
   <data name="SettingsView" xml:space="preserve">
     <value>Parameters</value>
   </data>
+  <data name="Students.Content" xml:space="preserve">
+    <value>Students</value>
+  </data>
+  <data name="StudentsView" xml:space="preserve">
+    <value>Students</value>
+  </data>
 </root>

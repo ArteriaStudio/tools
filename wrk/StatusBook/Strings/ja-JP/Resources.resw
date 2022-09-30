@@ -144,4 +144,10 @@
   <data name="SettingsView" xml:space="preserve">
     <value>パラメータ</value>
   </data>
+  <data name="Students.Content" xml:space="preserve">
+    <value>生徒</value>
+  </data>
+  <data name="StudentsView" xml:space="preserve">
+    <value>生徒</value>
+  </data>
 </root>

@@ -28,6 +28,11 @@
 						<ImageIcon Source="Assets/people_white_24dp.svg"></ImageIcon>
 					</NavigationViewItem.Icon>
 				</NavigationViewItem>
+				<NavigationViewItem x:Uid="Students" Tag="StudentsView">
+					<NavigationViewItem.Icon>
+						<ImageIcon Source="Assets/people_white_24dp.svg"></ImageIcon>
+					</NavigationViewItem.Icon>
+				</NavigationViewItem>
 				<NavigationViewItem x:Uid="Media" Tag="MediaView">
 					<NavigationViewItem.Icon>
 						<ImageIcon Source="Assets/radio_white_24dp.svg"></ImageIcon>

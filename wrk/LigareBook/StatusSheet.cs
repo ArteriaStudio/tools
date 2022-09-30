@@ -1,5 +1,6 @@
 ﻿using Microsoft.UI.Xaml;
 using Npgsql;
+using Ritters;
 using SQLitePCL;
 using System;
 using System.Collections.Generic;
@@ -23,6 +24,7 @@ namespace LigareBook
 		public string Memo { get; set; }
 	}
 
+
 	public class StatusSheet
 	{
 		static StatusSheet	pInstance = new StatusSheet();
@@ -35,6 +37,16 @@ namespace LigareBook
 		public static StatusSheet GetInstance()
 		{
 			return(pInstance);
+		}
+
+		//　生徒一覧を取得
+		public ObservableCollection<Student>	ListupStudents(ProfileData  pProfileData)
+		{
+			var pContext = new Context(pProfileData.DatabaseServer, pProfileData.DatabaseName, pProfileData.SchemaName);
+			var pCursor = new StudentsCursor();
+			var pItems = pCursor.Listup(pContext);
+
+			return(pItems);
 		}
 
 		//　一覧を取得

@@ -83,7 +83,11 @@ namespace StatusBook
 			}
 			else if (pTargetPage.Equals("PersonsView") == true)
 			{
-				this.FragmentsFrame.Navigate(typeof(StatusPage));
+				this.FragmentsFrame.Navigate(typeof(PersonsPage));
+			}
+			else if (pTargetPage.Equals("StudentsView") == true)
+			{
+				this.FragmentsFrame.Navigate(typeof(StudentsPage));
 			}
 			else if (pTargetPage.Equals("MediaView") == true)
 			{

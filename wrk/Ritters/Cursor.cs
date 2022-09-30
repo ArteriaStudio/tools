@@ -9,6 +9,36 @@ namespace Ritters
 {
 	public class Cursor
 	{
+		//　カーソルを作成
+		public Cursor()
+		{
+			;
+		}
+
+		//　
+		~Cursor()
+		{
+			;
+		}
+
+		public event EventHandler<NpgsqlDataReader> CursorEventHandler;
+
+		public bool Open(Context pContext, String pSQL)
+		{
+			using (var pCommand = new NpgsqlCommand(pSQL, pContext.m_pConnection))
+			{
+				using (var pReader = pCommand.ExecuteReader())
+				{
+					if (CursorEventHandler != null)
+					{
+						CursorEventHandler(this, pReader);
+					}
+				}
+			}
+			return(true);
+		}
+
+
 		//　
 		public bool Create(NpgsqlConnection pConnection, Object pObject)
 		{
