@@ -11,6 +11,8 @@ SELECT
   MAccounts.UpdateAt,
   MAccounts.DeleteAt,
   MStudents.StudentNumber,
+  MStudents.Gender,
+  MStudents.BirthAt,
   MStudents.EnterAt,
   MStudents.LeaveAt,
   MGrade.Year,

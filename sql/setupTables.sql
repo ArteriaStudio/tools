@@ -103,6 +103,24 @@ INSERT INTO MMemberTypes (Ordinal, MemberType, Text) VALUES (0, 0, 'メンバ');
 INSERT INTO MMemberTypes (Ordinal, MemberType, Text) VALUES (1, 1, 'マネージャ');
 INSERT INTO MMemberTypes (Ordinal, MemberType, Text) VALUES (2, 2, 'オーナ');
 
+/*　役割種類　*/
+DROP TABLE MDomains;
+CREATE TABLE MDomains (
+  Category      INTEGER NOT NULL,
+  Name          VARCHAR(256) NOT NULL,
+  CreateAt      TIMESTAMP DEFAULT now(),
+  UpdateAt      TIMESTAMP,
+  DeleteAt      TIMESTAMP,
+  PRIMARY KEY (Category),
+  UNIQUE (Name)
+);
+GRANT ALL ON MMemberTypes TO cmnoper;
+GRANT SELECT ON MMemberTypes TO aploper;
+
+INSERT INTO MDomains (Category, Name) VALUES (0, '@class.bunri-s.ed.jp');
+INSERT INTO MDomains (Category, Name) VALUES (1, '@study.bunri-s.ed.jp');
+INSERT INTO MDomains (Category, Name) VALUES (2, '@staff.bunri-s.ed.jp');
+
 
 /*　組織単位　*/
 CREATE TABLE MOrgUnits (
@@ -171,8 +189,8 @@ CREATE TABLE MAccounts (
 GRANT ALL ON MAccounts TO cmnoper;
 GRANT SELECT ON MAccounts TO aploper;
 
-DROP PROCEDURE AddAccount;
-CREATE PROCEDURE AddAccount (
+DROP PROCEDURE UpsertAccount;
+CREATE PROCEDURE UpsertAccount (
   pEmail      VARCHAR(256),
   pName       VARCHAR(256),
   pRead       VARCHAR(256),
@@ -192,6 +210,13 @@ CREATE FUNCTION GetAccountIDByEmail (
   SELECT AccountID FROM MAccounts WHERE Email = $1
 $$ LANGUAGE SQL;
 
+/*　生徒用メールアドレス生成　*/
+DROP FUNCTION GenerateEmailForStudent;
+CREATE FUNCTION GenerateEmailForStudent (
+  pStudentNumber VARCHAR(5)
+) RETURNS VARCHAR(256) AS $$
+  SELECT pStudentNumber || Name FROM MDomains WHERE Category = 0;
+$$ LANGUAGE SQL;
 
 
 
@@ -220,7 +245,7 @@ CREATE PROCEDURE AddOriginalName (
   pReadFamily VARCHAR(60)
 )
 LANGUAGE SQL AS $$
-  CALL AddAccount(pEmail, pName, pRead, pOrgUnit, iStatus);
+  CALL UpsertAccount(pEmail, pName, pRead, pOrgUnit, iStatus);
   INSERT INTO MOriginalNames (AccountID, Family, ReadFamily)
     (SELECT AccountID, pFamily, pReadFamily FROM MAccounts WHERE Email = pEmail);
 $$;
@@ -254,7 +279,7 @@ CREATE PROCEDURE AddRegisterName (
   pReadFamily VARCHAR(60)
 )
 LANGUAGE SQL AS $$
-  CALL AddAccount(pEmail, pName, pRead, pOrgUnit, iStatus);
+  CALL UpsertAccount(pEmail, pName, pRead, pOrgUnit, iStatus);
   INSERT INTO MRegisterNames (AccountID, First, Family, ReadFirst, ReadFamily)
     (SELECT AccountID, pFirst, pFamily, pReadFirst, pReadFamily FROM MAccounts WHERE Email = pEmail);
 $$;
@@ -288,7 +313,7 @@ CREATE PROCEDURE AddPopularName (
   pReadFamily VARCHAR(60)
 )
 LANGUAGE SQL AS $$
-  CALL AddAccount(pEmail, pName, pRead, pOrgUnit, iStatus);
+  CALL UpsertAccount(pEmail, pName, pRead, pOrgUnit, iStatus);
   INSERT INTO MPopularNames (AccountID, First, Family, ReadFirst, ReadFamily)
     (SELECT AccountID, pFirst, pFamily, pReadFirst, pReadFamily FROM MAccounts WHERE Email = pEmail);
 $$;
@@ -318,7 +343,7 @@ CREATE PROCEDURE AddRegularName (
   pFamily     VARCHAR(60)
 )
 LANGUAGE SQL AS $$
-  CALL AddAccount(pEmail, pName, pRead, pOrgUnit, iStatus);
+  CALL UpsertAccount(pEmail, pName, pRead, pOrgUnit, iStatus);
   INSERT INTO MRegularNames (AccountID, First, Family)
     (SELECT AccountID, pFirst, pFamily FROM MAccounts WHERE Email = pEmail);
 $$;
@@ -350,7 +375,7 @@ CREATE PROCEDURE AddAddress (
   pCityID       VARCHAR(6)
 )
 LANGUAGE SQL AS $$
-  CALL AddAccount(pEmail, pName, pRead, pOrgUnit, iStatus);
+  CALL UpsertAccount(pEmail, pName, pRead, pOrgUnit, iStatus);
   INSERT INTO MAddress (AccountID, Address, CityID)
     (SELECT AccountID, pAddress, pCityID FROM MAccounts WHERE Email = pEmail);
 $$;
@@ -401,19 +426,22 @@ DROP TABLE MStudents;
 CREATE TABLE MStudents (
   StudentNumber VARCHAR(5) NOT NULL,
   AccountID     UUID NOT NULL,
+  Gender        VARCHAR(1) NOT NULL,
+  BirthAt       TIMESTAMP NOT NULL,
   EnterAt       TIMESTAMP NOT NULL DEFAULT now(),
   LeaveAt       TIMESTAMP,
   PRIMARY KEY ( StudentNumber ),
   FOREIGN KEY ( AccountID ) REFERENCES MAccounts ( AccountID )
-    ON DELETE CASCADE ON UPDATE CASCADE
+    ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT CK_GENDER CHECK ( Gender = '男' OR Gender = '女' )
 );
 GRANT ALL ON MStudents TO cmnoper;
 GRANT SELECT ON MStudents TO aploper;
 
 /*　学籍マスタは現状だと更新する契機が見当たらないのでストアドプロシージャはなし（2022/09/20）　*/
 
-INSERT INTO MStudents (StudentNumber, AccountID) (SELECT '00000', AccountID FROM MAccounts WHERE Email = 'wakaba@arteria-s.net');
-INSERT INTO MStudents (StudentNumber, AccountID) (SELECT '00099', AccountID FROM MAccounts WHERE Email = 'yuna@arteria-s.net');
+INSERT INTO MStudents (StudentNumber, AccountID, Gender, BirthAt) (SELECT '00000', AccountID, '女', now() FROM MAccounts WHERE Email = 'wakaba@arteria-s.net');
+INSERT INTO MStudents (StudentNumber, AccountID, Gender, BirthAt) (SELECT '00099', AccountID, '女', now() FROM MAccounts WHERE Email = 'yuna@arteria-s.net');
 
 
 
