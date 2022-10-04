@@ -1,0 +1,30 @@
+﻿<Page
+    x:Class="StatusBook.LoaderPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:StatusBook"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+	xmlns:lb="using:LigareBook"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="auto" />
+			<RowDefinition Height="*" />
+		</Grid.RowDefinitions>
+
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*" />
+		</Grid.ColumnDefinitions>
+
+		<StackPanel Grid.Column="0" Grid.Row="0">
+			<TextBlock x:Uid="FT_Loader" Margin="16,4" />
+			<RadioButtons Name="LoadOptions" x:Uid="DataType" MaxColumns="4" Margin="16,4" ItemsSource="{x:Bind pLoadOptions}" SelectionChanged="LoadOptions_SelectionChanged" />
+			<TextBox x:Uid="Filepath" Margin="16,4" />
+			<Button x:Uid="Upsert" Margin="16,4"  />
+		</StackPanel>
+
+	</Grid>
+</Page>

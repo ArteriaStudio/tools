@@ -126,6 +126,24 @@
   <data name="DashBoardView" xml:space="preserve">
     <value>ダッシュボード</value>
   </data>
+  <data name="DataType.Header" xml:space="preserve">
+    <value>データ種類</value>
+  </data>
+  <data name="DevicesList" xml:space="preserve">
+    <value>機器リスト</value>
+  </data>
+  <data name="Filepath.Header" xml:space="preserve">
+    <value>ファイルパス</value>
+  </data>
+  <data name="FT_Loader.Text" xml:space="preserve">
+    <value>各種データを一括登録、更新する画面です。</value>
+  </data>
+  <data name="Loader.Content" xml:space="preserve">
+    <value>ローダー</value>
+  </data>
+  <data name="LoaderView" xml:space="preserve">
+    <value>ローダー</value>
+  </data>
   <data name="Media.Content" xml:space="preserve">
     <value>メディア</value>
   </data>
@@ -144,10 +162,22 @@
   <data name="SettingsView" xml:space="preserve">
     <value>パラメータ</value>
   </data>
+  <data name="StaffList" xml:space="preserve">
+    <value>事務職員リスト</value>
+  </data>
   <data name="Students.Content" xml:space="preserve">
     <value>生徒</value>
   </data>
+  <data name="StudentsList" xml:space="preserve">
+    <value>生徒リスト</value>
+  </data>
   <data name="StudentsView" xml:space="preserve">
     <value>生徒</value>
+  </data>
+  <data name="TeachersList" xml:space="preserve">
+    <value>教育職員リスト</value>
+  </data>
+  <data name="Upsert.Content" xml:space="preserve">
+    <value>更新</value>
   </data>
 </root>
