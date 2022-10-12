@@ -132,11 +132,8 @@
   <data name="DevicesList" xml:space="preserve">
     <value>DevicesList</value>
   </data>
-  <data name="Filepath.Header" xml:space="preserve">
-    <value>Filepath</value>
-  </data>
-  <data name="Filepath.PlaceholderText" xml:space="preserve">
-    <value>C:\Users\EveryOne\Documents</value>
+  <data name="Filepath.Text" xml:space="preserve">
+    <value>Please drop file this.</value>
   </data>
   <data name="FT_Loader.Text" xml:space="preserve">
     <value>FlavourText Loader</value>

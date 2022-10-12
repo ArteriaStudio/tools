@@ -12,8 +12,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using Windows.ApplicationModel.DataTransfer;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
+using Windows.Storage.Pickers;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -69,6 +72,59 @@ namespace StatusBook
 				}
 			}
 			System.Diagnostics.Debug.WriteLine("[Leave]LoadOptions_SelectionChanged");
+			
+			ValidateMe(sender);
+		}
+
+		private void ValidateMe(object sender)
+		{
+			bool fEnabled = true;
+			var pLoadOptions = this.LoadOptions;
+			if (pLoadOptions.SelectedIndex == -1)
+			{
+				fEnabled = false;
+			}
+			System.Diagnostics.Debug.WriteLine("[Trace]pLoadOptions.SelectedIndex=" + pLoadOptions.SelectedIndex);
+
+			this.Upsert.IsEnabled = fEnabled;
+		}
+
+		private async void Filepath_Drop(object sender, DragEventArgs e)
+		{
+			if (e.DataView.Contains(StandardDataFormats.StorageItems))
+			{
+				var pItems = await e.DataView.GetStorageItemsAsync();
+				for (int i = 0; i < pItems.Count; i++)
+				{
+					// なぜか落ちる（2022/10/12:debug）
+					var pStorageFile = pItems[i] as StorageFile;
+					System.Diagnostics.Debug.WriteLine("[Trace]Filepath: " + pStorageFile.Path);
+					this.Filepath.Text = pStorageFile.Path;
+				}
+				/*
+				foreach (var pItem in pItems)
+				{
+					var pStorageFile = pItem as StorageFile;
+					System.Diagnostics.Debug.WriteLine("[Trace]Filepath: " + pStorageFile.Path);
+					this.Filepath.Text = pStorageFile.Path;
+				}
+				*/
+			}
+
+			ValidateMe(sender);
+		}
+
+		private void Filepath_Tapped(object sender, TappedRoutedEventArgs e)
+		{
+			//　コモンダイアログを使う道は、忘れるか諦めるのが好ましい（2022/10/12）
+			;
+			//　最適解：エクスプローラでファイルをドロップしろと利用者に伝える
+		}
+
+		private void Filepath_DragOver(object sender, DragEventArgs e)
+		{
+			e.AcceptedOperation = Windows.ApplicationModel.DataTransfer.DataPackageOperation.Copy;
+			;
 		}
 	}
 }

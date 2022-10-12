@@ -132,8 +132,8 @@
   <data name="DevicesList" xml:space="preserve">
     <value>機器リスト</value>
   </data>
-  <data name="Filepath.Header" xml:space="preserve">
-    <value>ファイルパス</value>
+  <data name="Filepath.Text" xml:space="preserve">
+    <value>ここにファイルをドロップしてください。</value>
   </data>
   <data name="FT_Loader.Text" xml:space="preserve">
     <value>各種データを一括登録、更新する画面です。</value>
