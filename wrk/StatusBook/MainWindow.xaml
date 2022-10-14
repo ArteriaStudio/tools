@@ -1,5 +1,5 @@
-﻿<Window
-	x:Class="StatusBook.MainWindow"
+﻿<ri:FrameWindow
+	xmlns:ri="using:Arteria_s.UI.Base" x:Class="StatusBook.MainWindow"
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:local="using:StatusBook"
@@ -33,4 +33,4 @@
 		</Border>
 	</Grid>
 	
-</Window>
+</ri:FrameWindow>

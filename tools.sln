@@ -18,7 +18,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StatusBook", "wrk\StatusBoo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LigareBook", "wrk\LigareBook\LigareBook.csproj", "{8BAB2A80-4DF0-460C-B327-2AF8385B0D83}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ritters", "wrk\Ritters\Ritters.csproj", "{EC9FC00F-14D7-4278-803F-611B6D55A9CB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ritters", "wrk\Ritters\Ritters.csproj", "{EC9FC00F-14D7-4278-803F-611B6D55A9CB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

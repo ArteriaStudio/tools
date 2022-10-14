@@ -4,6 +4,7 @@ using Microsoft.UI.Xaml.Controls.Primitives;
 using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
+using Microsoft.UI.Xaml.Media.Imaging;
 using Microsoft.UI.Xaml.Navigation;
 using Microsoft.VisualBasic.FileIO;
 using Microsoft.Windows.ApplicationModel.Resources;
@@ -89,42 +90,123 @@ namespace StatusBook
 			this.Upsert.IsEnabled = fEnabled;
 		}
 
+		private async void Grid_Drop(object sender, DragEventArgs e)
+		{
+			if (e.DataView.Contains(StandardDataFormats.StorageItems))
+			{
+				var items = await e.DataView.GetStorageItemsAsync();
+				if (items.Count > 0)
+				{
+					var storageFile = items[0] as StorageFile;
+					this.Filepath.Text = storageFile.Path;
+				}
+			}
+		}
+
+		//　2022/10/14：ドラッグandドロップが正常に動作しないので実装を断念
+		//　→　と思ったら「操作あの終了を同期的に確認できないので、Defferralを使えとサンプルにあった。
+		//　→　でもやっぱり落ちる。（foreach inの二週目の契機）
 		private async void Filepath_Drop(object sender, DragEventArgs e)
 		{
 			if (e.DataView.Contains(StandardDataFormats.StorageItems))
 			{
+				System.Diagnostics.Debug.WriteLine("[Trace]1");
+				//　GetDeferral()を使っても非同期関数で獲得したオブジェクトを参照すると落ちる
+				var def = e.GetDeferral();
+				System.Diagnostics.Debug.WriteLine("[Trace]2");
 				var pItems = await e.DataView.GetStorageItemsAsync();
-				for (int i = 0; i < pItems.Count; i++)
+				System.Diagnostics.Debug.WriteLine("[Trace]3");
+				var pStorageFiles = pItems;
+				System.Diagnostics.Debug.WriteLine("[Trace]4");
+				foreach (var pStorageFile in pStorageFiles)
 				{
-					// なぜか落ちる（2022/10/12:debug）
-					var pStorageFile = pItems[i] as StorageFile;
-					System.Diagnostics.Debug.WriteLine("[Trace]Filepath: " + pStorageFile.Path);
+					System.Diagnostics.Debug.WriteLine("[Trace]4.1");
 					this.Filepath.Text = pStorageFile.Path;
+					System.Diagnostics.Debug.WriteLine("[Trace]4.2");
 				}
-				/*
-				foreach (var pItem in pItems)
-				{
-					var pStorageFile = pItem as StorageFile;
-					System.Diagnostics.Debug.WriteLine("[Trace]Filepath: " + pStorageFile.Path);
-					this.Filepath.Text = pStorageFile.Path;
-				}
-				*/
+				System.Diagnostics.Debug.WriteLine("[Trace]5");
+				e.AcceptedOperation = DataPackageOperation.Copy;
+				System.Diagnostics.Debug.WriteLine("[Trace]6");
+				def.Complete();
+			}
+			else
+			{
+				e.AcceptedOperation = DataPackageOperation.None;
 			}
 
-			ValidateMe(sender);
+			/*
+			if (e.DataView.Contains(StandardDataFormats.StorageItems))
+			{
+				var pItems = await e.DataView.GetStorageItemsAsync();
+				var nItems = pItems.Count;
+				if (nItems > 0)
+				{
+					System.Diagnostics.Debug.WriteLine("[Trace]Count=" + nItems);
+					for (int i = 0; i < nItems; i++)
+					{
+						// なぜか落ちる（2022/10/12:debug）
+						var pStorageFile = pItems[i] as StorageFile;
+						if (pStorageFile != null)
+						{
+							this.Filepath.Text = pStorageFile.Path;
+						}
+					}
+				}
+			}
+			*/
+			//ValidateMe(sender);
 		}
 
-		private void Filepath_Tapped(object sender, TappedRoutedEventArgs e)
+		private async void Filepath_Tapped(object sender, TappedRoutedEventArgs e)
 		{
 			//　コモンダイアログを使う道は、忘れるか諦めるのが好ましい（2022/10/12）
 			;
 			//　最適解：エクスプローラでファイルをドロップしろと利用者に伝える
+			FileOpenPicker openPicker = new FileOpenPicker();
+			openPicker.ViewMode = PickerViewMode.Thumbnail;
+			openPicker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
+			openPicker.FileTypeFilter.Add(".jpg");
+			openPicker.FileTypeFilter.Add(".jpeg");
+			openPicker.FileTypeFilter.Add(".png");
+
+			StorageFile file = await openPicker.PickSingleFileAsync();
+			if (file != null)
+			{
+				// Application now has read/write access to the picked file
+				this.Filepath.Text = file.Path;
+			}
+			else
+			{
+//				this.Filepath.Text = file.Path;
+			}
+
+
+
+
+		}
+		private void Filepath_DragEnter(object sender, DragEventArgs e)
+		{
+			if (e.DataView.Contains(StandardDataFormats.StorageItems))
+			{
+				e.AcceptedOperation = Windows.ApplicationModel.DataTransfer.DataPackageOperation.Copy;
+			}
+			else
+			{
+				e.AcceptedOperation = Windows.ApplicationModel.DataTransfer.DataPackageOperation.None;
+			}
 		}
 
 		private void Filepath_DragOver(object sender, DragEventArgs e)
 		{
-			e.AcceptedOperation = Windows.ApplicationModel.DataTransfer.DataPackageOperation.Copy;
-			;
+			if (e.DataView.Contains(StandardDataFormats.StorageItems))
+			{
+				e.AcceptedOperation = Windows.ApplicationModel.DataTransfer.DataPackageOperation.Copy;
+			}
+			else
+			{
+				e.AcceptedOperation = Windows.ApplicationModel.DataTransfer.DataPackageOperation.None;
+			}
 		}
+
 	}
 }

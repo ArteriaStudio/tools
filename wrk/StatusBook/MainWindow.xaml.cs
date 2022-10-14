@@ -8,6 +8,7 @@ using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Media.Animation;
 using Microsoft.UI.Xaml.Navigation;
 using Microsoft.Windows.ApplicationModel.Resources;
+using Arteria_s.UI.Base;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -24,7 +25,7 @@ namespace StatusBook
 	/// <summary>
 	/// An empty window that can be used on its own or navigated to within a Frame.
 	/// </summary>
-	public sealed partial class MainWindow : Window
+	public sealed partial class MainWindow : FrameWindow
 	{
 		public MainWindow()
 		{
