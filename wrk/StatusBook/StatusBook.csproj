@@ -16,14 +16,18 @@
   <ItemGroup>
     <None Remove="ApexPage.xaml" />
     <None Remove="ContentsPage.xaml" />
+    <None Remove="DeviceListPage.xaml" />
     <None Remove="FooterPage.xaml" />
     <None Remove="ListupPage.xaml" />
     <None Remove="LoaderPage.xaml" />
     <None Remove="MediaPage.xaml" />
+    <None Remove="OrgUnitPage.xaml" />
     <None Remove="PersonsPage.xaml" />
     <None Remove="SettingsPage.xaml" />
+    <None Remove="StaffListPage.xaml" />
     <None Remove="StartPage.xaml" />
     <None Remove="StatusPage.xaml" />
+    <None Remove="StudentListPage.xaml" />
     <None Remove="StudentsPage.xaml" />
   </ItemGroup>
 
@@ -57,6 +61,26 @@
   <ItemGroup>
     <ProjectReference Include="..\LigareBook\LigareBook.csproj" />
     <ProjectReference Include="..\Ritters\Ritters.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="OrgUnitPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="DeviceListPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="StaffListPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="StudentListPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="LoaderPage.xaml">

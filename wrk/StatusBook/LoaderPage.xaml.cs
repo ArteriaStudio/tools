@@ -1,4 +1,5 @@
-﻿using Microsoft.UI.Xaml;
+﻿using Arteria_s.UI.Base;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
 using Microsoft.UI.Xaml.Data;
@@ -49,9 +50,10 @@ namespace StatusBook
 			var pResLoader = new ResourceLoader();
 			pLoadOptions = new List<LoadOptionItem>();
 			pLoadOptions.Add(new LoadOptionItem() { iNumber = 0, Label = pResLoader.GetString("StudentsList") });
-			pLoadOptions.Add(new LoadOptionItem() { iNumber = 1, Label = pResLoader.GetString("TeachersList") });
-			pLoadOptions.Add(new LoadOptionItem() { iNumber = 2, Label = pResLoader.GetString("StaffList") });
-			pLoadOptions.Add(new LoadOptionItem() { iNumber = 3, Label = pResLoader.GetString("DevicesList") });
+			pLoadOptions.Add(new LoadOptionItem() { iNumber = 1, Label = pResLoader.GetString("StaffList") });
+			pLoadOptions.Add(new LoadOptionItem() { iNumber = 2, Label = pResLoader.GetString("DevicesList") });
+
+			this.ListFrame.Navigate(typeof(StudentListPage));
 		}
 
 		private void LoadOptions_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -62,6 +64,18 @@ namespace StatusBook
 				if (pOption != null)
 				{
 					System.Diagnostics.Debug.WriteLine("[Add]pOption.iNumber=" + pOption.iNumber);
+					switch (pOption.iNumber)
+					{
+					case	0:
+						this.ListFrame.Navigate(typeof(StudentListPage));
+						break;
+					case	1:
+						this.ListFrame.Navigate(typeof(StaffListPage));
+						break;
+					case	2:
+						this.ListFrame.Navigate(typeof(DeviceListPage));
+						break;
+					}
 				}
 			}
 
@@ -90,19 +104,6 @@ namespace StatusBook
 			this.Upsert.IsEnabled = fEnabled;
 		}
 
-		private async void Grid_Drop(object sender, DragEventArgs e)
-		{
-			if (e.DataView.Contains(StandardDataFormats.StorageItems))
-			{
-				var items = await e.DataView.GetStorageItemsAsync();
-				if (items.Count > 0)
-				{
-					var storageFile = items[0] as StorageFile;
-					this.Filepath.Text = storageFile.Path;
-				}
-			}
-		}
-
 		//　2022/10/14：ドラッグandドロップが正常に動作しないので実装を断念
 		//　→　と思ったら「操作あの終了を同期的に確認できないので、Defferralを使えとサンプルにあった。
 		//　→　でもやっぱり落ちる。（foreach inの二週目の契機）
@@ -118,6 +119,7 @@ namespace StatusBook
 				System.Diagnostics.Debug.WriteLine("[Trace]3");
 				var pStorageFiles = pItems;
 				System.Diagnostics.Debug.WriteLine("[Trace]4");
+				//　↓この辺りで落ちる（2022/10/15）Windows App SDK 1.2辺りで問題が修正されるとかなんとか
 				foreach (var pStorageFile in pStorageFiles)
 				{
 					System.Diagnostics.Debug.WriteLine("[Trace]4.1");
@@ -134,27 +136,7 @@ namespace StatusBook
 				e.AcceptedOperation = DataPackageOperation.None;
 			}
 
-			/*
-			if (e.DataView.Contains(StandardDataFormats.StorageItems))
-			{
-				var pItems = await e.DataView.GetStorageItemsAsync();
-				var nItems = pItems.Count;
-				if (nItems > 0)
-				{
-					System.Diagnostics.Debug.WriteLine("[Trace]Count=" + nItems);
-					for (int i = 0; i < nItems; i++)
-					{
-						// なぜか落ちる（2022/10/12:debug）
-						var pStorageFile = pItems[i] as StorageFile;
-						if (pStorageFile != null)
-						{
-							this.Filepath.Text = pStorageFile.Path;
-						}
-					}
-				}
-			}
-			*/
-			//ValidateMe(sender);
+			ValidateMe(sender);
 		}
 
 		private async void Filepath_Tapped(object sender, TappedRoutedEventArgs e)
@@ -162,24 +144,21 @@ namespace StatusBook
 			//　コモンダイアログを使う道は、忘れるか諦めるのが好ましい（2022/10/12）
 			//　最適解：エクスプローラでファイルをドロップしろと利用者に伝える
 			//　相互運用機能に頼る（2022/10/15）
-			FileOpenPicker openPicker = new FileOpenPicker();
-			openPicker.ViewMode = PickerViewMode.Thumbnail;
-			openPicker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
-			openPicker.FileTypeFilter.Add(".csv");
-
 			var pApp = Application.Current as App;
-			var hWnd = WinRT.Interop.WindowNative.GetWindowHandle(pApp.m_pWindow);
-			WinRT.Interop.InitializeWithWindow.Initialize(openPicker, hWnd);
+			var pOpenPicker = PickerHelper.NewFileOpenPicker(pApp.m_pWindow);
 
-			StorageFile file = await openPicker.PickSingleFileAsync();
+			pOpenPicker.ViewMode = PickerViewMode.Thumbnail;
+			pOpenPicker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
+			pOpenPicker.FileTypeFilter.Add(".csv");
+
+			StorageFile file = await pOpenPicker.PickSingleFileAsync();
 			if (file != null)
 			{
-				// Application now has read/write access to the picked file
 				this.Filepath.Text = file.Path;
 			}
 			else
 			{
-//				this.Filepath.Text = file.Path;
+				;
 			}
 
 

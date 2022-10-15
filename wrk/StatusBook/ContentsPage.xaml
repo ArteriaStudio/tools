@@ -23,6 +23,11 @@
 						<ImageIcon Source="Assets/dashboard_white_24dp.svg"></ImageIcon>
 					</NavigationViewItem.Icon>
 				</NavigationViewItem>
+				<NavigationViewItem x:Uid="OrgUnit" Tag="OrgUnitView">
+					<NavigationViewItem.Icon>
+						<ImageIcon Source="Assets/corporate_fare_white_24dp.svg"></ImageIcon>
+					</NavigationViewItem.Icon>
+				</NavigationViewItem>
 				<NavigationViewItem x:Uid="Persons" Tag="PersonsView">
 					<NavigationViewItem.Icon>
 						<ImageIcon Source="Assets/people_white_24dp.svg"></ImageIcon>

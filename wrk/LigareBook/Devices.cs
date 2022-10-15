@@ -1,5 +1,4 @@
 ﻿using Arteria_s.DB.Base;
-using Microsoft.VisualBasic;
 using Npgsql;
 using System;
 using System.Collections.Generic;
@@ -10,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace LigareBook
 {
-	public class Student
+	public class Device
 	{
-		public Guid	AccountID { get; set; }
+		public Guid AccountID { get; set; }
 		public String Email { get; set; }
 		public String Name { get; set; }
 		public String Read { get; set; }
@@ -31,21 +30,11 @@ namespace LigareBook
 		public String Numbers { get; set; }
 	}
 
-	public class StudentsCursor
+	public class DevicesCursor
 	{
-		public StudentsCursor()
+		public ObservableCollection<Device> Listup(Context pContext)
 		{
-			;
-		}
-
-		~StudentsCursor()
-		{
-			;
-		}
-
-		public ObservableCollection<Student> Listup(Context pContext)
-		{
-			var pItems = new ObservableCollection<Student>();
+			var pItems = new ObservableCollection<Device>();
 			var pSQL = "SELECT AccountID, Email, Name, StudentNumber, Year, School, Grade, Sets, Numbers FROM VStudents;";
 
 			using (var pCommand = new NpgsqlCommand(pSQL, pContext.m_pConnection))
@@ -54,22 +43,22 @@ namespace LigareBook
 				{
 					while (pReader.Read())
 					{
-						Student pStudent = new Student();
-						pStudent.AccountID     = pReader.GetGuid(0);
-						pStudent.Email         = pReader.GetString(1);
-						pStudent.Name          = pReader.GetString(2);
-						pStudent.StudentNumber = pReader.GetString(3);
-						pStudent.Year          = pReader.GetInt32(4);
-						pStudent.School        = pReader.GetString(5);
-						pStudent.Grade         = pReader.GetString(6);
-						pStudent.Sets          = pReader.GetString(7);
-						pStudent.Numbers       = pReader.GetString(8);
-						pItems.Add(pStudent);
+						Device pDevice = new Device();
+						pDevice.AccountID = pReader.GetGuid(0);
+						pDevice.Email = pReader.GetString(1);
+						pDevice.Name = pReader.GetString(2);
+						pDevice.StudentNumber = pReader.GetString(3);
+						pDevice.Year = pReader.GetInt32(4);
+						pDevice.School = pReader.GetString(5);
+						pDevice.Grade = pReader.GetString(6);
+						pDevice.Sets = pReader.GetString(7);
+						pDevice.Numbers = pReader.GetString(8);
+						pItems.Add(pDevice);
 					}
 				}
 			}
 
-			return(pItems);
+			return (pItems);
 		}
 	}
 }

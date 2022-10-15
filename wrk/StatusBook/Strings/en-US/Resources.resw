@@ -162,6 +162,12 @@
   <data name="MediaView" xml:space="preserve">
     <value>Media</value>
   </data>
+  <data name="OrgUnit.Content" xml:space="preserve">
+    <value>OrgUnit</value>
+  </data>
+  <data name="OrgUnitView" xml:space="preserve">
+    <value>OrgUnit</value>
+  </data>
   <data name="Persons.Content" xml:space="preserve">
     <value>Persons</value>
   </data>
@@ -188,9 +194,6 @@
   </data>
   <data name="StudentsView" xml:space="preserve">
     <value>Students</value>
-  </data>
-  <data name="TeachersList" xml:space="preserve">
-    <value>TeachersList</value>
   </data>
   <data name="Upsert.Content" xml:space="preserve">
     <value>Upsert</value>

@@ -13,6 +13,18 @@
     <None Update="App.xaml">
       <SubType>Designer</SubType>
     </None>
+    <Page Update="OrgUnitPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="DeviceListPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="StaffListPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="StudentListPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="LoaderPage.xaml">
       <SubType>Designer</SubType>
     </Page>

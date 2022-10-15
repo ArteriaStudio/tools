@@ -25,6 +25,7 @@
 			<Border BorderThickness="1" BorderBrush="Gray" Margin="16,4,16,4" AllowDrop="False" DragEnter="Filepath_DragEnter" DragOver="Filepath_DragOver" Drop="Filepath_Drop">
 				<TextBlock Name="Filepath" x:Uid="Filepath" Margin="16,4,16,6" Tapped="Filepath_Tapped" />
 			</Border>
+			<Frame Name="ListFrame" Margin="16,4,16,6" />
 			<Button Name="Upsert" x:Uid="Upsert" Margin="16,4" IsEnabled="False" />
 		</StackPanel>
 
