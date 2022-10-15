@@ -1,6 +1,6 @@
-﻿using Microsoft.VisualBasic;
+﻿using Arteria_s.DB.Base;
+using Microsoft.VisualBasic;
 using Npgsql;
-using Ritters;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

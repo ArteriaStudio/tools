@@ -27,27 +27,23 @@ namespace StatusBook
 	{
 		public SettingsPage()
 		{
-			this.InitializeComponent();
+			InitializeComponent();
 
-			for (int i = 0; i < 25; i++)
-			{
-				Person pPerson = new Person();
-				pPerson.Name = "number: " + i + "x";
-				pItems.Add(pPerson);
-			}
+			var pApp = Application.Current as App;
 
-//			this.SizeChanged += SettingsPage_SizeChanged;
-			
+			DatabaseServer.Text = pApp.m_pProfile.DatabaseServer;
+			DatabaseName.Text = pApp.m_pProfile.DatabaseName;
+			SchemaName.Text = pApp.m_pProfile.SchemaName;
 		}
 
 		//　コンテンツ幅の計算処理をフック
 		protected override Size MeasureOverride(Size  size)
 		{
 			var pApp = Application.Current as App;
-			System.Diagnostics.Debug.WriteLine("pApp.m_window.Content.ActualSize=" + pApp.m_window.Content.ActualSize);
-			System.Diagnostics.Debug.WriteLine("pApp.m_window.Content.DesiredSize=" + pApp.m_window.Content.DesiredSize);
-			System.Diagnostics.Debug.WriteLine("pApp.m_window.Bounds.Width=" + pApp.m_window.Bounds.Width);
-			System.Diagnostics.Debug.WriteLine("pApp.m_window.Bounds.Height=" + pApp.m_window.Bounds.Height);
+			System.Diagnostics.Debug.WriteLine("pApp.m_window.Content.ActualSize=" + pApp.m_pWindow.Content.ActualSize);
+			System.Diagnostics.Debug.WriteLine("pApp.m_window.Content.DesiredSize=" + pApp.m_pWindow.Content.DesiredSize);
+			System.Diagnostics.Debug.WriteLine("pApp.m_window.Bounds.Width=" + pApp.m_pWindow.Bounds.Width);
+			System.Diagnostics.Debug.WriteLine("pApp.m_window.Bounds.Height=" + pApp.m_pWindow.Bounds.Height);
 
 			System.Diagnostics.Debug.WriteLine("this.Parent.ToString()=" + this.Parent.ToString());
 			
@@ -59,7 +55,7 @@ namespace StatusBook
 			System.Diagnostics.Debug.WriteLine("this.ActualSize=" + this.ActualSize);
 			System.Diagnostics.Debug.WriteLine("this.DesiredSize=" + this.DesiredSize);
 
-			var pWindow = pApp.m_window as MainWindow;
+			var pWindow = pApp.m_pWindow as MainWindow;
 			/*
 //			var pNavigationView = pWindow.m_pNavigationView;
 			System.Diagnostics.Debug.WriteLine("pNavigationView.ActualSize=" + pNavigationView.ActualSize);
@@ -75,5 +71,13 @@ namespace StatusBook
 		}
 
 		ObservableCollection<Person>	pItems = new ObservableCollection<Person>();
+
+		private void Apply_Click(object sender, RoutedEventArgs e)
+		{
+			var pApp = Application.Current as App;
+			pApp.m_pProfile.DatabaseServer = DatabaseServer.Text;
+			pApp.m_pProfile.DatabaseName = DatabaseName.Text;
+			pApp.m_pProfile.SchemaName = SchemaName.Text;
+		}
 	}
 }

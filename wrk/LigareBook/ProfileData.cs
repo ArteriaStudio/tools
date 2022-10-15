@@ -1,14 +1,13 @@
-﻿using Ritters;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LigareBook
+namespace Arteria_s.Common.LigareBook
 {
-	public class ProfileData
+	public class Profile
 	{
 		//　プロパティ
 		public string	DatabaseServer { get; set; }
@@ -16,7 +15,7 @@ namespace LigareBook
 		public string	SchemaName { get; set; }
 		public string	CurrentPage { get; set; }
 
-		public ProfileData()
+		public Profile()
 		{
 			//　データベースサーバー名
 			DatabaseServer = "stagesv.bunri-hjs.ac.jp";

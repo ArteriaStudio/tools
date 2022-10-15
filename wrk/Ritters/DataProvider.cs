@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ritters
+namespace Arteria_s.DB.Base
 {
 	//　データプロバイダ
 	public class DataProvider

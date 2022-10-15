@@ -160,14 +160,16 @@ namespace StatusBook
 		private async void Filepath_Tapped(object sender, TappedRoutedEventArgs e)
 		{
 			//　コモンダイアログを使う道は、忘れるか諦めるのが好ましい（2022/10/12）
-			;
 			//　最適解：エクスプローラでファイルをドロップしろと利用者に伝える
+			//　相互運用機能に頼る（2022/10/15）
 			FileOpenPicker openPicker = new FileOpenPicker();
 			openPicker.ViewMode = PickerViewMode.Thumbnail;
 			openPicker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
-			openPicker.FileTypeFilter.Add(".jpg");
-			openPicker.FileTypeFilter.Add(".jpeg");
-			openPicker.FileTypeFilter.Add(".png");
+			openPicker.FileTypeFilter.Add(".csv");
+
+			var pApp = Application.Current as App;
+			var hWnd = WinRT.Interop.WindowNative.GetWindowHandle(pApp.m_pWindow);
+			WinRT.Interop.InitializeWithWindow.Initialize(openPicker, hWnd);
 
 			StorageFile file = await openPicker.PickSingleFileAsync();
 			if (file != null)

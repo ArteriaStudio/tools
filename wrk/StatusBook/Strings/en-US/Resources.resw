@@ -120,6 +120,9 @@
   <data name="ApplicationName" xml:space="preserve">
     <value>StatusBook</value>
   </data>
+  <data name="Apply.Content" xml:space="preserve">
+    <value>Apply</value>
+  </data>
   <data name="AppTitle.PaneTitle" xml:space="preserve">
     <value>Console</value>
   </data>
@@ -128,6 +131,12 @@
   </data>
   <data name="DashBoardView" xml:space="preserve">
     <value>DashBoard</value>
+  </data>
+  <data name="DatabaseName.Header" xml:space="preserve">
+    <value>Database Name</value>
+  </data>
+  <data name="DatabaseServer.Header" xml:space="preserve">
+    <value>Database Server</value>
   </data>
   <data name="DataType.Header" xml:space="preserve">
     <value>DataType</value>
@@ -158,6 +167,9 @@
   </data>
   <data name="PersonsView" xml:space="preserve">
     <value>Persons</value>
+  </data>
+  <data name="SchemaName.Header" xml:space="preserve">
+    <value>Schema Name</value>
   </data>
   <data name="Settings.Content" xml:space="preserve">
     <value>Settings</value>

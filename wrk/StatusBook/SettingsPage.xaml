@@ -17,20 +17,11 @@
 			<RowDefinition Height="*" />
 		</Grid.RowDefinitions>
 
-		<GridView ItemsSource="{x:Bind pItems}">
-			<GridView.ItemTemplate>
-				<!-- DataTemplate x:DataType ： ItemSourceに指定したコレクションの要素にアクセスする時に用いるテンプレート引数型で指定したクラス名 -->
-				<DataTemplate x:DataType="lb:Person">
-					<!-- TextBlock Text：{x:Bind変数 参照するメンバ名} -->
-					<TextBlock Text="{x:Bind Name}" />
-				</DataTemplate>
-			</GridView.ItemTemplate>
-
-			<GridView.ItemsPanel>
-				<ItemsPanelTemplate>
-					<ItemsWrapGrid Orientation="Horizontal" HorizontalAlignment="Center" />
-				</ItemsPanelTemplate>
-			</GridView.ItemsPanel>
-		</GridView>
+		<StackPanel Grid.Column="0" Grid.Row="0">
+			<TextBox Name="DatabaseServer" x:Uid="DatabaseServer" Text="" Margin="16,6,16,6" />
+			<TextBox Name="DatabaseName" x:Uid="DatabaseName" Text="" Margin="16,6,16,6" />
+			<TextBox Name="SchemaName" x:Uid="SchemaName" Text="" Margin="16,6,16,6" />
+			<Button Name="Apply" x:Uid="Apply" Margin="16,4,16,4" IsEnabled="True" Click="Apply_Click" />
+		</StackPanel>
 	</Grid>
 </Page>

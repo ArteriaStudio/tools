@@ -31,11 +31,14 @@ namespace StatusBook
 
 			//　一覧データを入力
 			var pApp = Application.Current as App;
-			var pProfileData = pApp.m_pProfile as ProfileData;
+			var pProfile = pApp.m_pProfile;
+			var pContext = pApp.m_pContext;
 			var pStatusSheet = StatusSheet.GetInstance();
-			pItems = pStatusSheet.Listup(pProfileData);
-
-			pStudents = pStatusSheet.ListupStudents(pProfileData);
+			pItems = pStatusSheet.Listup(pProfile);
+			if (pItems != null)
+			{
+				pStudents = pStatusSheet.ListupStudents(pContext);
+			}
 		}
 
 		ObservableCollection<Person> pItems = new ObservableCollection<Person>();

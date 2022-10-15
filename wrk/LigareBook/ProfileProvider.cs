@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Arteria_s.Common.LigareBook;
+using Arteria_s.OS.Base;
 using Microsoft.Data.Sqlite;
 
 namespace LigareBook
@@ -19,8 +17,14 @@ namespace LigareBook
 			var pAppDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
 			System.Diagnostics.Debug.WriteLine("AppData: " + pAppDataFolder);
 
+			//　ユーザープロファイルのフォルダ名を生成
+			var pFolderPath = pAppDataFolder + "/" + m_pCompanyName + "/" + m_pAppName;
+
+			DirectoryHelper.CreateDirectorySafe(pFolderPath);
+
 			//　ユーザープロファイルのパス名を生成
-			m_pProfilePath = pAppDataFolder + "/" + m_pCompanyName + "/" + m_pAppName + "/" + m_pAppName + ".db";
+			m_pProfilePath = pFolderPath + "/" + m_pAppName + ".db";
+
 
 			//　データベースを利用する前提条件を整える（なければ作る）
 			PrepareDatabase();
@@ -99,9 +103,9 @@ namespace LigareBook
 		}
 
 		// こちらもとてもスッキリしたコーディング。みんなニッコリ（2022/08/31 Rink）
-		public static bool Save(ProfileData pProfileData)
+		public static bool Save(Profile pProfile)
 		{
-			var pProperties = pProfileData.GetType().GetProperties();
+			var pProperties = pProfile.GetType().GetProperties();
 
 			var m_pConnectionString = "Data Source=" + m_pProfilePath;
 
@@ -115,10 +119,10 @@ namespace LigareBook
 				foreach (var pProperty in pProperties)
 				{
 					System.Diagnostics.Debug.WriteLine(pProperty.Name);
-					System.Diagnostics.Debug.WriteLine(pProperty.GetValue(pProfileData));
+					System.Diagnostics.Debug.WriteLine(pProperty.GetValue(pProfile));
 
 					var pItem  = pProperty.Name;
-					var pValue = pProperty.GetValue(pProfileData);
+					var pValue = pProperty.GetValue(pProfile);
 
 					pCommand.Parameters.Clear();
 					pCommand.Parameters.AddWithValue("$Item", pItem);
@@ -131,10 +135,10 @@ namespace LigareBook
 		}
 
 		//　とてもスッキリしたコーディング。みんなニッコリ（2022/08/31 Rink）
-		public static ProfileData Load()
+		public static Profile Load()
 		{
-			ProfileData pProfileData = new ProfileData();
-			var pProperties = pProfileData.GetType().GetProperties();
+			Profile pProfile = new Profile();
+			var pProperties = pProfile.GetType().GetProperties();
 
 			var m_pConnectionString = "Data Source=" + m_pProfilePath;
 
@@ -157,14 +161,14 @@ namespace LigareBook
 							if (pItem.Equals(pProperty.Name) == true)
 							{
 								//　第一引数は、設定対象となるクラスのインスタンスを指定
-								pProperty.SetValue(pProfileData, pValue);
+								pProperty.SetValue(pProfile, pValue);
 							}
 						}
 					}
 				}
 			}
 
-			return (pProfileData);
+			return (pProfile);
 		}
 
 	}

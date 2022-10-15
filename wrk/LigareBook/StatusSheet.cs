@@ -1,12 +1,14 @@
-﻿using Microsoft.UI.Xaml;
+﻿using Arteria_s.Common.LigareBook;
+using Arteria_s.DB.Base;
+using Microsoft.UI.Xaml;
 using Npgsql;
-using Ritters;
 using SQLitePCL;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data.Common;
 using System.Linq;
+using System.Net.Sockets;
 using System.Runtime.ConstrainedExecution;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,6 +27,7 @@ namespace LigareBook
 	}
 
 
+	//　形として不要なクラス
 	public class StatusSheet
 	{
 		static StatusSheet	pInstance = new StatusSheet();
@@ -40,9 +43,9 @@ namespace LigareBook
 		}
 
 		//　生徒一覧を取得
-		public ObservableCollection<Student>	ListupStudents(ProfileData  pProfileData)
+		public ObservableCollection<Student>	ListupStudents(Context pContext)
 		{
-			var pContext = new Context(pProfileData.DatabaseServer, pProfileData.DatabaseName, pProfileData.SchemaName);
+//			var pContext = new Context(pProfileData.DatabaseServer, pProfileData.DatabaseName, pProfileData.SchemaName);
 			var pCursor = new StudentsCursor();
 			var pItems = pCursor.Listup(pContext);
 
@@ -50,7 +53,7 @@ namespace LigareBook
 		}
 
 		//　一覧を取得
-		public ObservableCollection<Person> 	Listup(ProfileData  pProfileData)
+		public ObservableCollection<Person> 	Listup(Profile  pProfile)
 		{
 			var pItems = new ObservableCollection<Person>();
 
@@ -64,7 +67,7 @@ namespace LigareBook
 			}
 
 			//　データベースサーバからデータを入力
-			var pConnectionString = String.Format("Server={0};Port=5432;Database={1};Username={2};sslmode=disable", pProfileData.DatabaseServer, pProfileData.DatabaseName, pProfileData.SchemaName);
+			var pConnectionString = String.Format("Server={0};Port=5432;Database={1};Username={2};sslmode=disable", pProfile.DatabaseServer, pProfile.DatabaseName, pProfile.SchemaName);
 
 			var pSQL = "SELECT StateID, Name FROM MStates;";
 
@@ -72,21 +75,28 @@ namespace LigareBook
 			using (var pConnection = new NpgsqlConnection(pConnectionString))
 			using (var pCommand = new NpgsqlCommand(pSQL, pConnection))
 			{
-				pConnection.Open();
-
-				using (var pReader = pCommand.ExecuteReader())
+				try
 				{
-					while (pReader.Read())
+					pConnection.Open();
+					using (var pReader = pCommand.ExecuteReader())
 					{
-						System.Diagnostics.Debug.WriteLine("StateID: " + pReader.GetString(0));
-						System.Diagnostics.Debug.WriteLine("Name: " + pReader.GetString(1));
+						while (pReader.Read())
+						{
+							System.Diagnostics.Debug.WriteLine("StateID: " + pReader.GetString(0));
+							System.Diagnostics.Debug.WriteLine("Name: " + pReader.GetString(1));
 
-						var pItem = new Person();
-						pItem.Number = pReader.GetString(0);
-						pItem.CompositionName = pReader.GetString(1);
+							var pItem = new Person();
+							pItem.Number = pReader.GetString(0);
+							pItem.CompositionName = pReader.GetString(1);
 
-						pItems.Add(pItem);
+							pItems.Add(pItem);
+						}
 					}
+				}
+				catch (SocketException e)
+				{
+					System.Diagnostics.Debug.WriteLine("Exception: " + e.ToString());
+					return(null);
 				}
 			}
 

@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Apply.Content" xml:space="preserve">
+    <value>適用</value>
+  </data>
   <data name="AppTitle.PaneTitle" xml:space="preserve">
     <value>コンソール</value>
   </data>
@@ -125,6 +128,12 @@
   </data>
   <data name="DashBoardView" xml:space="preserve">
     <value>ダッシュボード</value>
+  </data>
+  <data name="DatabaseName.Header" xml:space="preserve">
+    <value>データベースインスタンス名</value>
+  </data>
+  <data name="DatabaseServer.Header" xml:space="preserve">
+    <value>データベースサーバホスト名</value>
   </data>
   <data name="DataType.Header" xml:space="preserve">
     <value>データ種類</value>
@@ -155,6 +164,9 @@
   </data>
   <data name="PersonsView" xml:space="preserve">
     <value>人物</value>
+  </data>
+  <data name="SchemaName.Header" xml:space="preserve">
+    <value>スキーマ名</value>
   </data>
   <data name="Settings.Content" xml:space="preserve">
     <value>パラメータ</value>

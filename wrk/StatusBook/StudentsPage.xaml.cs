@@ -1,4 +1,5 @@
-﻿using LigareBook;
+﻿using Arteria_s.Common.LigareBook;
+using LigareBook;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
@@ -31,9 +32,10 @@ namespace StatusBook
 
 			//　一覧データを入力
 			var pApp = Application.Current as App;
-			var pProfileData = pApp.m_pProfile as ProfileData;
+			var pProfile = pApp.m_pProfile;
+			var pContext = pApp.m_pContext;
 			var pStatusSheet = StatusSheet.GetInstance();
-			pStudents = pStatusSheet.ListupStudents(pProfileData);
+			pStudents = pStatusSheet.ListupStudents(pContext);
 		}
 
 		ObservableCollection<Student> pStudents = new ObservableCollection<Student>();

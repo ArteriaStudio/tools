@@ -1,11 +1,13 @@
-﻿using Npgsql;
+﻿using Microsoft.UI.Xaml.Controls.Primitives;
+using Npgsql;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ritters
+namespace Arteria_s.DB.Base
 {
 	//　データベースコンテキスト
 	public class Context
