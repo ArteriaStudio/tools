@@ -1,19 +1,14 @@
 ﻿<Page
-    x:Class="StatusBook.OrgUnitPage"
+    x:Class="StatusBook.HistoryPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:StatusBook"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	xmlns:lb="using:LigareBook"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-	<TreeView ItemsSource="{x:Bind pOrgUnits}">
-		<TreeView.ItemTemplate>
-			<DataTemplate x:Name="TableDataTemplate" x:DataType="lb:OrgUnit">
-				<TreeViewItem ItemsSource="{x:Bind Children}" Content="{x:Bind Name}" IsExpanded="{x:Bind IsExpanded}"  />
-			</DataTemplate>
-		</TreeView.ItemTemplate>
-	</TreeView>
+    <Grid>
+
+    </Grid>
 </Page>

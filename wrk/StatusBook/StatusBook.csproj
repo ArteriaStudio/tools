@@ -18,6 +18,7 @@
     <None Remove="ContentsPage.xaml" />
     <None Remove="DeviceListPage.xaml" />
     <None Remove="FooterPage.xaml" />
+    <None Remove="HistoryPage.xaml" />
     <None Remove="ListupPage.xaml" />
     <None Remove="LoaderPage.xaml" />
     <None Remove="MediaPage.xaml" />
@@ -61,6 +62,11 @@
   <ItemGroup>
     <ProjectReference Include="..\LigareBook\LigareBook.csproj" />
     <ProjectReference Include="..\Ritters\Ritters.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="HistoryPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="OrgUnitPage.xaml">

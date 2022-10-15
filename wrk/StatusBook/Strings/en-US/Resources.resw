@@ -150,6 +150,12 @@
   <data name="FT_Loader.Text" xml:space="preserve">
     <value>FlavourText Loader</value>
   </data>
+  <data name="History.Content" xml:space="preserve">
+    <value>History</value>
+  </data>
+  <data name="HistoryView" xml:space="preserve">
+    <value>History</value>
+  </data>
   <data name="Loader.Content" xml:space="preserve">
     <value>Loader</value>
   </data>

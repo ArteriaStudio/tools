@@ -43,6 +43,22 @@ SELECT
   MEmploys.StaffType,
   MEmploys.ContractType
 FROM
-    MAccounts
-      INNER JOIN MEmploys ON MAccounts.AccountID = MEmploys.AccountID;
+  MAccounts
+    INNER JOIN MEmploys ON MAccounts.AccountID = MEmploys.AccountID;
 GRANT SELECT ON VEmploys TO aploper, cmnoper;
+
+/*　組織単位　*/
+DROP VIEW VOrgUnits;
+CREATE VIEW VOrgUnits AS
+SELECT
+  MOrgUnits.OrgUnitID,
+  MOrgUnits.Code,
+  MOrgUnits.Name,
+  MOrgRels.ContainerID
+FROM
+  MOrgUnits
+    LEFT OUTER JOIN MOrgRels ON MOrgRels.OrgUnitID = MOrgUnits.OrgUnitID
+ORDER BY
+  ContainerID, Code;
+GRANT SELECT ON VOrgUnits TO aploper, cmnoper;
+

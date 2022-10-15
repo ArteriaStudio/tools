@@ -147,6 +147,12 @@
   <data name="FT_Loader.Text" xml:space="preserve">
     <value>各種データを一括登録、更新する画面です。</value>
   </data>
+  <data name="History.Content" xml:space="preserve">
+    <value>操作ログ</value>
+  </data>
+  <data name="HistoryView" xml:space="preserve">
+    <value>操作ログ</value>
+  </data>
   <data name="Loader.Content" xml:space="preserve">
     <value>ローダー</value>
   </data>

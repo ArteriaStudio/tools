@@ -101,6 +101,10 @@ namespace StatusBook
 			{
 				this.FragmentsFrame.Navigate(typeof(MediaPage));
 			}
+			else if (pTargetPage.Equals("HistoryView") == true)
+			{
+				this.FragmentsFrame.Navigate(typeof(HistoryPage));
+			}
 			else if (pTargetPage.Equals("SettingsView") == true)
 			{
 				this.FragmentsFrame.Navigate(typeof(SettingsPage));

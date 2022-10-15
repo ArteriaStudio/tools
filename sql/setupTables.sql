@@ -137,6 +137,10 @@ CREATE TABLE MOrgUnits (
 GRANT ALL ON MOrgUnits TO cmnoper;
 GRANT SELECT ON MOrgUnits TO aploper;
 
+INSERT INTO MOrgUnits (Code, Name) VALUES ('00000001', '生徒');
+INSERT INTO MOrgUnits (Code, Name) VALUES ('00000002', '職員');
+
+
 /*　　組織構造　*/
 CREATE TABLE MOrgRels (
   Year          INTEGER NOT NULL,
@@ -159,6 +163,45 @@ LANGUAGE SQL AS $$
   INSERT INTO MOrgRels (Year, OrgUnitID, ContainerID) (SELECT pYear, OrgUnitID, pContainerID FROM MOrgUnits WHERE Code = pCode);
 $$;
 
+CREATE FUNCTION GetOrgUnitID (
+  pContainerCode VARCHAR(8)
+) RETURNS UUID
+LANGUAGE SQL AS $$
+  SELECT OrgUnitID FROM MOrgUnits WHERE Code = pContainerCode;
+$$;
+
+
+CREATE PROCEDURE AppendOrgUnitByCode (pYear INTEGER, pCode VARCHAR(8), pName VARCHAR(32), pContainerCode VARCHAR(8))
+LANGUAGE SQL AS $$
+  INSERT INTO MOrgUnits (Code, Name) VALUES (pCode, pName);
+  INSERT INTO MOrgRels (Year, OrgUnitID, ContainerID) (SELECT pYear, OrgUnitID, GetOrgUnitID(pContainerCode) FROM MOrgUnits WHERE Code = pCode);
+$$;
+
+
+INSERT INTO MOrgUnits (OrgUnitID, Code, Name) VALUES ('{00000000-0000-0000-0000-000000000001}', '00000000', 'アルテリア工房');
+INSERT INTO MOrgRels (Year, OrgUnitID, ContainerID) (SELECT 2022, OrgUnitID, '{00000000-0000-0000-0000-000000000000}' FROM MOrgUnits WHERE Code = '00000000');
+
+CALL AppendOrgUnit(2022, '00000001', '生徒', '{00000000-0000-0000-0000-000000000001}');
+CALL AppendOrgUnit(2022, '00000002', '職員', '{00000000-0000-0000-0000-000000000001}');
+
+CALL AppendOrgUnitByCode(2022, '00000003', '教育職員', '00000002');
+CALL AppendOrgUnitByCode(2022, '00000004', '事務職員', '00000002');
+CALL AppendOrgUnitByCode(2022, '00000005', '1期生', '00000001');
+CALL AppendOrgUnitByCode(2022, '00000006', '2期生', '00000001');
+
+
+
+/*
+CALL AppendOrgUnit(2022, '________', '1', '{00000000-0000-0000-0000-000000000001}');
+CALL AppendOrgUnit(2022, '_', '2', '{00000000-0000-0000-0000-000000000001}');
+CALL AppendOrgUnit(2022, ' ', '3', '{00000000-0000-0000-0000-000000000001}');
+CALL AppendOrgUnit(2022, '  ', '4', '{00000000-0000-0000-0000-000000000001}');
+*/
+/*
+SELECT MOrgUnits.OrgUnitID, MOrgUnits.Code, MOrgUnits.Name, MOrgRels.ContainerID FROM MOrgUnits INNER JOIN MOrgRels ON MOrgRels.OrgUnitID = MOrgUnits.OrgUnitID;
+SELECT MOrgUnits.OrgUnitID, MOrgUnits.Code, MOrgUnits.Name, MOrgRels.ContainerID FROM MOrgUnits LEFT OUTER JOIN MOrgRels ON MOrgRels.OrgUnitID = MOrgUnits.OrgUnitID;
+*/
+
 CREATE PROCEDURE MoveOrgUnit (pYear INTEGER, pCode VARCHAR(8), pContainerCode VARCHAR(8))
 LANGUAGE SQL AS $$
   UPDATE MOrgRels SET ContainerID = (SELECT OrgUnitID FROM MOrgUnits WHERE Code = pContainerCode) WHERE OrgUnitID = (SELECT OrgUnitID FROM MOrgUnits WHERE Code = pCode);
@@ -166,7 +209,7 @@ $$;
 
 CREATE FUNCTION GetRootOrgUnitID() RETURNS UUID
 LANGUAGE SQL AS $$
-  SELECT OrgUnitID FROM MOrgRels WHERE Year = (SELECT Year FROM MCurrent) AND ContainerID = '{00000000-0000-0000-0000-000000000000}';
+  SELECT OrgUnitID FROM MOrgRels WHERE Year = (SELECT Year FROM MCurrent) AND ContainerID = '{00000000-0000-0000-0000-000000000001}';
 $$;
 
 /*　アカウント基本情報　*/

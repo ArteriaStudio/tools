@@ -48,6 +48,12 @@
 						<ImageIcon Source="Assets/radio_white_24dp.svg"></ImageIcon>
 					</NavigationViewItem.Icon>
 				</NavigationViewItem>
+				<NavigationViewItem x:Uid="History" Tag="HistoryView">
+					<NavigationViewItem.Icon>
+						<ImageIcon Source="Assets/history_white_24dp.svg"></ImageIcon>
+					</NavigationViewItem.Icon>
+				</NavigationViewItem>
+				
 			</NavigationView.MenuItems>
 			<NavigationView.FooterMenuItems>
 				<NavigationViewItem x:Uid="Settings" Tag="SettingsView">
