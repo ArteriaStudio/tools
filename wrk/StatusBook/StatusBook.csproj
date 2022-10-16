@@ -23,6 +23,7 @@
     <None Remove="LoaderPage.xaml" />
     <None Remove="MediaPage.xaml" />
     <None Remove="OrgUnitPage.xaml" />
+    <None Remove="OrgUnitsPage.xaml" />
     <None Remove="PersonsPage.xaml" />
     <None Remove="SettingsPage.xaml" />
     <None Remove="StaffListPage.xaml" />
@@ -64,12 +65,17 @@
     <ProjectReference Include="..\Ritters\Ritters.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Page Update="OrgUnitPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
     <Page Update="HistoryPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="OrgUnitPage.xaml">
+    <Page Update="OrgUnitsPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>

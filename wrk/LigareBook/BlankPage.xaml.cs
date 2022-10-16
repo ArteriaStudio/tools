@@ -16,25 +16,16 @@ using Windows.Foundation.Collections;
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
 
-namespace StatusBook
+namespace LigareBook
 {
 	/// <summary>
 	/// An empty page that can be used on its own or navigated to within a Frame.
 	/// </summary>
-	public sealed partial class OrgUnitPage : Page
+	public sealed partial class BlankPage : Page
 	{
-		public OrgUnitPage()
+		public BlankPage()
 		{
 			this.InitializeComponent();
-		}
-
-		protected override void OnNavigatedTo(NavigationEventArgs e)
-		{
-			if (e.Parameter is Guid)
-			{
-				var pKey = e.Parameter.ToString();
-			}
-
 		}
 	}
 }

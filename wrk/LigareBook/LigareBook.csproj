@@ -6,6 +6,9 @@
     <RuntimeIdentifiers>win10-x86;win10-x64;win10-arm64</RuntimeIdentifiers>
     <UseWinUI>true</UseWinUI>
   </PropertyGroup>
+  <ItemGroup>
+    <None Remove="BlankPage.xaml" />
+  </ItemGroup>
 
   <ItemGroup>
       <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="6.0.10" />
@@ -17,5 +20,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Ritters\Ritters.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="BlankPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 </Project>

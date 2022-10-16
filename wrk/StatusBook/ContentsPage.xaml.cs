@@ -83,7 +83,7 @@ namespace StatusBook
 			}
 			else if (pTargetPage.Equals("OrgUnitView") == true)
 			{
-				this.FragmentsFrame.Navigate(typeof(OrgUnitPage));
+				this.FragmentsFrame.Navigate(typeof(OrgUnitsPage));
 			}
 			else if (pTargetPage.Equals("PersonsView") == true)
 			{
