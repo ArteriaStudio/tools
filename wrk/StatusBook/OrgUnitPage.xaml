@@ -1,18 +1,46 @@
 ﻿<Page
-    x:Class="StatusBook.OrgUnitPage"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:StatusBook"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	x:Class="StatusBook.OrgUnitPage"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:local="using:StatusBook"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:lb="using:LigareBook"
-    mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+	mc:Ignorable="d"
+	Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
 	<TreeView ItemsSource="{x:Bind pOrgUnits}">
 		<TreeView.ItemTemplate>
 			<DataTemplate x:Name="TableDataTemplate" x:DataType="lb:OrgUnit">
-				<TreeViewItem ItemsSource="{x:Bind Children}" Content="{x:Bind Name}" IsExpanded="{x:Bind IsExpanded}"  />
+				<TreeViewItem ItemsSource="{x:Bind Children}" IsExpanded="{x:Bind IsExpanded}" VerticalAlignment="Center">
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="24" />
+							<ColumnDefinition Width="72" />
+							<ColumnDefinition Width="*" />
+							<ColumnDefinition Width="48" />
+							<ColumnDefinition Width="48" />
+							<ColumnDefinition Width="48" />
+						</Grid.ColumnDefinitions>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="32" />
+						</Grid.RowDefinitions>
+
+						<Image Grid.Column="0" Source="Assets/folder_white.svg" VerticalAlignment="Center" />
+						<TextBlock Grid.Column="1" Text="{x:Bind Code}" VerticalAlignment="Center" />
+						<TextBlock Grid.Column="2" Text="{x:Bind Name}" VerticalAlignment="Center" />
+						<Button Name="add" Tag="{x:Bind OrgUnitID}" Grid.Column="3" Click="add_Click">
+							<Image Source="Assets/add_white.svg" VerticalAlignment="Center" />
+						</Button>
+						<Button Name="remove" Tag="{x:Bind OrgUnitID}" Grid.Column="4" Click="remove_Click">
+							<Image Source="Assets/remove_white.svg" VerticalAlignment="Center" />
+						</Button>
+						<Button Name="more" Tag="{x:Bind OrgUnitID}" Grid.Column="5" Click="more_Click">
+							<Image Source="Assets/more_vert_white.svg" VerticalAlignment="Center" />
+						</Button>
+
+					</Grid>
+				</TreeViewItem>
 			</DataTemplate>
 		</TreeView.ItemTemplate>
 	</TreeView>

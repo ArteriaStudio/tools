@@ -54,6 +54,7 @@ SELECT
   MOrgUnits.OrgUnitID,
   MOrgUnits.Code,
   MOrgUnits.Name,
+  MOrgRels.Year,
   MOrgRels.ContainerID
 FROM
   MOrgUnits

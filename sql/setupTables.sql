@@ -135,7 +135,7 @@ CREATE TABLE MOrgUnits (
   UNIQUE ( Name ) 
 );
 GRANT ALL ON MOrgUnits TO cmnoper;
-GRANT SELECT ON MOrgUnits TO aploper;
+GRANT SELECT, INSERT, UPDATE, DELETE ON MOrgUnits TO aploper;
 
 INSERT INTO MOrgUnits (Code, Name) VALUES ('00000001', '生徒');
 INSERT INTO MOrgUnits (Code, Name) VALUES ('00000002', '職員');
@@ -154,7 +154,7 @@ CREATE TABLE MOrgRels (
     ON DELETE CASCADE ON UPDATE CASCADE
 );
 GRANT ALL ON MOrgRels TO cmnoper;
-GRANT SELECT ON MOrgRels TO aploper;
+GRANT SELECT, INSERT, UPDATE, DELETE ON MOrgRels TO aploper;
 
 /*　組織単位を追加　*/
 CREATE PROCEDURE AppendOrgUnit (pYear INTEGER, pCode VARCHAR(8), pName VARCHAR(32), pContainerID UUID)

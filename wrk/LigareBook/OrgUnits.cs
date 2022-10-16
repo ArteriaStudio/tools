@@ -47,5 +47,55 @@ namespace LigareBook
 
 			return (pItems);
 		}
+
+		public Guid FetchID(Context pContext, String pCode)
+		{
+			Guid pOrgUnitID = Guid.Empty;
+			var pSQL = "SELECT OrgUnitID FROM VOrgUnits WHERE Year = @Year AND Code = @Code;";
+
+			using (var pCommand = new NpgsqlCommand(pSQL, pContext.m_pConnection))
+			{
+				pCommand.Parameters.AddWithValue("Year", 2022);
+				pCommand.Parameters.AddWithValue("Code", pCode);
+
+				using (var pReader = pCommand.ExecuteReader())
+				{
+					while (pReader.Read())
+					{
+						pOrgUnitID = pReader.GetGuid(0);
+						break;
+					}
+				}
+			}
+
+			return(pOrgUnitID);
+		}
+
+		public void Insert(Context pContext, Guid pContainerID, OrgUnit pOrgUnit)
+		{
+			var pSQL = "CALL AppendOrgUnit(@Year, @Code, @Name, @ContainerID)";
+
+			using (var pCommand = new NpgsqlCommand(pSQL, pContext.m_pConnection))
+			{
+				pCommand.Parameters.Clear();
+				pCommand.Parameters.AddWithValue("Year", 2022);
+				pCommand.Parameters.AddWithValue("Code", pOrgUnit.Code);
+				pCommand.Parameters.AddWithValue("Name", pOrgUnit.Name);
+				pCommand.Parameters.AddWithValue("ContainerID", pContainerID);
+				pCommand.ExecuteNonQuery();
+			}
+		}
+
+		public void Delete(Context pContext, Guid pOrgUnitID)
+		{
+			var pSQL = "DELETE FROM MOrgUnits WHERE OrgUnitID = @OrgUnitID";
+
+			using (var pCommand = new NpgsqlCommand(pSQL, pContext.m_pConnection))
+			{
+				pCommand.Parameters.Clear();
+				pCommand.Parameters.AddWithValue("OrgUnitID", pOrgUnitID);
+				pCommand.ExecuteNonQuery();
+			}
+		}
 	}
 }

@@ -50,6 +50,59 @@ namespace StatusBook
 					}
 				}
 			}
+
+			return(false);
+		}
+
+		private bool InsertOrgUnit(ObservableCollection<OrgUnit> pOrgUnits, OrgUnit pInsertOrgUnit)
+		{
+			System.Diagnostics.Trace.WriteLine("pOrgUnits.Count=" + pOrgUnits.Count);
+			foreach (var pOrgUnit in pOrgUnits)
+			{
+#if DEBUG
+				System.Diagnostics.Trace.WriteLine("Compare_0=" + pOrgUnit.ContainerID.ToString());
+				System.Diagnostics.Trace.WriteLine("Compare_1=" + pInsertOrgUnit.ContainerID.ToString());
+#endif
+				if (pOrgUnit.OrgUnitID.Equals(pInsertOrgUnit.ContainerID) == true)
+				{
+					pOrgUnit.Children.Add(pInsertOrgUnit);
+					return(true);
+				}
+				else
+				{
+					if (InsertOrgUnit(pOrgUnit.Children, pInsertOrgUnit) == true)
+					{
+						return(true);
+					}
+				}
+			}
+
+			return(false);
+		}
+
+		//　保存先コンテナから登録するコンテナを探し、そこに指定要素を追加
+		private bool DeleteOrgUnit(ObservableCollection<OrgUnit> pOrgUnits, OrgUnit pDeleteOrgUnit)
+		{
+			System.Diagnostics.Trace.WriteLine("pOrgUnits.Count=" + pOrgUnits.Count);
+			foreach (var pOrgUnit in pOrgUnits)
+			{
+#if DEBUG
+				System.Diagnostics.Trace.WriteLine("Compare_0=" + pOrgUnit.ContainerID.ToString());
+				System.Diagnostics.Trace.WriteLine("Compare_1=" + pDeleteOrgUnit.OrgUnitID.ToString());
+#endif
+				if (pOrgUnit.OrgUnitID.Equals(pDeleteOrgUnit.OrgUnitID) == true)
+				{
+					pOrgUnits.Remove(pOrgUnit);
+					return(true);
+				}
+				else
+				{
+					if (DeleteOrgUnit(pOrgUnit.Children, pDeleteOrgUnit) == true)
+					{
+						return(true);
+					}
+				}
+			}
 			return(false);
 		}
 
@@ -85,22 +138,59 @@ namespace StatusBook
 				}
 
 			}
-//			pOrgUnits = pItems;
-
-
-			/*
-			OrgUnit	pOrgUnit = new OrgUnit();
-			pOrgUnit.IsExpanded = true;
-			pOrgUnit.Name = "root";
-			OrgUnit pChild = new OrgUnit();
-			pChild.Name = "child";
-			pOrgUnit.Children.Add(pChild);
-			pOrgUnits.Add(pOrgUnit);
-			*/
-
 		}
 
 		private ObservableCollection<OrgUnit> pOrgUnits = new ObservableCollection<OrgUnit>();
-		//ObservableCollection<TreeViewNode> pOrgUnits = new ObservableCollection<TreeViewNode>();
+
+		private void add_Click(object sender, RoutedEventArgs e)
+		{
+			Button pButton = sender as Button;
+			System.Diagnostics.Trace.WriteLine("Tag: " + pButton.Tag);
+
+			Guid	pContainerID = new Guid(pButton.Tag.ToString());
+
+			var pApp = Application.Current as App;
+			var pContext = pApp.m_pContext;
+
+			var pOrgUnit = new OrgUnit();
+			pOrgUnit.OrgUnitID = GuidHelper.CreateNewGuid();
+			pOrgUnit.Code = "";
+			pOrgUnit.Name = pOrgUnit.OrgUnitID.ToString();
+			pOrgUnit.ContainerID = pContainerID;
+/*
+			var pOrgUnitsCursor = new OrgUnitsCursor();
+			pOrgUnitsCursor.Insert(pContext, pContainerID, pOrgUnit);
+			pOrgUnit.OrgUnitID = pOrgUnitsCursor.FetchID(pContext, pOrgUnit.Code);
+*/
+			InsertOrgUnit(pOrgUnits, pOrgUnit);
+		}
+
+		private void remove_Click(object sender, RoutedEventArgs e)
+		{
+			Button pButton = sender as Button;
+			System.Diagnostics.Trace.WriteLine("Tag: " + pButton.Tag);
+
+			Guid pContainerID = new Guid(pButton.Tag.ToString());
+
+			var pApp = Application.Current as App;
+			var pContext = pApp.m_pContext;
+
+			var pOrgUnit = new OrgUnit();
+			pOrgUnit.OrgUnitID = pContainerID;
+			pOrgUnit.Code = "";
+			pOrgUnit.Name = "";
+
+			var pOrgUnitsCursor = new OrgUnitsCursor();
+			pOrgUnitsCursor.Delete(pContext, pContainerID);
+
+			DeleteOrgUnit(pOrgUnits, pOrgUnit);
+		}
+
+		private void more_Click(object sender, RoutedEventArgs e)
+		{
+			Button	pButton = sender as Button;
+			System.Diagnostics.Trace.WriteLine("Tag: " + pButton.Tag);
+
+		}
 	}
 }
