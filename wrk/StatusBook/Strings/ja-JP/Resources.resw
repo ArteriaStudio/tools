@@ -165,6 +165,9 @@
   <data name="Mediaview" xml:space="preserve">
     <value>メディア</value>
   </data>
+  <data name="Message_Violation_UniqueKey" xml:space="preserve">
+    <value>ユニークキー違反</value>
+  </data>
   <data name="OrgUnit.Content" xml:space="preserve">
     <value>組織単位</value>
   </data>

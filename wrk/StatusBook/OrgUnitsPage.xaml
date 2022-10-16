@@ -18,10 +18,10 @@
 			<RowDefinition Height="*" />
 		</Grid.RowDefinitions>
 
-		<TreeView Grid.Column="0" Grid.Row="0" ItemsSource="{x:Bind pOrgUnits}">
+		<TreeView Grid.Column="0" Grid.Row="0" ItemsSource="{x:Bind pOrgUnits}" SelectionMode="Single" ItemInvoked="TreeView_ItemInvoked">
 			<TreeView.ItemTemplate>
 				<DataTemplate x:Name="TableDataTemplate" x:DataType="lb:OrgUnit">
-					<TreeViewItem ItemsSource="{x:Bind Children}" IsExpanded="{x:Bind IsExpanded}" VerticalAlignment="Center">
+					<TreeViewItem ItemsSource="{x:Bind Children}" IsExpanded="{x:Bind IsExpanded}" VerticalAlignment="Center" >
 						<Grid>
 							<Grid.ColumnDefinitions>
 								<ColumnDefinition Width="24" />
@@ -36,8 +36,8 @@
 							</Grid.RowDefinitions>
 
 							<Image Grid.Column="0" Source="Assets/folder_white.svg" VerticalAlignment="Center" />
-							<TextBlock Grid.Column="1" Text="{x:Bind Code}" VerticalAlignment="Center" />
-							<TextBlock Grid.Column="2" Text="{x:Bind Name}" VerticalAlignment="Center" />
+							<TextBlock Grid.Column="1" Text="{x:Bind OrgUnitCode}" VerticalAlignment="Center" />
+							<TextBlock Grid.Column="2" Text="{x:Bind OrgUnitName}" VerticalAlignment="Center" />
 							<Button Name="add" Tag="{x:Bind OrgUnitID}" Grid.Column="3" Click="add_Click">
 								<Image Source="Assets/add_white.svg" VerticalAlignment="Center" />
 							</Button>

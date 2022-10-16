@@ -170,6 +170,25 @@ LANGUAGE SQL AS $$
   SELECT OrgUnitID FROM MOrgUnits WHERE Code = pContainerCode;
 $$;
 
+DROP PROCEDURE UpsertOrgUnit;
+CREATE PROCEDURE UpsertOrgUnit (pYear INTEGER, pCode VARCHAR(8), pName VARCHAR(32), pContainerID UUID)
+LANGUAGE SQL AS $$
+  INSERT INTO MOrgUnits (Code, Name) VALUES (pCode, pName)
+  ON CONFLICT ON CONSTRAINT morgunits_code_key
+  DO UPDATE SET Name = pName;
+  INSERT INTO MOrgRels (Year, OrgUnitID, ContainerID) (SELECT pYear, OrgUnitID, pContainerID FROM MOrgUnits WHERE Code = pCode)
+  ON CONFLICT ON CONSTRAINT morgrels_pkey
+  DO UPDATE SET ContainerID = pContainerID;
+$$;
+
+DROP PROCEDURE UpdateOrgUnit;
+CREATE PROCEDURE UpdateOrgUnit (pOrgUnitID UUID, pCode VARCHAR(8), pName VARCHAR(32))
+LANGUAGE SQL AS $$
+  UPDATE MOrgUnits SET Code = pCode, Name = pName WHERE OrgUnitID = pOrgUnitID;
+$$;
+
+
+
 
 CREATE PROCEDURE AppendOrgUnitByCode (pYear INTEGER, pCode VARCHAR(8), pName VARCHAR(32), pContainerCode VARCHAR(8))
 LANGUAGE SQL AS $$

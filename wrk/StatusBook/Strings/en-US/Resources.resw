@@ -168,6 +168,9 @@
   <data name="MediaView" xml:space="preserve">
     <value>Media</value>
   </data>
+  <data name="Message_Violation_UniqueKey" xml:space="preserve">
+    <value>Unique Key Violation</value>
+  </data>
   <data name="OrgUnit.Content" xml:space="preserve">
     <value>OrgUnit</value>
   </data>

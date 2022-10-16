@@ -1,5 +1,7 @@
 ﻿using Arteria_s.DB.Base;
+using Microsoft.Windows.ApplicationModel.Resources;
 using Npgsql;
+using Ritters;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -12,8 +14,8 @@ namespace LigareBook
 	public class OrgUnit
 	{
 		public Guid OrgUnitID { get; set; }
-		public String Code { get; set; }
-		public String Name { get; set; }
+		public String OrgUnitCode { get; set; }
+		public String OrgUnitName { get; set; }
 		public Guid ContainerID { get; set; }
 
 		public bool IsExpanded { get; set; } = false;
@@ -36,8 +38,8 @@ namespace LigareBook
 						OrgUnit pOrgUnit = new OrgUnit();
 
 						pOrgUnit.OrgUnitID = pReader.GetGuid(0);
-						pOrgUnit.Code = pReader.GetString(1);
-						pOrgUnit.Name = pReader.GetString(2);
+						pOrgUnit.OrgUnitCode = pReader.GetString(1);
+						pOrgUnit.OrgUnitName = pReader.GetString(2);
 						pOrgUnit.ContainerID = pReader.GetGuid(3);
 
 						pItems.Add(pOrgUnit);
@@ -46,6 +48,32 @@ namespace LigareBook
 			}
 
 			return (pItems);
+		}
+
+		public OrgUnit	Fetch(Context pContext, Guid pOrgUnitID)
+		{
+			var pSQL = "SELECT OrgUnitID, Code, Name, ContainerID FROM VOrgUnits WHERE OrgUnitID = @OrgUnitID;";
+
+			using (var pCommand = new NpgsqlCommand(pSQL, pContext.m_pConnection))
+			{
+				pCommand.Parameters.AddWithValue("OrgUnitID", pOrgUnitID);
+				using (var pReader = pCommand.ExecuteReader())
+				{
+					while (pReader.Read())
+					{
+						OrgUnit pOrgUnit = new OrgUnit();
+
+						pOrgUnit.OrgUnitID = pReader.GetGuid(0);
+						pOrgUnit.OrgUnitCode = pReader.GetString(1);
+						pOrgUnit.OrgUnitName = pReader.GetString(2);
+						pOrgUnit.ContainerID = pReader.GetGuid(3);
+
+						return(pOrgUnit);
+					}
+				}
+			}
+
+			return(null);
 		}
 
 		public Guid FetchID(Context pContext, String pCode)
@@ -79,9 +107,23 @@ namespace LigareBook
 			{
 				pCommand.Parameters.Clear();
 				pCommand.Parameters.AddWithValue("Year", 2022);
-				pCommand.Parameters.AddWithValue("Code", pOrgUnit.Code);
-				pCommand.Parameters.AddWithValue("Name", pOrgUnit.Name);
+				pCommand.Parameters.AddWithValue("Code", pOrgUnit.OrgUnitCode);
+				pCommand.Parameters.AddWithValue("Name", pOrgUnit.OrgUnitName);
 				pCommand.Parameters.AddWithValue("ContainerID", pContainerID);
+				pCommand.ExecuteNonQuery();
+			}
+		}
+
+		public void Update(Context pContext, OrgUnit pOrgUnit)
+		{
+			var pSQL = "CALL UpdateOrgUnit(@OrgUnitID, @Code, @Name)";
+
+			using (var pCommand = new NpgsqlCommand(pSQL, pContext.m_pConnection))
+			{
+				pCommand.Parameters.Clear();
+				pCommand.Parameters.AddWithValue("OrgUnitID", pOrgUnit.OrgUnitID);
+				pCommand.Parameters.AddWithValue("Code", pOrgUnit.OrgUnitCode);
+				pCommand.Parameters.AddWithValue("Name", pOrgUnit.OrgUnitName);
 				pCommand.ExecuteNonQuery();
 			}
 		}

@@ -25,7 +25,7 @@ namespace StatusBook
 	/// <summary>
 	/// An empty page that can be used on its own or navigated to within a Frame.
 	/// </summary>
-	public sealed partial class OrgUnitsPage : Page
+	public sealed partial class OrgUnitsPage : Page, IEventListener
 	{
 		//　保存先コンテナから登録するコンテナを探し、そこに指定要素を追加
 		private bool AppendOrgUnit(ObservableCollection<OrgUnit> pOrgUnits, OrgUnit pAppendOrgUnit)
@@ -106,28 +106,61 @@ namespace StatusBook
 			return(false);
 		}
 
-		public OrgUnitsPage()
+		//　保存先コンテナから登録するコンテナを探す。（false：該当なし）
+		private bool LookupOrgUnitHasChild(ObservableCollection<OrgUnit> pOrgUnits, Guid pContainerID)
 		{
-			this.InitializeComponent();
+			System.Diagnostics.Trace.WriteLine("pOrgUnits.Count=" + pOrgUnits.Count);
+			foreach (var pOrgUnit in pOrgUnits)
+			{
+#if DEBUG
+				System.Diagnostics.Trace.WriteLine("Compare_0=" + pOrgUnit.ContainerID.ToString());
+				System.Diagnostics.Trace.WriteLine("Compare_1=" + pContainerID.ToString());
+#endif
+				if (pOrgUnit.OrgUnitID.Equals(pContainerID) == true)
+				{
+					if (pOrgUnit.Children.Count() > 0)
+					{
+						return(true);
+					}
+					else
+					{
+						return(false);
+					}
+				}
+				else
+				{
+					if (LookupOrgUnitHasChild(pOrgUnit.Children, pContainerID) == true)
+					{
+						return (true);
+					}
+				}
+			}
+			return (false);
+		}
+
+		private void LoadItems()
+		{
+			pOrgUnits.Clear();
 
 			Guid pRoot = new Guid("{00000000-0000-0000-0000-000000000001}");
 
 			var pApp = Application.Current as App;
 			var pContext = pApp.m_pContext;
 
-			OrgUnitsCursor	pCursor = new OrgUnitsCursor();
+			OrgUnitsCursor pCursor = new OrgUnitsCursor();
 			var pItems = pCursor.Listup(pContext);
 			foreach (var pItem in pItems)
 			{
 				OrgUnit pOrgUnit = new OrgUnit();
 				pOrgUnit.IsExpanded = true;
 				pOrgUnit.Children = new ObservableCollection<OrgUnit>();
-				pOrgUnit.Code = pItem.Code;
-				pOrgUnit.Name = pItem.Name;
+				pOrgUnit.OrgUnitCode = pItem.OrgUnitCode;
+				pOrgUnit.OrgUnitName = pItem.OrgUnitName;
 				pOrgUnit.OrgUnitID = pItem.OrgUnitID;
 				pOrgUnit.ContainerID = pItem.ContainerID;
 
-				if (pOrgUnit.OrgUnitID.CompareTo(pRoot) == 0) {
+				if (pOrgUnit.OrgUnitID.CompareTo(pRoot) == 0)
+				{
 					//　ルート項目を登録するルート
 					pOrgUnits.Add(pOrgUnit);
 				}
@@ -137,8 +170,25 @@ namespace StatusBook
 					AppendOrgUnit(pOrgUnits, pOrgUnit);
 				}
 			}
-			//FormFrame.Navigate(typeof(BlankPage));
-			FormFrame.Navigate(typeof(OrgUnitPage), pRoot);
+		}
+
+		public OrgUnitsPage()
+		{
+			this.InitializeComponent();
+
+			Guid pRoot = new Guid("{00000000-0000-0000-0000-000000000001}");
+
+			LoadItems();
+
+			var pOrgUnit = new OrgUnit();
+			pOrgUnit.OrgUnitID = pRoot;
+			pOrgUnit.ContainerID = Guid.Empty;
+
+			TransitionContext pTransitoin = new TransitionContext();
+			pTransitoin.pListener = this;
+			pTransitoin.pArgments = pOrgUnit;
+
+			FormFrame.Navigate(typeof(OrgUnitPage), pTransitoin);
 		}
 
 		private ObservableCollection<OrgUnit> pOrgUnits = new ObservableCollection<OrgUnit>();
@@ -154,9 +204,9 @@ namespace StatusBook
 			var pContext = pApp.m_pContext;
 
 			var pOrgUnit = new OrgUnit();
-			pOrgUnit.OrgUnitID = GuidHelper.CreateNewGuid();
-			pOrgUnit.Code = "";
-			pOrgUnit.Name = pOrgUnit.OrgUnitID.ToString();
+			pOrgUnit.OrgUnitID = Guid.Empty;
+			pOrgUnit.OrgUnitCode = "";
+			pOrgUnit.OrgUnitName = "";
 			pOrgUnit.ContainerID = pContainerID;
 /*
 			var pOrgUnitsCursor = new OrgUnitsCursor();
@@ -173,18 +223,22 @@ namespace StatusBook
 
 			Guid pContainerID = new Guid(pButton.Tag.ToString());
 
-			var pApp = Application.Current as App;
-			var pContext = pApp.m_pContext;
+			if (LookupOrgUnitHasChild(pOrgUnits, pContainerID) == false)
+			{
+				var pApp = Application.Current as App;
+				var pContext = pApp.m_pContext;
 
-			var pOrgUnit = new OrgUnit();
-			pOrgUnit.OrgUnitID = pContainerID;
-			pOrgUnit.Code = "";
-			pOrgUnit.Name = "";
+				var pOrgUnit = new OrgUnit();
+				pOrgUnit.OrgUnitID = pContainerID;
+				pOrgUnit.OrgUnitCode = "";
+				pOrgUnit.OrgUnitName = "";
 
-			var pOrgUnitsCursor = new OrgUnitsCursor();
-			pOrgUnitsCursor.Delete(pContext, pContainerID);
+				var pOrgUnitsCursor = new OrgUnitsCursor();
+				pOrgUnitsCursor.Delete(pContext, pContainerID);
 
-			DeleteOrgUnit(pOrgUnits, pOrgUnit);
+				DeleteOrgUnit(pOrgUnits, pOrgUnit);
+			}
+
 		}
 
 		private void more_Click(object sender, RoutedEventArgs e)
@@ -192,6 +246,27 @@ namespace StatusBook
 			Button	pButton = sender as Button;
 			System.Diagnostics.Trace.WriteLine("Tag: " + pButton.Tag);
 
+		}
+
+		private void TreeView_ItemInvoked(TreeView sender, TreeViewItemInvokedEventArgs args)
+		{
+			var pOrgUnit = args.InvokedItem as OrgUnit;
+
+			TransitionContext pTransitoin = new TransitionContext();
+			pTransitoin.pListener = this;
+			pTransitoin.pArgments = pOrgUnit;
+
+			FormFrame.Navigate(typeof(OrgUnitPage), pTransitoin);
+		}
+
+		public void OnInsert(object  pData)
+		{
+			LoadItems();
+		}
+
+		public void OnUpdate(object pData)
+		{
+			LoadItems();
 		}
 	}
 }

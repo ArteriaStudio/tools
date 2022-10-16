@@ -12,7 +12,7 @@
 		<Border BorderBrush="Gray" BorderThickness="1" />
 		<Grid>
 			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="256" />
+				<ColumnDefinition Width="320" />
 			</Grid.ColumnDefinitions>
 			<Grid.RowDefinitions>
 				<RowDefinition Height="auto" />
@@ -25,11 +25,11 @@
 			</Grid.RowDefinitions>
 
 			<TextBlock Grid.Column="0" Grid.Row="0" Text="caption" Style="{StaticResource TitleTextBlockStyle}" Margin="16,12,12,16" />
-			<TextBox Grid.Column="0" Grid.Row="1" Header="OrgUnitID" PlaceholderText="body" IsReadOnly="True" Margin="12,12,12,12" />
-			<TextBox Grid.Column="0" Grid.Row="2" Header="OrgUnitCode" PlaceholderText="body" Margin="12,12,12,12" />
-			<TextBox Grid.Column="0" Grid.Row="3" Header="OrgUnitName" PlaceholderText="body" Margin="12,12,12,12" />
-			<TextBox Grid.Column="0" Grid.Row="4" Header="ContainerID" PlaceholderText="body" IsReadOnly="True" Margin="12,12,12,12" />
-			<Button Grid.Column="0" Grid.Row="5" Content="保存" Margin="12,12,12,12" />
+			<TextBox Name="OrgUnitID" Grid.Column="0" Grid.Row="1" Header="OrgUnitID" PlaceholderText="body" IsReadOnly="True" Margin="12,12,12,12" />
+			<TextBox Name="OrgUnitCode" Grid.Column="0" Grid.Row="2" Header="OrgUnitCode" PlaceholderText="body" Margin="12,12,12,12" />
+			<TextBox Name="OrgUnitName" Grid.Column="0" Grid.Row="3" Header="OrgUnitName" PlaceholderText="body" Margin="12,12,12,12" />
+			<TextBox Name="ContainerID" Grid.Column="0" Grid.Row="4" Header="ContainerID" PlaceholderText="body" IsReadOnly="True" Margin="12,12,12,12" />
+			<Button Name="Apply" Grid.Column="0" Grid.Row="5" Content="保存" Margin="12,12,12,12" Click="Apply_Click" />
 
 		</Grid>
 	</StackPanel>
