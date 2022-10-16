@@ -180,8 +180,17 @@ namespace StatusBook
 #endif
 				if (pOrgUnit.OrgUnitID.Equals(pUpdateOrgUnit.OrgUnitID) == true)
 				{
+					/*
 					pOrgUnit.OrgUnitCode = pUpdateOrgUnit.OrgUnitCode;
 					pOrgUnit.OrgUnitName = pUpdateOrgUnit.OrgUnitName;
+					*/
+
+					var pItem = pOrgUnit;
+					pItem.IsExpanded = true;
+					pItem.OrgUnitCode = pUpdateOrgUnit.OrgUnitCode;
+					pItem.OrgUnitName = pUpdateOrgUnit.OrgUnitName;
+					pOrgUnits.Remove(pOrgUnit);
+					pOrgUnits.Add(pItem);
 					return (true);
 				}
 				else
@@ -334,6 +343,9 @@ namespace StatusBook
 			UpdateOrgUnit(m_pOrgUnits, pOrgUnit);
 			//　ItemSourceに紐付くコレクションは更新済み
 			//　しかし、再描画メソッドが見当たらない…（2022/10/16）
+			
+			//this.OrgUnits.ItemsSource = null;
+			//this.OrgUnits.ItemsSource = m_pOrgUnits;
 		}
 	}
 }
