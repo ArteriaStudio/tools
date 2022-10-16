@@ -18,7 +18,7 @@
 			<RowDefinition Height="*" />
 		</Grid.RowDefinitions>
 
-		<TreeView Grid.Column="0" Grid.Row="0" ItemsSource="{x:Bind pOrgUnits}" SelectionMode="Single" ItemInvoked="TreeView_ItemInvoked">
+		<TreeView Name="OrgUnits" Grid.Column="0" Grid.Row="0" ItemsSource="{x:Bind m_pOrgUnits}" SelectionMode="Single" ItemInvoked="TreeView_ItemInvoked">
 			<TreeView.ItemTemplate>
 				<DataTemplate x:Name="TableDataTemplate" x:DataType="lb:OrgUnit">
 					<TreeViewItem ItemsSource="{x:Bind Children}" IsExpanded="{x:Bind IsExpanded}" VerticalAlignment="Center" >

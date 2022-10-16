@@ -187,6 +187,11 @@ LANGUAGE SQL AS $$
   UPDATE MOrgUnits SET Code = pCode, Name = pName WHERE OrgUnitID = pOrgUnitID;
 $$;
 
+DROP PROCEDURE UpdateOrgUnitContainer;
+CREATE PROCEDURE UpdateOrgUnitContainer (iYear INTEGER, pOrgUnitID UUID, pContainerID UUID)
+LANGUAGE SQL AS $$
+  UPDATE MOrgRels SET ContainerID = pContainerID WHERE Year = iYear AND OrgUnitID = pOrgUnitID;
+$$;
 
 
 
@@ -207,6 +212,7 @@ CALL AppendOrgUnitByCode(2022, '00000003', '教育職員', '00000002');
 CALL AppendOrgUnitByCode(2022, '00000004', '事務職員', '00000002');
 CALL AppendOrgUnitByCode(2022, '00000005', '1期生', '00000001');
 CALL AppendOrgUnitByCode(2022, '00000006', '2期生', '00000001');
+CALL AppendOrgUnitByCode(2022, '00000009', '21期生', '00000006');
 
 
 

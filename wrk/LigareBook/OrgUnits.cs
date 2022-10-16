@@ -49,6 +49,32 @@ namespace LigareBook
 
 			return (pItems);
 		}
+		public ObservableCollection<OrgUnit> Listup(Context pContext, Guid  pContainerID)
+		{
+			var pItems = new ObservableCollection<OrgUnit>();
+			var pSQL = "SELECT OrgUnitID, Code, Name, ContainerID FROM VOrgUnits WHERE ContainerID = @ContainerID;";
+
+			using (var pCommand = new NpgsqlCommand(pSQL, pContext.m_pConnection))
+			{
+				pCommand.Parameters.AddWithValue("ContainerID", pContainerID);
+				using (var pReader = pCommand.ExecuteReader())
+				{
+					while (pReader.Read())
+					{
+						OrgUnit pOrgUnit = new OrgUnit();
+
+						pOrgUnit.OrgUnitID = pReader.GetGuid(0);
+						pOrgUnit.OrgUnitCode = pReader.GetString(1);
+						pOrgUnit.OrgUnitName = pReader.GetString(2);
+						pOrgUnit.ContainerID = pReader.GetGuid(3);
+
+						pItems.Add(pOrgUnit);
+					}
+				}
+			}
+
+			return (pItems);
+		}
 
 		public OrgUnit	Fetch(Context pContext, Guid pOrgUnitID)
 		{
@@ -124,6 +150,20 @@ namespace LigareBook
 				pCommand.Parameters.AddWithValue("OrgUnitID", pOrgUnit.OrgUnitID);
 				pCommand.Parameters.AddWithValue("Code", pOrgUnit.OrgUnitCode);
 				pCommand.Parameters.AddWithValue("Name", pOrgUnit.OrgUnitName);
+				pCommand.ExecuteNonQuery();
+			}
+		}
+
+		public void UpdateContainer(Context pContext, OrgUnit pOrgUnit)
+		{
+			var pSQL = "CALL UpdateOrgUnitContainer(@Year, @OrgUnitID, @ContainerID)";
+
+			using (var pCommand = new NpgsqlCommand(pSQL, pContext.m_pConnection))
+			{
+				pCommand.Parameters.Clear();
+				pCommand.Parameters.AddWithValue("Year", 2022);
+				pCommand.Parameters.AddWithValue("OrgUnitID", pOrgUnit.OrgUnitID);
+				pCommand.Parameters.AddWithValue("ContainerID", pOrgUnit.ContainerID);
 				pCommand.ExecuteNonQuery();
 			}
 		}
