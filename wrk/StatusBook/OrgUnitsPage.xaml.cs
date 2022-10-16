@@ -343,6 +343,7 @@ namespace StatusBook
 			UpdateOrgUnit(m_pOrgUnits, pOrgUnit);
 			//　ItemSourceに紐付くコレクションは更新済み
 			//　しかし、再描画メソッドが見当たらない…（2022/10/16）
+			//　コレクションに削除、追加すれば部分的に更新できるが、置換メソッドが見当たらない…
 			
 			//this.OrgUnits.ItemsSource = null;
 			//this.OrgUnits.ItemsSource = m_pOrgUnits;
