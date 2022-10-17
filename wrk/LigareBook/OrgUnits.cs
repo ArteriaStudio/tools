@@ -54,23 +54,31 @@ namespace LigareBook
 			var pItems = new ObservableCollection<OrgUnit>();
 			var pSQL = "SELECT OrgUnitID, Code, Name, ContainerID FROM VOrgUnits WHERE ContainerID = @ContainerID;";
 
-			using (var pCommand = new NpgsqlCommand(pSQL, pContext.m_pConnection))
+			try
 			{
-				pCommand.Parameters.AddWithValue("ContainerID", pContainerID);
-				using (var pReader = pCommand.ExecuteReader())
+				using (var pCommand = new NpgsqlCommand(pSQL, pContext.m_pConnection))
 				{
-					while (pReader.Read())
+					pCommand.Parameters.AddWithValue("ContainerID", pContainerID);
+					using (var pReader = pCommand.ExecuteReader())
 					{
-						OrgUnit pOrgUnit = new OrgUnit();
+						while (pReader.Read())
+						{
+							OrgUnit pOrgUnit = new OrgUnit();
 
-						pOrgUnit.OrgUnitID = pReader.GetGuid(0);
-						pOrgUnit.OrgUnitCode = pReader.GetString(1);
-						pOrgUnit.OrgUnitName = pReader.GetString(2);
-						pOrgUnit.ContainerID = pReader.GetGuid(3);
+							pOrgUnit.OrgUnitID = pReader.GetGuid(0);
+							pOrgUnit.OrgUnitCode = pReader.GetString(1);
+							pOrgUnit.OrgUnitName = pReader.GetString(2);
+							pOrgUnit.ContainerID = pReader.GetGuid(3);
 
-						pItems.Add(pOrgUnit);
+							pItems.Add(pOrgUnit);
+						}
 					}
 				}
+
+			}
+			catch (PostgresException e)
+			{
+				System.Diagnostics.Debug.Write("" + e.SqlState + ":" + e.Message);
 			}
 
 			return (pItems);
@@ -80,23 +88,30 @@ namespace LigareBook
 		{
 			var pSQL = "SELECT OrgUnitID, Code, Name, ContainerID FROM VOrgUnits WHERE OrgUnitID = @OrgUnitID;";
 
-			using (var pCommand = new NpgsqlCommand(pSQL, pContext.m_pConnection))
+			try
 			{
-				pCommand.Parameters.AddWithValue("OrgUnitID", pOrgUnitID);
-				using (var pReader = pCommand.ExecuteReader())
+				using (var pCommand = new NpgsqlCommand(pSQL, pContext.m_pConnection))
 				{
-					while (pReader.Read())
+					pCommand.Parameters.AddWithValue("OrgUnitID", pOrgUnitID);
+					using (var pReader = pCommand.ExecuteReader())
 					{
-						OrgUnit pOrgUnit = new OrgUnit();
+						while (pReader.Read())
+						{
+							OrgUnit pOrgUnit = new OrgUnit();
 
-						pOrgUnit.OrgUnitID = pReader.GetGuid(0);
-						pOrgUnit.OrgUnitCode = pReader.GetString(1);
-						pOrgUnit.OrgUnitName = pReader.GetString(2);
-						pOrgUnit.ContainerID = pReader.GetGuid(3);
+							pOrgUnit.OrgUnitID = pReader.GetGuid(0);
+							pOrgUnit.OrgUnitCode = pReader.GetString(1);
+							pOrgUnit.OrgUnitName = pReader.GetString(2);
+							pOrgUnit.ContainerID = pReader.GetGuid(3);
 
-						return(pOrgUnit);
+							return (pOrgUnit);
+						}
 					}
 				}
+			}
+			catch (PostgresException e)
+			{
+				System.Diagnostics.Debug.Write("" + e.SqlState + ":" + e.Message);
 			}
 
 			return(null);

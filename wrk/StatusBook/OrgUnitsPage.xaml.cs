@@ -16,6 +16,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.System;
+using Windows.ApplicationModel.DataTransfer;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -347,6 +348,26 @@ namespace StatusBook
 			
 			//this.OrgUnits.ItemsSource = null;
 			//this.OrgUnits.ItemsSource = m_pOrgUnits;
+		}
+
+		private void OrgUnits_DragItemsCompleted(TreeView sender, TreeViewDragItemsCompletedEventArgs args)
+		{
+			if (args.DropResult == DataPackageOperation.Move)
+			{
+				var pContainer = (OrgUnit)args.NewParentItem;
+
+
+				foreach (var pItem in args.Items)
+				{
+					var pOrgUnit = (OrgUnit)pItem;
+					
+					//MoveContainer
+					;
+					
+				}
+				System.Diagnostics.Debug.WriteLine("Current: " + args.Items.ToString());
+				System.Diagnostics.Debug.WriteLine("Parent : " + args.NewParentItem.ToString());
+			}
 		}
 	}
 }

@@ -2,10 +2,22 @@
 using Arteria_s.DB.Base;
 using LigareBook;
 using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Controls.Primitives;
+using Microsoft.UI.Xaml.Data;
+using Microsoft.UI.Xaml.Input;
+using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
-using Npgsql;
+using Microsoft.UI.Xaml.Shapes;
 using System;
-using System.Net.Sockets;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
+using Windows.ApplicationModel;
+using Windows.ApplicationModel.Activation;
+using Windows.Foundation;
+using Windows.Foundation.Collections;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -35,27 +47,9 @@ namespace StatusBook
 			//　ウィンドウを作成する前にプロファイルを入力する契機はここになるが、
 			//　アプリケーションのインスタンスが削除される契機はフレームワークが提供していない。
 			m_pProfile = ProfileProvider.Load();
-
-			//　データベースと接続
-			try
-			{
-				m_pContext = new Context(m_pProfile.DatabaseServer, m_pProfile.DatabaseName, m_pProfile.SchemaName);
-			}
-			/**/
-			catch (NpgsqlException e)
-			{
-				System.Diagnostics.Trace.WriteLine(e.Message + "\n" + e.StackTrace);
-				m_pContext = null;
-			}
-			/**/
-			catch (SocketException)
-			{
-				m_pContext = null;
-			}
 		}
 
 		public Profile m_pProfile = null;
-		public Context m_pContext = null;
 
 		/// <summary>
 		/// Invoked when the application is launched normally by the end user.  Other entry points
@@ -98,6 +92,7 @@ namespace StatusBook
 		}
 
 		public Window m_pWindow;
+		public Context m_pContext;
 
 		public void TransitView(String pTargetView)
 		{
