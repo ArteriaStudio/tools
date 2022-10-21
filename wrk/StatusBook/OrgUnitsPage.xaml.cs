@@ -356,17 +356,20 @@ namespace StatusBook
 			{
 				var pContainer = (OrgUnit)args.NewParentItem;
 
-
 				foreach (var pItem in args.Items)
 				{
 					var pOrgUnit = (OrgUnit)pItem;
-					
-					//MoveContainer
-					;
-					
+					pOrgUnit.ContainerID = pContainer.OrgUnitID;
+
+					var pApp = Application.Current as App;
+					var pContext = pApp.m_pContext;
+
+					var pOrgUnitsCursor = new OrgUnitsCursor();
+					pOrgUnitsCursor.UpdateContainer(pContext, pOrgUnit);
 				}
+
 				System.Diagnostics.Debug.WriteLine("Current: " + args.Items.ToString());
-				System.Diagnostics.Debug.WriteLine("Parent : " + args.NewParentItem.ToString());
+				System.Diagnostics.Debug.WriteLine("Parent: " + args.NewParentItem.ToString());
 			}
 		}
 	}
