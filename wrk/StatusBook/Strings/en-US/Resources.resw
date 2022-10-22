@@ -126,6 +126,12 @@
   <data name="AppTitle.PaneTitle" xml:space="preserve">
     <value>Console</value>
   </data>
+  <data name="Browse.Content" xml:space="preserve">
+    <value>Browse</value>
+  </data>
+  <data name="CodePage.Header" xml:space="preserve">
+    <value>CodePage</value>
+  </data>
   <data name="DashBoard.Content" xml:space="preserve">
     <value>DashBoard</value>
   </data>
@@ -144,7 +150,10 @@
   <data name="DevicesList" xml:space="preserve">
     <value>DevicesList</value>
   </data>
-  <data name="Filepath.Text" xml:space="preserve">
+  <data name="Filepath.Header" xml:space="preserve">
+    <value>Filepath</value>
+  </data>
+  <data name="Filepath.PlaceholderText" xml:space="preserve">
     <value>Please drop file this.</value>
   </data>
   <data name="FT_Loader.Text" xml:space="preserve">
@@ -192,6 +201,9 @@
   <data name="SettingsView" xml:space="preserve">
     <value>Parameters</value>
   </data>
+  <data name="SJIS" xml:space="preserve">
+    <value>Shift-JIS</value>
+  </data>
   <data name="StaffList" xml:space="preserve">
     <value>StaffList</value>
   </data>
@@ -206,5 +218,8 @@
   </data>
   <data name="Upsert.Content" xml:space="preserve">
     <value>Upsert</value>
+  </data>
+  <data name="UTF8" xml:space="preserve">
+    <value>UTF-8</value>
   </data>
 </root>

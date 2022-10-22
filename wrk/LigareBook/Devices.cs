@@ -30,7 +30,7 @@ namespace LigareBook
 		public String Numbers { get; set; }
 	}
 
-	public class DevicesCursor
+	public class DevicesCursor : Loader
 	{
 		public ObservableCollection<Device> Listup(Context pContext)
 		{

@@ -123,6 +123,12 @@
   <data name="AppTitle.PaneTitle" xml:space="preserve">
     <value>コンソール</value>
   </data>
+  <data name="Browse.Content" xml:space="preserve">
+    <value>ファイル選択</value>
+  </data>
+  <data name="CodePage.Header" xml:space="preserve">
+    <value>文字コード</value>
+  </data>
   <data name="DashBoard.Content" xml:space="preserve">
     <value>ダッシュボード</value>
   </data>
@@ -141,7 +147,10 @@
   <data name="DevicesList" xml:space="preserve">
     <value>機器リスト</value>
   </data>
-  <data name="Filepath.Text" xml:space="preserve">
+  <data name="Filepath.Header" xml:space="preserve">
+    <value>ファイルパス</value>
+  </data>
+  <data name="Filepath.PlaceholderText" xml:space="preserve">
     <value>ここにファイルをドロップしてください。</value>
   </data>
   <data name="FT_Loader.Text" xml:space="preserve">
@@ -189,6 +198,9 @@
   <data name="SettingsView" xml:space="preserve">
     <value>パラメータ</value>
   </data>
+  <data name="SJIS" xml:space="preserve">
+    <value>Shift-JIS</value>
+  </data>
   <data name="StaffList" xml:space="preserve">
     <value>職員リスト</value>
   </data>
@@ -203,5 +215,8 @@
   </data>
   <data name="Upsert.Content" xml:space="preserve">
     <value>更新</value>
+  </data>
+  <data name="UTF8" xml:space="preserve">
+    <value>UTF-8</value>
   </data>
 </root>

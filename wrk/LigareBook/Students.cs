@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -31,7 +32,7 @@ namespace LigareBook
 		public String Numbers { get; set; }
 	}
 
-	public class StudentsCursor
+	public class StudentsCursor : Loader
 	{
 		public StudentsCursor()
 		{
@@ -70,6 +71,11 @@ namespace LigareBook
 			}
 
 			return(pItems);
+		}
+
+		public override bool Load(string pPath)
+		{
+			return(true);
 		}
 	}
 }

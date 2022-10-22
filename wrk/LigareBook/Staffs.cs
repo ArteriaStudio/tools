@@ -25,7 +25,7 @@ namespace LigareBook
 		public String ContractType { get; set; }
 	}
 
-	public class StaffsCursor
+	public class StaffsCursor : Loader
 	{
 		public ObservableCollection<Staff> Listup(Context pContext)
 		{

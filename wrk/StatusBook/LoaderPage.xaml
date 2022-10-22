@@ -22,11 +22,26 @@
 		<StackPanel Grid.Column="0" Grid.Row="0">
 			<TextBlock x:Uid="FT_Loader" Margin="16,4,16,4" />
 			<RadioButtons Name="LoadOptions" x:Uid="DataType" MaxColumns="4" Margin="16,4" ItemsSource="{x:Bind pLoadOptions}" SelectionChanged="LoadOptions_SelectionChanged" />
+			<RadioButtons Name="CodePages" x:Uid="CodePage" MaxColumns="4" Margin="16,4" ItemsSource="{x:Bind pCodePages}" SelectionChanged="CodePages_SelectionChanged" />
+			<Grid Margin="16,4,16,4">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="auto" />
+				</Grid.RowDefinitions>
+
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*" />
+					<ColumnDefinition Width="auto" />
+				</Grid.ColumnDefinitions>
+				<TextBox Grid.Row="0" Grid.Column="0" Name="Filepath" x:Uid="Filepath" TextChanged="Filepath_TextChanged" />
+				<Button Grid.Row="0" Grid.Column="1" Name="Browse" x:Uid="Browse" IsEnabled="True" Click="Browse_Click" Margin="8" VerticalAlignment="Bottom" />
+			</Grid>
+<!--
 			<Border BorderThickness="1" BorderBrush="Gray" Margin="16,4,16,4" AllowDrop="False" DragEnter="Filepath_DragEnter" DragOver="Filepath_DragOver" Drop="Filepath_Drop">
 				<TextBlock Name="Filepath" x:Uid="Filepath" Margin="16,4,16,6" Tapped="Filepath_Tapped" />
 			</Border>
+-->
 			<Frame Name="ListFrame" Margin="16,4,16,6" />
-			<Button Name="Upsert" x:Uid="Upsert" Margin="16,4" IsEnabled="False" />
+			<Button Name="Upsert" x:Uid="Upsert" Margin="16,4" IsEnabled="False" Click="Upsert_Click" />
 		</StackPanel>
 
 	</Grid>

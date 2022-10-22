@@ -1,4 +1,5 @@
 ﻿using Arteria_s.UI.Base;
+using LigareBook;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
@@ -25,7 +26,7 @@ using Windows.Storage.Pickers;
 
 namespace StatusBook
 {
-	public class LoadOptionItem
+	public class OptionItem
 	{
 		public string Label { get; set; }
 		public int iNumber { get; set; }
@@ -41,17 +42,21 @@ namespace StatusBook
 	/// </summary>
 	public sealed partial class LoaderPage : Page
 	{
-		List<LoadOptionItem> pLoadOptions;
+		List<OptionItem> pLoadOptions;
+		List<OptionItem> pCodePages;
 
 		public LoaderPage()
 		{
 			this.InitializeComponent();
 
 			var pResLoader = new ResourceLoader();
-			pLoadOptions = new List<LoadOptionItem>();
-			pLoadOptions.Add(new LoadOptionItem() { iNumber = 0, Label = pResLoader.GetString("StudentsList") });
-			pLoadOptions.Add(new LoadOptionItem() { iNumber = 1, Label = pResLoader.GetString("StaffList") });
-			pLoadOptions.Add(new LoadOptionItem() { iNumber = 2, Label = pResLoader.GetString("DevicesList") });
+			pLoadOptions = new List<OptionItem>();
+			pLoadOptions.Add(new OptionItem() { iNumber = 0, Label = pResLoader.GetString("StudentsList") });
+			pLoadOptions.Add(new OptionItem() { iNumber = 1, Label = pResLoader.GetString("StaffList") });
+			pLoadOptions.Add(new OptionItem() { iNumber = 2, Label = pResLoader.GetString("DevicesList") });
+			pCodePages = new List<OptionItem>();
+			pCodePages.Add(new OptionItem() { iNumber = 0, Label = pResLoader.GetString("UTF8") });
+			pCodePages.Add(new OptionItem() { iNumber = 1, Label = pResLoader.GetString("SJIS") });
 
 			this.ListFrame.Navigate(typeof(StudentListPage));
 		}
@@ -59,7 +64,7 @@ namespace StatusBook
 		private void LoadOptions_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			System.Diagnostics.Debug.WriteLine("[Enter]LoadOptions_SelectionChanged");
-			foreach (LoadOptionItem pOption in e.AddedItems)
+			foreach (OptionItem pOption in e.AddedItems)
 			{
 				if (pOption != null)
 				{
@@ -79,7 +84,7 @@ namespace StatusBook
 				}
 			}
 
-			foreach (LoadOptionItem pOption in e.RemovedItems)
+			foreach (OptionItem pOption in e.RemovedItems)
 			{
 				if (pOption != null)
 				{
@@ -91,11 +96,66 @@ namespace StatusBook
 			ValidateMe(sender);
 		}
 
+		private void CodePages_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			System.Diagnostics.Debug.WriteLine("[Enter]CodePages_SelectionChanged");
+			foreach (OptionItem pOption in e.AddedItems)
+			{
+				if (pOption != null)
+				{
+					System.Diagnostics.Debug.WriteLine("[Add]pOption.iNumber=" + pOption.iNumber);
+				}
+			}
+
+			foreach (OptionItem pOption in e.RemovedItems)
+			{
+				if (pOption != null)
+				{
+					System.Diagnostics.Debug.WriteLine("[Del]pOption.iNumber=" + pOption.iNumber);
+				}
+			}
+			System.Diagnostics.Debug.WriteLine("[Leave]CodePages_SelectionChanged");
+
+			ValidateMe(sender);
+		}
+
+		private async void Browse_Click(object sender, RoutedEventArgs e)
+		{
+			//　コモンダイアログを使う道は、忘れるか諦めるのが好ましい（2022/10/12）
+			//　最適解：エクスプローラでファイルをドロップしろと利用者に伝える
+			//　相互運用機能に頼る（2022/10/15）
+			var pApp = Application.Current as App;
+			var pOpenPicker = PickerHelper.NewFileOpenPicker(pApp.m_pWindow);
+
+			pOpenPicker.ViewMode = PickerViewMode.List;
+			pOpenPicker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
+			pOpenPicker.FileTypeFilter.Add(".csv");
+			pOpenPicker.FileTypeFilter.Add("*");
+
+			StorageFile file = await pOpenPicker.PickSingleFileAsync();
+			if (file != null)
+			{
+				this.Filepath.Text = file.Path;
+			}
+			else
+			{
+				;
+			}
+		}
+
 		private void ValidateMe(object sender)
 		{
 			bool fEnabled = true;
+
 			var pLoadOptions = this.LoadOptions;
 			if (pLoadOptions.SelectedIndex == -1)
+			{
+				fEnabled = false;
+			}
+			System.Diagnostics.Debug.WriteLine("[Trace]pLoadOptions.SelectedIndex=" + pLoadOptions.SelectedIndex);
+
+			var pCodePages = this.CodePages;
+			if (pCodePages.SelectedIndex == -1)
 			{
 				fEnabled = false;
 			}
@@ -139,32 +199,6 @@ namespace StatusBook
 			ValidateMe(sender);
 		}
 
-		private async void Filepath_Tapped(object sender, TappedRoutedEventArgs e)
-		{
-			//　コモンダイアログを使う道は、忘れるか諦めるのが好ましい（2022/10/12）
-			//　最適解：エクスプローラでファイルをドロップしろと利用者に伝える
-			//　相互運用機能に頼る（2022/10/15）
-			var pApp = Application.Current as App;
-			var pOpenPicker = PickerHelper.NewFileOpenPicker(pApp.m_pWindow);
-
-			pOpenPicker.ViewMode = PickerViewMode.Thumbnail;
-			pOpenPicker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
-			pOpenPicker.FileTypeFilter.Add(".csv");
-
-			StorageFile file = await pOpenPicker.PickSingleFileAsync();
-			if (file != null)
-			{
-				this.Filepath.Text = file.Path;
-			}
-			else
-			{
-				;
-			}
-
-
-
-
-		}
 		private void Filepath_DragEnter(object sender, DragEventArgs e)
 		{
 			if (e.DataView.Contains(StandardDataFormats.StorageItems))
@@ -189,5 +223,38 @@ namespace StatusBook
 			}
 		}
 
+		//　ロード開始
+		private void Upsert_Click(object sender, RoutedEventArgs e)
+		{
+			var pLoadOptions = this.LoadOptions;
+			var iSelectedIndex = pLoadOptions.SelectedIndex;
+			var pLoadFilepath = this.Filepath.Text;
+
+			System.Diagnostics.Debug.WriteLine("Selected Index=" + iSelectedIndex);
+			System.Diagnostics.Debug.WriteLine("LoadFilepath=" + pLoadFilepath);
+
+			Loader pLoader = null;
+			switch (iSelectedIndex)
+			{
+				case 0:
+					pLoader = new StudentsCursor();
+					break;
+				case 1:
+					pLoader = new StaffsCursor();
+					break;
+				case 2:
+					pLoader = new DevicesCursor();
+					break;
+			}
+			if (pLoader != null)
+			{
+				pLoader.Load(pLoadFilepath);
+			}
+		}
+
+		private void Filepath_TextChanged(object sender, TextChangedEventArgs e)
+		{
+			System.Diagnostics.Debug.WriteLine("" + this.Filepath.Text);
+		}
 	}
 }
