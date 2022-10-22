@@ -1,9 +1,14 @@
 ﻿using Arteria_s.DB.Base;
+using CsvHelper;
+using CsvHelper.Configuration;
+using CsvHelper.Configuration.Attributes;
 using Microsoft.VisualBasic;
 using Npgsql;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -31,6 +36,32 @@ namespace LigareBook
 		public String Sets { get; set; }
 		public String Numbers { get; set; }
 	}
+
+	public class StudentCSV
+	{
+		[Index(0)]
+		public int Year { get; set; }
+		[Index(1)]
+		public String School { get; set; }
+		[Index(2)]
+		public String Grade { get; set; }
+		[Index(3)]
+		public String Name { get; set; }
+		[Index(4)]
+		public String Read { get; set; }
+		[Index(5)]
+		public String Sets { get; set; }
+		[Index(6)]
+		public String Numbers { get; set; }
+		[Index(7)]
+		public String Gender { get; set; }
+		[Index(8)]
+		public String BirthAt { get; set; }
+		[Index(9)]
+		public String StudentNumber { get; set; }
+	}
+
+
 
 	public class StudentsCursor : Loader
 	{
@@ -75,6 +106,19 @@ namespace LigareBook
 
 		public override bool Load(string pPath)
 		{
+			// https://code-maze.com/csharp-read-data-from-csv-file/
+			var pConfiguration = new CsvConfiguration(CultureInfo.InvariantCulture)
+			{
+				HasHeaderRecord = false,
+			};
+			using (var pReader = new StreamReader(pPath))
+			using (var pFetcher = new CsvReader(pReader, pConfiguration))
+			{
+				pFetcher.Read();
+				var pRecoords = pFetcher.GetRecord<StudentCSV>();
+			}
+
+
 			return(true);
 		}
 	}
