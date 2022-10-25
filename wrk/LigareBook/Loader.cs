@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Arteria_s.DB.Base;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,7 +18,7 @@ namespace LigareBook
 			;
 		}
 
-		public virtual bool Load(string pPath)
+		public virtual bool Load(string pPath, string pCodeSet, Context pContext)
 		{
 			return(false);
 		}

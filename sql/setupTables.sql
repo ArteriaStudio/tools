@@ -255,7 +255,20 @@ CREATE TABLE MAccounts (
   UNIQUE (Email)
 );
 GRANT ALL ON MAccounts TO cmnoper;
-GRANT SELECT ON MAccounts TO aploper;
+GRANT SELECT, INSERT, UPDATE ON MAccounts TO aploper;
+
+DROP PROCEDURE InsertAccount;
+CREATE PROCEDURE InsertAccount (
+  pEmail      VARCHAR(256),
+  pName       VARCHAR(256),
+  pRead       VARCHAR(256),
+  pOrgUnit    UUID,
+  iStatus     INTEGER)
+LANGUAGE SQL AS $$
+  INSERT INTO MAccounts (Email, Name, Read, OrgUnitID, Status)
+    (SELECT pEmail, pName, pRead, pOrgUnit, iStatus)
+$$;
+
 
 DROP PROCEDURE UpsertAccount;
 CREATE PROCEDURE UpsertAccount (
@@ -504,7 +517,19 @@ CREATE TABLE MStudents (
   CONSTRAINT CK_GENDER CHECK ( Gender = '男' OR Gender = '女' )
 );
 GRANT ALL ON MStudents TO cmnoper;
-GRANT SELECT ON MStudents TO aploper;
+GRANT SELECT, INSERT, UPDATE ON MStudents TO aploper;
+
+DROP PROCEDURE InsertStudent;
+CREATE PROCEDURE InsertStudent (
+  pStudentNumber    VARCHAR(5),
+  pAccountID        UUID,
+  pGender           VARCHAR(1),
+  pBirthAt          TIMESTAMP,
+  pEnterAt          TIMESTAMP
+) LANGUAGE SQL AS $$
+  INSERT INTO MStudents (StudentNumber, AccountID, Gender, BirthAt, EnterAt)
+    (SELECT pStudentNumber, pAccountID, pGender, pBirthAt, pEnterAt)
+$$;
 
 /*　学籍マスタは現状だと更新する契機が見当たらないのでストアドプロシージャはなし（2022/09/20）　*/
 
@@ -524,18 +549,33 @@ CREATE TABLE MGrade (
   AccountID     UUID NOT NULL,
   PRIMARY KEY ( Year, School, Grade, Sets, Numbers ),
   FOREIGN KEY ( AccountID ) REFERENCES MAccounts ( AccountID )
-    ON DELETE CASCADE ON UPDATE CASCADE,
-  FOREIGN KEY ( Year ) REFERENCES MCurrent ( Year )
     ON DELETE CASCADE ON UPDATE CASCADE
 );
 GRANT ALL ON MGrade TO cmnoper;
-GRANT SELECT ON MGrade TO aploper;
+GRANT SELECT, INSERT, UPDATE ON MGrade TO aploper;
+
+DROP PROCEDURE InsertGrade;
+CREATE PROCEDURE InsertGrade (
+  iYear          INTEGER,
+  pStudentNumber VARCHAR(5),
+  pSchool        VARCHAR(2),
+  pGrade         VARCHAR(1),
+  pSets          VARCHAR(2),
+  pNumbers       VARCHAR(2)
+) LANGUAGE SQL AS $$
+  INSERT INTO MGrade (Year, School, Grade, Sets, Numbers, AccountID)
+    (SELECT iYear, pSchool, pGrade, pSets, pNumbers, AccountID FROM MStudents WHERE StudentNumber = pStudentNumber)
+$$;
+
+
+
+
 
 /*　注意：未登録を検出する方法を実装していないので、実質このストアドプロシージャは使ってはならない（2022/09/20）　*/
 CREATE PROCEDURE UpsertGrade (
   pYear          INTEGER,
   pStudentNumber VARCHAR(5),
-  pSchool        VARCHAR(2),
+  pSchool        VARCHAR(3),
   pGrade         VARCHAR(1),
   pSets          VARCHAR(2),
   pNumbers       VARCHAR(2)
@@ -548,6 +588,37 @@ $$;
 
 CALL UpsertGrade('2022', '00000', '中学', '1', '1', '1');
 CALL UpsertGrade('2022', '00099', '中学', '3', '6', '99');
+
+
+DROP PROCEDURE InsertStudentAccount;
+CREATE PROCEDURE InsertStudentAccount (
+  pOrgUnitCode   VARCHAR(8),
+  pEmail         VARCHAR(256),
+  pName          VARCHAR(256),
+  pRead          VARCHAR(256),
+  pGender        VARCHAR(1),
+  pBirthAt       TIMESTAMP,
+  pEnterAt       TIMESTAMP,
+  iYear          INTEGER,
+  pStudentNumber VARCHAR(5),
+  pSchool        VARCHAR(3),
+  pGrade         VARCHAR(1),
+  pSets          VARCHAR(2),
+  pNumbers       VARCHAR(2)
+) LANGUAGE 'plpgsql' AS $$
+DECLARE
+  pOrgUnitID     UUID;
+  pAccountID     UUID;
+BEGIN
+  pOrgUnitID = GetOrgUnitID(pOrgUnitCode);
+  CALL InsertAccount(pEmail, pName, pRead, pOrgUnitID, 0);
+  pAccountID = GetAccountIDByEmail(pEmail);
+  CALL InsertStudent(pStudentNumber, pAccountID, pGender, pBirthAt, pEnterAt);
+  CALL InsertGrade(iYear, pStudentNumber, pSchool, pGrade, pSets, pNumbers);
+END
+$$;
+
+CALL InsertStudentAccount('000000', 'aes@arteria-s.net', '宮部　みゆき', 'みやべ　みゆき', '女', '2000/01/2', '2022/12/22', 2022, '01001', '高校', '2', 'G2', '2');
 
 
 

@@ -10,8 +10,10 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection.PortableExecutable;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace LigareBook
@@ -35,6 +37,27 @@ namespace LigareBook
 		public String Grade { get; set; }
 		public String Sets { get; set; }
 		public String Numbers { get; set; }
+
+		public void Dump()
+		{
+			System.Diagnostics.Debug.WriteLine(AccountID);
+			System.Diagnostics.Debug.WriteLine(Email);
+			System.Diagnostics.Debug.WriteLine(Name);
+			System.Diagnostics.Debug.WriteLine(Read);
+			System.Diagnostics.Debug.WriteLine(OrgUnitID);
+			System.Diagnostics.Debug.WriteLine(Status);
+			System.Diagnostics.Debug.WriteLine(ExpireAt);
+			System.Diagnostics.Debug.WriteLine(UpdateAt);
+			System.Diagnostics.Debug.WriteLine(DeleteAt);
+			System.Diagnostics.Debug.WriteLine(StudentNumber);
+			System.Diagnostics.Debug.WriteLine(EnterAt);
+			System.Diagnostics.Debug.WriteLine(LeaveAt);
+			System.Diagnostics.Debug.WriteLine($"{Year}");
+			System.Diagnostics.Debug.WriteLine(School);
+			System.Diagnostics.Debug.WriteLine(Grade);
+			System.Diagnostics.Debug.WriteLine(Sets);
+			System.Diagnostics.Debug.WriteLine(Numbers);
+		}
 	}
 
 	public class StudentCSV
@@ -56,9 +79,71 @@ namespace LigareBook
 		[Index(7)]
 		public String Gender { get; set; }
 		[Index(8)]
-		public String BirthAt { get; set; }
+		public DateTime BirthAt { get; set; }
 		[Index(9)]
 		public String StudentNumber { get; set; }
+		
+		public bool CheckSelf()
+		{
+			if (Year < 2000)
+			{
+				return(false);
+			}
+			if (Lexical.IsSchool(School) == false)
+			{
+				return(false);
+			}
+			if (Lexical.IsGrade(Grade) == false)
+			{
+				return (false);
+			}
+			if (Lexical.IsName(Name) == false)
+			{
+				return (false);
+			}
+			if (Lexical.IsRead(Read) == false)
+			{
+				return (false);
+			}
+			/*
+			if (Lexical.IsNumber(Sets) == false)
+			{
+				return (false);
+			}
+			*/
+			if (Lexical.IsNumber(Numbers) == false)
+			{
+				return (false);
+			}
+			if (Lexical.IsGender(Gender) == false)
+			{
+				return (false);
+			}
+			if (Lexical.IsDateTime(BirthAt) == false)
+			{
+				return (false);
+			}
+			if (Lexical.IsNumber(StudentNumber) == false)
+			{
+				return (false);
+			}
+
+			return (true);
+		}
+
+		public void Dump()
+		{
+			System.Diagnostics.Debug.WriteLine($"年度: {Year}");
+			System.Diagnostics.Debug.WriteLine("学校区分: " + School);
+			System.Diagnostics.Debug.WriteLine("学年: " + Grade);
+			System.Diagnostics.Debug.WriteLine("名前: " + Name);
+			System.Diagnostics.Debug.WriteLine("ふりがな: " + Read);
+			System.Diagnostics.Debug.WriteLine("クラス: " + Sets);
+			System.Diagnostics.Debug.WriteLine("出席番号: " + Numbers);
+			System.Diagnostics.Debug.WriteLine("性別: " + Gender);
+			System.Diagnostics.Debug.WriteLine("生年月日: " + BirthAt);
+			System.Diagnostics.Debug.WriteLine("学籍番号: " + StudentNumber);
+		}
 	}
 
 
@@ -104,22 +189,86 @@ namespace LigareBook
 			return(pItems);
 		}
 
-		public override bool Load(string pPath)
+		public void Insert(Context pContext, List<StudentCSV> pStudentsCSV)
+		{
+			var pTransaction = pContext.m_pConnection.BeginTransaction();
+
+			var pSQL = "CALL InsertStudentAccount(@OrgUnitCode, @Email, @Name, @Read, @Gender, @BirthAt, @EnterAt, @Year, @StudentNumber, @School, @Grade, @Sets, @Numbers);";
+			using (var pCommand = new NpgsqlCommand(pSQL, pContext.m_pConnection))
+			{
+				foreach (var pStudentCSV in pStudentsCSV)
+				{
+					pCommand.Parameters.Clear();
+
+					var pOrgUnitCode = "000000";
+					var pEmail = $"{pStudentCSV.StudentNumber}@class.bunri-s.ed.jp";
+					var pEnterAt = new DateTime(2022, 4, 1);
+
+					pCommand.Parameters.AddWithValue("OrgUnitCode", pOrgUnitCode);
+					pCommand.Parameters.AddWithValue("Email", pEmail);
+					pCommand.Parameters.AddWithValue("Name", pStudentCSV.Name);
+					pCommand.Parameters.AddWithValue("Read", pStudentCSV.Read);
+					pCommand.Parameters.AddWithValue("Gender", pStudentCSV.Gender);
+					pCommand.Parameters.AddWithValue("BirthAt", pStudentCSV.BirthAt);
+					pCommand.Parameters.AddWithValue("EnterAt", pEnterAt);
+					pCommand.Parameters.AddWithValue("Year", pStudentCSV.Year);
+					pCommand.Parameters.AddWithValue("StudentNumber", pStudentCSV.StudentNumber);
+					if (pStudentCSV.School.Equals("中学校") == true)
+					{
+						pCommand.Parameters.AddWithValue("School", "中学");
+					}
+					else
+					{
+						pCommand.Parameters.AddWithValue("School", pStudentCSV.School);
+					}
+					pCommand.Parameters.AddWithValue("Grade", pStudentCSV.Grade);
+					pCommand.Parameters.AddWithValue("Sets", pStudentCSV.Sets);
+					pCommand.Parameters.AddWithValue("Numbers", pStudentCSV.Numbers);
+
+					try
+					{
+						pCommand.ExecuteNonQuery();
+					}
+					catch (PostgresException e)
+					{
+						System.Diagnostics.Debug.WriteLine($"Mesage: {e.MessageText}");
+					}
+				}
+			}
+
+			pTransaction.Commit();
+
+			return;
+		}
+
+		public override bool Load(string pPath, string pCodeSet, Context pContext)
 		{
 			// https://code-maze.com/csharp-read-data-from-csv-file/
 			var pConfiguration = new CsvConfiguration(CultureInfo.InvariantCulture)
 			{
-				HasHeaderRecord = false,
+				HasHeaderRecord = true,
 			};
-			using (var pReader = new StreamReader(pPath))
+			using (var pReader = new StreamReader(pPath, Encoding.GetEncoding(pCodeSet)))
 			using (var pFetcher = new CsvReader(pReader, pConfiguration))
 			{
-				pFetcher.Read();
-				var pRecoords = pFetcher.GetRecord<StudentCSV>();
+				var pItems = new List<StudentCSV>();
+				while (pFetcher.Read())
+				{
+					var pRecoords = pFetcher.GetRecord<StudentCSV>();
+					if (pRecoords.CheckSelf() == true)
+					{
+						pItems.Add(pRecoords);
+					}
+					else
+					{
+						//　字句エラー
+						System.Diagnostics.Debug.WriteLine("");
+					}
+				}
+				Insert(pContext, pItems);
 			}
 
-
-			return(true);
+			return (true);
 		}
 	}
 }

@@ -16,6 +16,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Sockets;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Text;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
@@ -39,8 +40,11 @@ namespace StatusBook
 		{
 			this.InitializeComponent();
 
-			
+			//　Unicode 以外のコードページをサポートするエンコーディングプロバイダーのインスタンスを登録
+			System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
 
+			//　前提条件検査
+			PrepareEnvironments();
 
 			//　フォーカス
 			//this.FocusVisualKind = FocusVisualKind.Reveal;
@@ -139,6 +143,15 @@ namespace StatusBook
 				this.FragmentsFrame.Navigate(typeof(MediaPage));
 			}
 			*/
+		}
+
+		private void PrepareEnvironments()
+		{
+			var pEncordings = Encoding.GetEncodings();
+			foreach (var pEncodeing in pEncordings)
+			{
+				System.Diagnostics.Trace.WriteLine("Encoding: Name=" + pEncodeing.Name + ", DisplayName=" + pEncodeing.DisplayName);
+			}
 		}
 
 	}

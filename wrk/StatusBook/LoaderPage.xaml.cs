@@ -227,14 +227,17 @@ namespace StatusBook
 		private void Upsert_Click(object sender, RoutedEventArgs e)
 		{
 			var pLoadOptions = this.LoadOptions;
-			var iSelectedIndex = pLoadOptions.SelectedIndex;
+			var iLoadOption = pLoadOptions.SelectedIndex;
+			var pCodePages = this.CodePages;
+			var iCodePage = pCodePages.SelectedIndex;
 			var pLoadFilepath = this.Filepath.Text;
 
-			System.Diagnostics.Debug.WriteLine("Selected Index=" + iSelectedIndex);
+			System.Diagnostics.Debug.WriteLine("Selected LoadOptions Index=" + iLoadOption);
+			System.Diagnostics.Debug.WriteLine("Selected CodePages Index=" + iCodePage);
 			System.Diagnostics.Debug.WriteLine("LoadFilepath=" + pLoadFilepath);
 
 			Loader pLoader = null;
-			switch (iSelectedIndex)
+			switch (iLoadOption)
 			{
 				case 0:
 					pLoader = new StudentsCursor();
@@ -246,9 +249,22 @@ namespace StatusBook
 					pLoader = new DevicesCursor();
 					break;
 			}
+
+			string pCodePage = "";
+			switch (iCodePage)
+			{
+				case 0:
+					pCodePage = "utf-8";
+					break;
+				case 1:
+					pCodePage = "shift_jis";
+					break;
+			}
 			if (pLoader != null)
 			{
-				pLoader.Load(pLoadFilepath);
+				var pApp = Application.Current as App;
+				var pContext = pApp.m_pContext;
+				pLoader.Load(pLoadFilepath, pCodePage, pContext);
 			}
 		}
 
