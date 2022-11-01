@@ -1,4 +1,5 @@
 ﻿using Arteria_s.UI.Base;
+using Arteria_s.UI.Helper;
 using LigareBook;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -226,6 +227,8 @@ namespace StatusBook
 		//　ロード開始
 		private void Upsert_Click(object sender, RoutedEventArgs e)
 		{
+			Functions.EnableAllControls(this.LoaderPagePanel, false);
+
 			var pLoadOptions = this.LoadOptions;
 			var iLoadOption = pLoadOptions.SelectedIndex;
 			var pCodePages = this.CodePages;
@@ -266,11 +269,13 @@ namespace StatusBook
 				var pContext = pApp.m_pContext;
 				pLoader.Load(pLoadFilepath, pCodePage, pContext);
 			}
+			Functions.EnableAllControls(this.LoaderPagePanel, true);
 		}
 
 		private void Filepath_TextChanged(object sender, TextChangedEventArgs e)
 		{
 			System.Diagnostics.Debug.WriteLine("" + this.Filepath.Text);
 		}
+
 	}
 }

@@ -531,6 +531,20 @@ CREATE PROCEDURE InsertStudent (
     (SELECT pStudentNumber, pAccountID, pGender, pBirthAt, pEnterAt)
 $$;
 
+DROP PROCEDURE UpsertStudent;
+CREATE PROCEDURE UpsertStudent (
+  pStudentNumber    VARCHAR(5),
+  pAccountID        UUID,
+  pGender           VARCHAR(1),
+  pBirthAt          TIMESTAMP,
+  pEnterAt          TIMESTAMP
+) LANGUAGE SQL AS $$
+  INSERT INTO MStudents (StudentNumber, AccountID, Gender, BirthAt, EnterAt)
+    (SELECT pStudentNumber, pAccountID, pGender, pBirthAt, pEnterAt)
+  ON CONFLICT ON CONSTRAINT mstudents_pkey
+  DO UPDATE SET Gender = pGender, BirthAt = pBirthAt, EnterAt = pEnterAt;
+$$;
+
 /*　学籍マスタは現状だと更新する契機が見当たらないのでストアドプロシージャはなし（2022/09/20）　*/
 
 INSERT INTO MStudents (StudentNumber, AccountID, Gender, BirthAt) (SELECT '00000', AccountID, '女', now() FROM MAccounts WHERE Email = 'wakaba@arteria-s.net');
@@ -541,15 +555,17 @@ INSERT INTO MStudents (StudentNumber, AccountID, Gender, BirthAt) (SELECT '00099
 /* 学年 */
 DROP TABLE MGrade;
 CREATE TABLE MGrade (
+  StudentNumber VARCHAR(5) NOT NULL,
   Year          INTEGER NOT NULL,
   School        VARCHAR(2) NOT NULL,
   Grade         VARCHAR(1) NOT NULL,
   Sets          VARCHAR(2) NOT NULL,
   Numbers       VARCHAR(2) NOT NULL,
   AccountID     UUID NOT NULL,
-  PRIMARY KEY ( Year, School, Grade, Sets, Numbers ),
+  PRIMARY KEY ( StudentNumber, Year ),
   FOREIGN KEY ( AccountID ) REFERENCES MAccounts ( AccountID )
-    ON DELETE CASCADE ON UPDATE CASCADE
+    ON DELETE CASCADE ON UPDATE CASCADE,
+  UNIQUE ( Year, School, Grade, Sets, Numbers )
 );
 GRANT ALL ON MGrade TO cmnoper;
 GRANT SELECT, INSERT, UPDATE ON MGrade TO aploper;
@@ -563,8 +579,8 @@ CREATE PROCEDURE InsertGrade (
   pSets          VARCHAR(2),
   pNumbers       VARCHAR(2)
 ) LANGUAGE SQL AS $$
-  INSERT INTO MGrade (Year, School, Grade, Sets, Numbers, AccountID)
-    (SELECT iYear, pSchool, pGrade, pSets, pNumbers, AccountID FROM MStudents WHERE StudentNumber = pStudentNumber)
+  INSERT INTO MGrade (StudentNumber, Year, School, Grade, Sets, Numbers, AccountID)
+    (SELECT pStudentNumber, iYear, pSchool, pGrade, pSets, pNumbers, AccountID FROM MStudents WHERE StudentNumber = pStudentNumber)
 $$;
 
 
@@ -572,18 +588,19 @@ $$;
 
 
 /*　注意：未登録を検出する方法を実装していないので、実質このストアドプロシージャは使ってはならない（2022/09/20）　*/
+DROP PROCEDURE UpsertGrade;
 CREATE PROCEDURE UpsertGrade (
-  pYear          INTEGER,
+  iYear          INTEGER,
   pStudentNumber VARCHAR(5),
   pSchool        VARCHAR(3),
   pGrade         VARCHAR(1),
   pSets          VARCHAR(2),
   pNumbers       VARCHAR(2)
 ) LANGUAGE SQL AS $$
-  INSERT INTO MGrade (Year, School, Grade, Sets, Numbers, AccountID)
-    (SELECT pYear, pSchool, pGrade, pSets, pNumbers, AccountID FROM MStudents WHERE StudentNumber = pStudentNumber)
+  INSERT INTO MGrade (StudentNumber, Year, School, Grade, Sets, Numbers, AccountID)
+    (SELECT pStudentNumber, iYear, pSchool, pGrade, pSets, pNumbers, AccountID FROM MStudents WHERE StudentNumber = pStudentNumber)
   ON CONFLICT ON CONSTRAINT mgrade_pkey
-  DO UPDATE SET Year = pYear, School = pSchool, Grade = pGrade, Sets = pSets, Numbers = pNumbers;
+  DO UPDATE SET Year = iYear, School = pSchool, Grade = pGrade, Sets = pSets, Numbers = pNumbers;
 $$;
 
 CALL UpsertGrade('2022', '00000', '中学', '1', '1', '1');
@@ -618,7 +635,36 @@ BEGIN
 END
 $$;
 
+DROP PROCEDURE UpsertStudentAccount;
+CREATE PROCEDURE UpsertStudentAccount (
+  pOrgUnitCode   VARCHAR(8),
+  pEmail         VARCHAR(256),
+  pName          VARCHAR(256),
+  pRead          VARCHAR(256),
+  pGender        VARCHAR(1),
+  pBirthAt       TIMESTAMP,
+  pEnterAt       TIMESTAMP,
+  iYear          INTEGER,
+  pStudentNumber VARCHAR(5),
+  pSchool        VARCHAR(3),
+  pGrade         VARCHAR(1),
+  pSets          VARCHAR(2),
+  pNumbers       VARCHAR(2)
+) LANGUAGE 'plpgsql' AS $$
+DECLARE
+  pOrgUnitID     UUID;
+  pAccountID     UUID;
+BEGIN
+  pOrgUnitID = GetOrgUnitID(pOrgUnitCode);
+  CALL UpsertAccount(pEmail, pName, pRead, pOrgUnitID, 0);
+  pAccountID = GetAccountIDByEmail(pEmail);
+  CALL UpsertStudent(pStudentNumber, pAccountID, pGender, pBirthAt, pEnterAt);
+  CALL UpsertGrade(iYear, pStudentNumber, pSchool, pGrade, pSets, pNumbers);
+END
+$$;
+
 CALL InsertStudentAccount('000000', 'aes@arteria-s.net', '宮部　みゆき', 'みやべ　みゆき', '女', '2000/01/2', '2022/12/22', 2022, '01001', '高校', '2', 'G2', '2');
+CALL UpsertStudentAccount('000000', 'aes@arteria-s.net', '宮部　みゆき', 'みやべ　みゆき', '女', '2000/01/2', '2022/12/22', 2022, '01001', '高校', '2', 'G2', '2');
 
 
 

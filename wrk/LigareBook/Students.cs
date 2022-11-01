@@ -193,7 +193,7 @@ namespace LigareBook
 		{
 			var pTransaction = pContext.m_pConnection.BeginTransaction();
 
-			var pSQL = "CALL InsertStudentAccount(@OrgUnitCode, @Email, @Name, @Read, @Gender, @BirthAt, @EnterAt, @Year, @StudentNumber, @School, @Grade, @Sets, @Numbers);";
+			var pSQL = "CALL UpsertStudentAccount(@OrgUnitCode, @Email, @Name, @Read, @Gender, @BirthAt, @EnterAt, @Year, @StudentNumber, @School, @Grade, @Sets, @Numbers);";
 			using (var pCommand = new NpgsqlCommand(pSQL, pContext.m_pConnection))
 			{
 				foreach (var pStudentCSV in pStudentsCSV)
@@ -231,7 +231,7 @@ namespace LigareBook
 					}
 					catch (PostgresException e)
 					{
-						System.Diagnostics.Debug.WriteLine($"Mesage: {e.MessageText}");
+						System.Diagnostics.Debug.WriteLine($"Mesage: {e.MessageText} Code: {e.ErrorCode}");
 					}
 				}
 			}
@@ -268,7 +268,7 @@ namespace LigareBook
 				Insert(pContext, pItems);
 			}
 
-			return (true);
+			return(true);
 		}
 	}
 }

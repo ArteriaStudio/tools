@@ -19,7 +19,7 @@
 			<ColumnDefinition Width="*" />
 		</Grid.ColumnDefinitions>
 
-		<StackPanel Grid.Column="0" Grid.Row="0">
+		<StackPanel Grid.Column="0" Grid.Row="0" Name="LoaderPagePanel">
 			<TextBlock x:Uid="FT_Loader" Margin="16,4,16,4" />
 			<RadioButtons Name="LoadOptions" x:Uid="DataType" MaxColumns="4" Margin="16,4" ItemsSource="{x:Bind pLoadOptions}" SelectionChanged="LoadOptions_SelectionChanged" />
 			<RadioButtons Name="CodePages" x:Uid="CodePage" MaxColumns="4" Margin="16,4" ItemsSource="{x:Bind pCodePages}" SelectionChanged="CodePages_SelectionChanged" />
