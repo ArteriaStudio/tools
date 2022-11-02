@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Sockets;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.Foundation;
@@ -41,7 +42,7 @@ namespace StatusBook
 	/// <summary>
 	/// An empty page that can be used on its own or navigated to within a Frame.
 	/// </summary>
-	public sealed partial class LoaderPage : Page
+	public sealed partial class LoaderPage : Page, LoaderEventListener
 	{
 		List<OptionItem> pLoadOptions;
 		List<OptionItem> pCodePages;
@@ -162,7 +163,30 @@ namespace StatusBook
 			}
 			System.Diagnostics.Debug.WriteLine("[Trace]pLoadOptions.SelectedIndex=" + pLoadOptions.SelectedIndex);
 
+			var pFilepath = this.Filepath;
+			if (pFilepath.Text.Length <= 0)
+			{
+				fEnabled = false;
+			}
+			else
+			{
+				if (File.Exists(this.Filepath.Text) == false)
+				{
+					fEnabled = false;
+					System.Diagnostics.Debug.WriteLine("Not Found: " + this.Filepath.Text);
+				}
+				else
+				{
+					System.Diagnostics.Debug.WriteLine("Exist: " + this.Filepath.Text);
+				}
+			}
+
 			this.Upsert.IsEnabled = fEnabled;
+		}
+
+		private void Filepath_TextChanged(object sender, TextChangedEventArgs e)
+		{
+			ValidateMe(sender);
 		}
 
 		//　2022/10/14：ドラッグandドロップが正常に動作しないので実装を断念
@@ -228,6 +252,7 @@ namespace StatusBook
 		private void Upsert_Click(object sender, RoutedEventArgs e)
 		{
 			Functions.EnableAllControls(this.LoaderPagePanel, false);
+			this.Browse.IsEnabled = false;
 
 			var pLoadOptions = this.LoadOptions;
 			var iLoadOption = pLoadOptions.SelectedIndex;
@@ -267,15 +292,14 @@ namespace StatusBook
 			{
 				var pApp = Application.Current as App;
 				var pContext = pApp.m_pContext;
-				pLoader.Load(pLoadFilepath, pCodePage, pContext);
+				pLoader.Load(pLoadFilepath, pCodePage, pContext, this);
 			}
 			Functions.EnableAllControls(this.LoaderPagePanel, true);
 		}
 
-		private void Filepath_TextChanged(object sender, TextChangedEventArgs e)
+		public void OnLoaded()
 		{
-			System.Diagnostics.Debug.WriteLine("" + this.Filepath.Text);
+			throw new NotImplementedException();
 		}
-
 	}
 }

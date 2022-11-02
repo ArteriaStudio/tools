@@ -241,7 +241,7 @@ namespace LigareBook
 			return;
 		}
 
-		public override bool Load(string pPath, string pCodeSet, Context pContext)
+		public override bool Load(string pPath, string pCodeSet, Context pContext, LoaderEventListener pListener)
 		{
 			// https://code-maze.com/csharp-read-data-from-csv-file/
 			var pConfiguration = new CsvConfiguration(CultureInfo.InvariantCulture)
