@@ -144,8 +144,14 @@
   <data name="DataType.Header" xml:space="preserve">
     <value>データ種類</value>
   </data>
+  <data name="Devices.Content" xml:space="preserve">
+    <value>デバイス</value>
+  </data>
   <data name="DevicesList" xml:space="preserve">
     <value>機器リスト</value>
+  </data>
+  <data name="DevicesView" xml:space="preserve">
+    <value>デバイス</value>
   </data>
   <data name="Filepath.Header" xml:space="preserve">
     <value>ファイルパス</value>

@@ -44,7 +44,7 @@ CREATE TABLE MStatus (
   UNIQUE (Code)
 );
 GRANT ALL ON MStatus TO cmnoper;
-GRANT SELECT ON MStatus TO aploper;
+GRANT SELECT, REFERENCES ON MStatus TO aploper, archons;
 
 INSERT INTO MStatus (Ordinal, Code, Text) VALUES (0, 0, 'Active');
 INSERT INTO MStatus (Ordinal, Code, Text) VALUES (1, 1, 'Suspended');

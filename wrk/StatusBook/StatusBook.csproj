@@ -17,6 +17,7 @@
     <None Remove="ApexPage.xaml" />
     <None Remove="ContentsPage.xaml" />
     <None Remove="DeviceListPage.xaml" />
+    <None Remove="DevicesPage.xaml" />
     <None Remove="FooterPage.xaml" />
     <None Remove="HistoryPage.xaml" />
     <None Remove="ListupPage.xaml" />
@@ -65,6 +66,11 @@
   <ItemGroup>
     <ProjectReference Include="..\LigareBook\LigareBook.csproj" />
     <ProjectReference Include="..\Ritters\Ritters.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="DevicesPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="OrgUnitPage.xaml">

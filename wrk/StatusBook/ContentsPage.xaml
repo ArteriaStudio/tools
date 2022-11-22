@@ -28,6 +28,11 @@
 						<ImageIcon Source="Assets/corporate_fare_white_24dp.svg"></ImageIcon>
 					</NavigationViewItem.Icon>
 				</NavigationViewItem>
+				<NavigationViewItem x:Uid="Devices" Tag="DevicesView">
+					<NavigationViewItem.Icon>
+						<ImageIcon Source="Assets/computer_white_24dp.svg"></ImageIcon>
+					</NavigationViewItem.Icon>
+				</NavigationViewItem>
 				<NavigationViewItem x:Uid="Persons" Tag="PersonsView">
 					<NavigationViewItem.Icon>
 						<ImageIcon Source="Assets/people_white_24dp.svg"></ImageIcon>
@@ -35,7 +40,7 @@
 				</NavigationViewItem>
 				<NavigationViewItem x:Uid="Students" Tag="StudentsView">
 					<NavigationViewItem.Icon>
-						<ImageIcon Source="Assets/people_white_24dp.svg"></ImageIcon>
+						<ImageIcon Source="Assets/emoji_people_white_24dp.svg"></ImageIcon>
 					</NavigationViewItem.Icon>
 				</NavigationViewItem>
 				<NavigationViewItem x:Uid="Loader" Tag="LoaderView">

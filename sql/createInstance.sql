@@ -9,9 +9,11 @@ select * from pg_available_extensions;
 /*　bkowner：テーブルやビューのオーナー。システムカタログとの区別に用いる　*/
 /*　aploper：アプリケーション向け窓口　*/
 /*　cmnoper：共通データの保護　*/
+/*　archons：利用者認証　*/
 CREATE ROLE bkowner WITH LOGIN;
 CREATE ROLE aploper WITH LOGIN;
 CREATE ROLE cmnoper WITH LOGIN;
+CREATE ROLE archons WITH LOGIN;
 
 /*　データベースを生成　*/
 DROP DATABASE sbook;

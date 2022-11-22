@@ -147,8 +147,14 @@
   <data name="DataType.Header" xml:space="preserve">
     <value>DataType</value>
   </data>
+  <data name="Devices.Content" xml:space="preserve">
+    <value>Devices</value>
+  </data>
   <data name="DevicesList" xml:space="preserve">
     <value>DevicesList</value>
+  </data>
+  <data name="DevicesView" xml:space="preserve">
+    <value>DevicesView</value>
   </data>
   <data name="Filepath.Header" xml:space="preserve">
     <value>Filepath</value>

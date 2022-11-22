@@ -85,6 +85,10 @@ namespace StatusBook
 			{
 				this.FragmentsFrame.Navigate(typeof(OrgUnitsPage));
 			}
+			else if (pTargetPage.Equals("DevicesView") == true)
+			{
+				this.FragmentsFrame.Navigate(typeof(DevicesPage));
+			}
 			else if (pTargetPage.Equals("PersonsView") == true)
 			{
 				this.FragmentsFrame.Navigate(typeof(PersonsPage));
