@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Arteria_s.App.SignOn (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "Arteria_s.App.SignOn (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
