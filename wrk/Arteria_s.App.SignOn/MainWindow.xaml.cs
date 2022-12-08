@@ -1,6 +1,9 @@
 // Copyright (c) Microsoft Corporation and Contributors.
 // Licensed under the MIT License.
 
+using Google.Apis.Discovery.v1;
+using Google.Apis.Discovery.v1.Data;
+using Google.Apis.Services;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
@@ -31,9 +34,33 @@ namespace Arteria_s.App.SignOn
 			this.InitializeComponent();
 		}
 
-		private void myButton_Click(object sender, RoutedEventArgs e)
+		private void Signin_Click(object sender, RoutedEventArgs e)
 		{
-			//myButton.Content = "Clicked";
+			GetByApiKey();
+		}
+
+		private async void GetByApiKey()
+		{
+			// Create the service.
+			var service = new DiscoveryService(new BaseClientService.Initializer
+			{
+				ApplicationName = "C# Application",
+				ApiKey = "AIzaSyDs2zzreZWTfgjBd4Q9q3BgONLqMOvfBtY",
+			});
+
+			// Run the request.
+			Console.WriteLine("Executing a list request...");
+			var result = await service.Apis.List().ExecuteAsync();
+
+			// Display the results.
+			if (result.Items != null)
+			{
+				foreach (DirectoryList.ItemsData api in result.Items)
+				{
+					Console.WriteLine(api.Id + " - " + api.Title);
+				}
+			}
+			return;
 		}
 	}
 }
