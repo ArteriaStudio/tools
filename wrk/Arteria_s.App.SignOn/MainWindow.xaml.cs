@@ -4,6 +4,8 @@
 using Google.Apis.Discovery.v1;
 using Google.Apis.Discovery.v1.Data;
 using Google.Apis.Services;
+using Google.Apis.YouTube.v3;
+using Google.Apis.YouTube.v3.Data;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
@@ -16,6 +18,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Channels;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 
@@ -36,10 +39,12 @@ namespace Arteria_s.App.SignOn
 
 		private void Signin_Click(object sender, RoutedEventArgs e)
 		{
-			GetByApiKey();
+			//DiscoveryServiceByApiKey();
+			LookupYoutubeByKeyword();
 		}
 
-		private async void GetByApiKey()
+		//　DiscoveryServiceに対するクラウド側API制限は「APIキーを制限しない」に設定しないと呼び出しがブロックされる
+		private async void DiscoveryServiceByApiKey()
 		{
 			// Create the service.
 			var service = new DiscoveryService(new BaseClientService.Initializer
@@ -49,7 +54,7 @@ namespace Arteria_s.App.SignOn
 			});
 
 			// Run the request.
-			Console.WriteLine("Executing a list request...");
+			System.Diagnostics.Debug.Write("Executing a list request...");
 			var result = await service.Apis.List().ExecuteAsync();
 
 			// Display the results.
@@ -57,9 +62,46 @@ namespace Arteria_s.App.SignOn
 			{
 				foreach (DirectoryList.ItemsData api in result.Items)
 				{
-					Console.WriteLine(api.Id + " - " + api.Title);
+					System.Diagnostics.Debug.Write(api.Id + " - " + api.Title + "\n");
 				}
 			}
+			return;
+		}
+
+		private async void LookupYoutubeByKeyword()
+		{
+			YouTubeService	pYouTube = new YouTubeService(new BaseClientService.Initializer()
+			{
+				ApiKey = "AIzaSyDs2zzreZWTfgjBd4Q9q3BgONLqMOvfBtY"
+			});
+			SearchResource.ListRequest listRequest = pYouTube.Search.List("snippet");
+			listRequest.Q = "impact";
+			listRequest.Order = SearchResource.ListRequest.OrderEnum.Relevance;
+
+			SearchListResponse searchResponse = await listRequest.ExecuteAsync();
+
+			List<string> videos = new List<string>();
+			List<string> channels = new List<string>();
+			List<string> playlists = new List<string>();
+
+			foreach (SearchResult searchResult in searchResponse.Items)
+			{
+				switch (searchResult.Id.Kind)
+				{
+					case "youtube#video":
+						videos.Add(String.Format("{0} ({1})", searchResult.Snippet.Title, searchResult.Id.VideoId));
+						break;
+
+					case "youtube#channel":
+						channels.Add(String.Format("{0} ({1})", searchResult.Snippet.Title, searchResult.Id.ChannelId));
+						break;
+
+					case "youtube#playlist":
+						playlists.Add(String.Format("{0} ({1})", searchResult.Snippet.Title, searchResult.Id.PlaylistId));
+						break;
+				}
+			}
+
 			return;
 		}
 	}
