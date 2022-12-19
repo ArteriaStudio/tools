@@ -30,6 +30,9 @@ using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Google.Apis.CloudIdentity.v1;
 using Google.Apis.Oauth2.v2;
+using System.Net.Http;
+using Windows.Media.Protection.PlayReady;
+using Windows.Storage.Streams;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -280,6 +283,12 @@ namespace Arteria_s.App.SignOn
 				HttpClientInitializer = pCredential,
 				ApplicationName = "Lumine.arteria-s.net.",
 			});
+
+
+
+			//AccountPicture.Source
+			//AccountPicture.ProfilePicture.Source;
+
 			/*
 			var pCalendar = await pService..List().ExecuteAsync();
 
@@ -323,6 +332,22 @@ namespace Arteria_s.App.SignOn
 			System.Diagnostics.Debug.WriteLine("FamilyName: " + pUserinfo.FamilyName);
 			System.Diagnostics.Debug.WriteLine("GivenName: " + pUserinfo.GivenName);
 			System.Diagnostics.Debug.WriteLine("Picture: " + pUserinfo.Picture);
+
+			//　イメージをダウンロードして画像を表示
+			var pClient = new HttpClient();
+			try
+			{
+				using HttpResponseMessage pResponse = await pClient.GetAsync(pUserinfo.Picture);
+				pResponse.EnsureSuccessStatusCode();
+				var pStream = await pResponse.Content.ReadAsStreamAsync();
+				IRandomAccessStream pImageStream = WindowsRuntimeStreamExtensions.AsRandomAccessStream(pStream);
+				AccountPicture.SetSource(pImageStream);
+			}
+			catch (HttpRequestException e)
+			{
+				Console.WriteLine("\nException Caught!");
+				Console.WriteLine("Message :{0} ", e.Message);
+			}
 		}
 	}
 }

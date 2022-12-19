@@ -16,13 +16,26 @@
 			<RowDefinition Height="auto" />
 			<RowDefinition Height="auto" />
 			<RowDefinition Height="auto" />
+			<RowDefinition Height="auto" />
 		</Grid.RowDefinitions>
 
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="*" />
 		</Grid.ColumnDefinitions>
-		<TextBox Grid.Column="0" Grid.Row="0" Name="AccountIdentity" x:Uid="AccountIdentity"></TextBox>
-		<TextBox Grid.Column="0" Grid.Row="1" Name="SharedSecret" x:Uid="SharedSecret"></TextBox>
+
+		<StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal">
+			<Ellipse Height="64" Width="64">
+				<Ellipse.Fill>
+					<ImageBrush>
+						<ImageBrush.ImageSource>
+							<BitmapImage x:Name="AccountPicture" />
+						</ImageBrush.ImageSource>
+					</ImageBrush>
+				</Ellipse.Fill>
+			</Ellipse>
+		</StackPanel>
+		<TextBox Grid.Column="0" Grid.Row="1" Name="AccountIdentity" x:Uid="AccountIdentity"></TextBox>
+		<TextBox Grid.Column="0" Grid.Row="2" Name="SharedSecret" x:Uid="SharedSecret"></TextBox>
 		<Grid Grid.Column="0" Grid.Row="2">
 			<Grid.RowDefinitions>
 				<RowDefinition Height="auto" />
