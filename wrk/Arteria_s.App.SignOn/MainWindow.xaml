@@ -36,7 +36,7 @@
 		</StackPanel>
 		<TextBox Grid.Column="0" Grid.Row="1" Name="AccountIdentity" x:Uid="AccountIdentity"></TextBox>
 		<TextBox Grid.Column="0" Grid.Row="2" Name="SharedSecret" x:Uid="SharedSecret"></TextBox>
-		<Grid Grid.Column="0" Grid.Row="2">
+		<Grid Grid.Column="0" Grid.Row="3">
 			<Grid.RowDefinitions>
 				<RowDefinition Height="auto" />
 			</Grid.RowDefinitions>
