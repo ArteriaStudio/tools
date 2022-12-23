@@ -29,6 +29,7 @@ namespace StatusBook
 		{
 			this.InitializeComponent();
 		}
+
 		ObservableCollection<Student> pStudents = new ObservableCollection<Student>();
 	}
 }

@@ -517,7 +517,7 @@ CREATE TABLE MStudents (
   CONSTRAINT CK_GENDER CHECK ( Gender = '男' OR Gender = '女' )
 );
 GRANT ALL ON MStudents TO cmnoper;
-GRANT SELECT, INSERT, UPDATE ON MStudents TO aploper;
+GRANT SELECT, INSERT, UPDATE, DELETE ON MStudents TO aploper;
 
 DROP PROCEDURE InsertStudent;
 CREATE PROCEDURE InsertStudent (

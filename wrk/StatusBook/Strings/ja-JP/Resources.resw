@@ -126,6 +126,9 @@
   <data name="Browse.Content" xml:space="preserve">
     <value>ファイル選択</value>
   </data>
+  <data name="Check.Content" xml:space="preserve">
+    <value>検査</value>
+  </data>
   <data name="CodePage.Header" xml:space="preserve">
     <value>文字コード</value>
   </data>

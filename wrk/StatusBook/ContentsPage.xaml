@@ -58,8 +58,8 @@
 						<ImageIcon Source="Assets/history_white_24dp.svg"></ImageIcon>
 					</NavigationViewItem.Icon>
 				</NavigationViewItem>
-				
 			</NavigationView.MenuItems>
+
 			<NavigationView.FooterMenuItems>
 				<NavigationViewItem x:Uid="Settings" Tag="SettingsView">
 					<NavigationViewItem.Icon>

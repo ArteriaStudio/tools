@@ -129,6 +129,9 @@
   <data name="Browse.Content" xml:space="preserve">
     <value>Browse</value>
   </data>
+  <data name="Check.Content" xml:space="preserve">
+    <value>Check</value>
+  </data>
   <data name="CodePage.Header" xml:space="preserve">
     <value>CodePage</value>
   </data>

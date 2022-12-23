@@ -146,21 +146,33 @@ namespace LigareBook
 		}
 	}
 
-
+	public interface StudentsCursorEventListener
+	{
+		public abstract void OnChecked(string pPath, string pCodeSet, SQLContext pContext, int nItems, int nError, List<StudentCSV> pItems);
+		public virtual void OnListuped()
+		{
+			;
+		}
+		public virtual void OnUpserted()
+		{
+			;
+		}
+	}
 
 	public class StudentsCursor : Loader
 	{
-		public StudentsCursor()
+		StudentsCursorEventListener	m_pListener = null;
+		public StudentsCursor(StudentsCursorEventListener pListener)
 		{
-			;
+			m_pListener = pListener;
 		}
 
 		~StudentsCursor()
 		{
-			;
+			m_pListener = null;
 		}
 
-		public ObservableCollection<Student> Listup(Context pContext)
+		public ObservableCollection<Student> Listup(SQLContext pContext)
 		{
 			var pItems = new ObservableCollection<Student>();
 			var pSQL = "SELECT AccountID, Email, Name, StudentNumber, Year, School, Grade, Sets, Numbers FROM VStudents;";
@@ -189,7 +201,7 @@ namespace LigareBook
 			return(pItems);
 		}
 
-		public void Insert(Context pContext, List<StudentCSV> pStudentsCSV)
+		public void Insert(SQLContext pContext, List<StudentCSV> pStudentsCSV)
 		{
 			var pTransaction = pContext.m_pConnection.BeginTransaction();
 
@@ -241,7 +253,7 @@ namespace LigareBook
 			return;
 		}
 
-		public override bool Load(string pPath, string pCodeSet, Context pContext, LoaderEventListener pListener)
+		public override bool Load(string pPath, string pCodeSet, SQLContext pContext)
 		{
 			// https://code-maze.com/csharp-read-data-from-csv-file/
 			var pConfiguration = new CsvConfiguration(CultureInfo.InvariantCulture)
@@ -262,13 +274,49 @@ namespace LigareBook
 					else
 					{
 						//　字句エラー
-						System.Diagnostics.Debug.WriteLine("");
+						System.Diagnostics.Debug.WriteLine("Found Error in input record self check.");
 					}
 				}
+
+				//　データベースに登録
 				Insert(pContext, pItems);
 			}
 
 			return(true);
+		}
+
+		public override bool Check(string pPath, string pCodeSet, SQLContext pContext)
+		{
+			// https://code-maze.com/csharp-read-data-from-csv-file/
+			var pConfiguration = new CsvConfiguration(CultureInfo.InvariantCulture)
+			{
+				HasHeaderRecord = true,
+			};
+			using (var pReader = new StreamReader(pPath, Encoding.GetEncoding(pCodeSet)))
+			using (var pFetcher = new CsvReader(pReader, pConfiguration))
+			{
+				var nItems = 0;
+				var nError = 0;
+				var pItems = new List<StudentCSV>();
+				while (pFetcher.Read())
+				{
+					var pRecoords = pFetcher.GetRecord<StudentCSV>();
+					if (pRecoords.CheckSelf() == true)
+					{
+						pItems.Add(pRecoords);
+						nItems ++;
+					}
+					else
+					{
+						//　字句エラー
+						System.Diagnostics.Debug.WriteLine("Found Error in input record self check.");
+						nError ++;
+					}
+				}
+				m_pListener.OnChecked(pPath, pCodeSet, pContext, nItems, nError, pItems);
+			}
+
+			return (true);
 		}
 	}
 }

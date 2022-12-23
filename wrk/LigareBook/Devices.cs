@@ -32,7 +32,7 @@ namespace LigareBook
 
 	public class DevicesCursor : Loader
 	{
-		public ObservableCollection<Device> Listup(Context pContext)
+		public ObservableCollection<Device> Listup(SQLContext pContext)
 		{
 			var pItems = new ObservableCollection<Device>();
 			var pSQL = "SELECT AccountID, Email, Name, StudentNumber, Year, School, Grade, Sets, Numbers FROM VStudents;";

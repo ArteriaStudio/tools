@@ -27,7 +27,7 @@ namespace LigareBook
 
 	public class StaffsCursor : Loader
 	{
-		public ObservableCollection<Staff> Listup(Context pContext)
+		public ObservableCollection<Staff> Listup(SQLContext pContext)
 		{
 			var pItems = new ObservableCollection<Staff>();
 			var pSQL = "SELECT AccountID, Email, Name, StudentNumber, Year, School, Grade, Sets, Numbers FROM VStudents;";

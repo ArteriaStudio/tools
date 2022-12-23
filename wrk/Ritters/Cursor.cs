@@ -24,7 +24,7 @@ namespace Arteria_s.DB.Base
 
 		public event EventHandler<NpgsqlDataReader> CursorEventHandler;
 
-		public bool Open(Context pContext, String pSQL)
+		public bool Open(SQLContext pContext, String pSQL)
 		{
 			using (var pCommand = new NpgsqlCommand(pSQL, pContext.m_pConnection))
 			{

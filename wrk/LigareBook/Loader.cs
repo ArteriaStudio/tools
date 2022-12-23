@@ -7,11 +7,6 @@ using System.Threading.Tasks;
 
 namespace LigareBook
 {
-	public interface LoaderEventListener
-	{
-		void OnLoaded();
-	}
-
 	public class Loader
 	{
 		public Loader()
@@ -23,7 +18,11 @@ namespace LigareBook
 			;
 		}
 
-		public virtual bool Load(string pPath, string pCodeSet, Context pContext, LoaderEventListener pListener)
+		public virtual bool Load(string pPath, string pCodeSet, SQLContext pContext)
+		{
+			return(false);
+		}
+		public virtual bool Check(string pPath, string pCodeSet, SQLContext pContext)
 		{
 			return(false);
 		}

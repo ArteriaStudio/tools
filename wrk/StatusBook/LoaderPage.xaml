@@ -36,7 +36,10 @@
 				<Button Grid.Row="0" Grid.Column="1" Name="Browse" x:Uid="Browse" IsEnabled="True" Click="Browse_Click" Margin="8" VerticalAlignment="Bottom" />
 			</Grid>
 			<Frame Name="ListFrame" Margin="16,4,16,6" />
-			<Button Name="Upsert" x:Uid="Upsert" Margin="16,4" IsEnabled="False" Click="Upsert_Click" />
+			<StackPanel Orientation="Horizontal">
+				<Button Name="Check" x:Uid="Check" Margin="16,4" IsEnabled="False" Click="Check_Click" />
+				<Button Name="Upsert" x:Uid="Upsert" Margin="16,4" IsEnabled="False" Click="Upsert_Click" />
+			</StackPanel>
 		</StackPanel>
 
 	</Grid>

@@ -11,12 +11,12 @@ using System.Threading.Tasks;
 namespace Arteria_s.DB.Base
 {
 	//　データベースコンテキスト
-	public class Context
+	public class SQLContext
 	{
 		public NpgsqlConnection m_pConnection = null;
 
 		//　
-		public Context(String DatabaseServer, String DatabaseName, String SchemaName)
+		public SQLContext(String DatabaseServer, String DatabaseName, String SchemaName)
 		{
 			var pConnectionString = String.Format("Server={0};Port=5432;Database={1};Username={2};sslmode=disable", DatabaseServer, DatabaseName, SchemaName);
 			System.Diagnostics.Debug.WriteLine("pConnectionString: " + pConnectionString);
@@ -25,7 +25,7 @@ namespace Arteria_s.DB.Base
 		}
 
 		//　
-		~Context()
+		~SQLContext()
 		{
 			m_pConnection.Close();
 			m_pConnection = null;
@@ -84,9 +84,9 @@ namespace Arteria_s.DB.Base
 		}
 	}
 
-	public class ContextEx : Context
+	public class SQLContextEx : SQLContext
 	{
-		public ContextEx(string DatabaseServer, string DatabaseName, string SchemaName, string AccountName, string AccessToken) : base(DatabaseServer, DatabaseName, SchemaName)
+		public SQLContextEx(string DatabaseServer, string DatabaseName, string SchemaName, string AccountName, string AccessToken) : base(DatabaseServer, DatabaseName, SchemaName)
 		{
 			SetSessionVariable("app.AccountName", AccountName);
 			SetSessionVariable("app.AccessToken", AccessToken);

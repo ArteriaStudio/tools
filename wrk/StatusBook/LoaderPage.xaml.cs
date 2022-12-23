@@ -1,4 +1,5 @@
-﻿using Arteria_s.UI.Base;
+﻿using Arteria_s.DB.Base;
+using Arteria_s.UI.Base;
 using Arteria_s.UI.Helper;
 using LigareBook;
 using Microsoft.UI.Xaml;
@@ -42,7 +43,7 @@ namespace StatusBook
 	/// <summary>
 	/// An empty page that can be used on its own or navigated to within a Frame.
 	/// </summary>
-	public sealed partial class LoaderPage : Page, LoaderEventListener
+	public sealed partial class LoaderPage : Page, StudentsCursorEventListener
 	{
 		List<OptionItem> pLoadOptions;
 		List<OptionItem> pCodePages;
@@ -181,6 +182,7 @@ namespace StatusBook
 				}
 			}
 
+			this.Check.IsEnabled = fEnabled;
 			this.Upsert.IsEnabled = fEnabled;
 		}
 
@@ -248,6 +250,57 @@ namespace StatusBook
 			}
 		}
 
+		//　ファイル入力前の事前検査
+		private void Check_Click(object sender, RoutedEventArgs e)
+		{
+			Functions.EnableAllControls(this.LoaderPagePanel, false);
+			this.Browse.IsEnabled = false;
+
+			var pLoadOptions = this.LoadOptions;
+			var iLoadOption = pLoadOptions.SelectedIndex;
+			var pCodePages = this.CodePages;
+			var iCodePage = pCodePages.SelectedIndex;
+			var pLoadFilepath = this.Filepath.Text;
+
+			System.Diagnostics.Debug.WriteLine("Selected LoadOptions Index=" + iLoadOption);
+			System.Diagnostics.Debug.WriteLine("Selected CodePages Index=" + iCodePage);
+			System.Diagnostics.Debug.WriteLine("LoadFilepath=" + pLoadFilepath);
+
+			Loader pLoader = null;
+			switch (iLoadOption)
+			{
+				case 0:
+					pLoader = new StudentsCursor(this);
+					break;
+				case 1:
+					pLoader = new StaffsCursor();
+					break;
+				case 2:
+					pLoader = new DevicesCursor();
+					break;
+			}
+
+			string pCodePage = "";
+			switch (iCodePage)
+			{
+				case 0:
+					pCodePage = "utf-8";
+					break;
+				case 1:
+				default:
+					pCodePage = "shift_jis";
+					break;
+			}
+			if (pLoader != null)
+			{
+				var pApp = Application.Current as App;
+				var pContext = pApp.m_pContext;
+				pLoader.Check(pLoadFilepath, pCodePage, pContext);
+			}
+
+			Functions.EnableAllControls(this.LoaderPagePanel, true);
+		}
+
 		//　ロード開始
 		private void Upsert_Click(object sender, RoutedEventArgs e)
 		{
@@ -268,7 +321,7 @@ namespace StatusBook
 			switch (iLoadOption)
 			{
 				case 0:
-					pLoader = new StudentsCursor();
+					pLoader = new StudentsCursor(this);
 					break;
 				case 1:
 					pLoader = new StaffsCursor();
@@ -292,14 +345,20 @@ namespace StatusBook
 			{
 				var pApp = Application.Current as App;
 				var pContext = pApp.m_pContext;
-				pLoader.Load(pLoadFilepath, pCodePage, pContext, this);
+				pLoader.Load(pLoadFilepath, pCodePage, pContext);
 			}
+
 			Functions.EnableAllControls(this.LoaderPagePanel, true);
 		}
 
 		public void OnLoaded()
 		{
 			throw new NotImplementedException();
+		}
+
+		public void OnChecked(string pPath, string pCodeSet, SQLContext pContext, int nItems, int nError, List<StudentCSV> pItems)
+		{
+			this.ListFrame.Navigate(typeof(StudentListPage), pItems);
 		}
 	}
 }

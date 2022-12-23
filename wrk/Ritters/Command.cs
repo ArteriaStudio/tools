@@ -13,9 +13,9 @@ namespace Arteria_s.DB.Base
 	{
 		private NpgsqlCommand	m_pCommand = null;
 
-		public SqlCommand(string pSQL, Context pContext)
+		public SqlCommand(string pSQL, SQLContext pSQLContext)
 		{
-			m_pCommand = new NpgsqlCommand(pSQL, pContext.m_pConnection);
+			m_pCommand = new NpgsqlCommand(pSQL, pSQLContext.m_pConnection);
 		}
 
 		~SqlCommand()

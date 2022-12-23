@@ -57,7 +57,7 @@ namespace StatusBook
 			//　データベースと接続
 			try
 			{
-				m_pContext = new ContextEx(m_pProfile.DatabaseServer, m_pProfile.DatabaseName, m_pProfile.SchemaName, "", "");
+				m_pContext = new SQLContextEx(m_pProfile.DatabaseServer, m_pProfile.DatabaseName, m_pProfile.SchemaName, "", "");
 			}
 			catch (NpgsqlException e)
 			{
@@ -71,7 +71,7 @@ namespace StatusBook
 		}
 
 		public Profile m_pProfile = null;
-		public ContextEx m_pContext = null;
+		public SQLContextEx m_pContext = null;
 
 		/// <summary>
 		/// Invoked when the application is launched normally by the end user.  Other entry points

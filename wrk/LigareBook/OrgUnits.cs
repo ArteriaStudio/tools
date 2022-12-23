@@ -24,7 +24,7 @@ namespace LigareBook
 
 	public class OrgUnitsCursor
 	{
-		public ObservableCollection<OrgUnit> Listup(Context pContext)
+		public ObservableCollection<OrgUnit> Listup(SQLContext pContext)
 		{
 			var pItems = new ObservableCollection<OrgUnit>();
 			var pSQL = "SELECT OrgUnitID, Code, Name, ContainerID FROM VOrgUnits;";
@@ -49,7 +49,7 @@ namespace LigareBook
 
 			return (pItems);
 		}
-		public ObservableCollection<OrgUnit> Listup(Context pContext, Guid  pContainerID)
+		public ObservableCollection<OrgUnit> Listup(SQLContext pContext, Guid  pContainerID)
 		{
 			var pItems = new ObservableCollection<OrgUnit>();
 			var pSQL = "SELECT OrgUnitID, Code, Name, ContainerID FROM VOrgUnits WHERE ContainerID = @ContainerID;";
@@ -84,7 +84,7 @@ namespace LigareBook
 			return (pItems);
 		}
 
-		public OrgUnit	Fetch(Context pContext, Guid pOrgUnitID)
+		public OrgUnit	Fetch(SQLContext pContext, Guid pOrgUnitID)
 		{
 			var pSQL = "SELECT OrgUnitID, Code, Name, ContainerID FROM VOrgUnits WHERE OrgUnitID = @OrgUnitID;";
 
@@ -117,7 +117,7 @@ namespace LigareBook
 			return(null);
 		}
 
-		public Guid FetchID(Context pContext, String pCode)
+		public Guid FetchID(SQLContext pContext, String pCode)
 		{
 			Guid pOrgUnitID = Guid.Empty;
 			var pSQL = "SELECT OrgUnitID FROM VOrgUnits WHERE Year = @Year AND Code = @Code;";
@@ -140,7 +140,7 @@ namespace LigareBook
 			return(pOrgUnitID);
 		}
 
-		public void Insert(Context pContext, Guid pContainerID, OrgUnit pOrgUnit)
+		public void Insert(SQLContext pContext, Guid pContainerID, OrgUnit pOrgUnit)
 		{
 			var pSQL = "CALL AppendOrgUnit(@Year, @Code, @Name, @ContainerID)";
 
@@ -155,7 +155,7 @@ namespace LigareBook
 			}
 		}
 
-		public void Update(Context pContext, OrgUnit pOrgUnit)
+		public void Update(SQLContext pContext, OrgUnit pOrgUnit)
 		{
 			var pSQL = "CALL UpdateOrgUnit(@OrgUnitID, @Code, @Name)";
 
@@ -169,7 +169,7 @@ namespace LigareBook
 			}
 		}
 
-		public void UpdateContainer(Context pContext, OrgUnit pOrgUnit)
+		public void UpdateContainer(SQLContext pContext, OrgUnit pOrgUnit)
 		{
 			var pSQL = "CALL UpdateOrgUnitContainer(@Year, @OrgUnitID, @ContainerID)";
 
@@ -183,7 +183,7 @@ namespace LigareBook
 			}
 		}
 
-		public void Delete(Context pContext, Guid pOrgUnitID)
+		public void Delete(SQLContext pContext, Guid pOrgUnitID)
 		{
 			var pSQL = "DELETE FROM MOrgUnits WHERE OrgUnitID = @OrgUnitID";
 
