@@ -1,6 +1,7 @@
 ﻿using Arteria_s.DB.Base;
 using Arteria_s.UI.Base;
 using Arteria_s.UI.Helper;
+using CsvHelper.Configuration.Attributes;
 using LigareBook;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -61,7 +62,7 @@ namespace StatusBook
 			pCodePages.Add(new OptionItem() { iNumber = 0, Label = pResLoader.GetString("UTF8") });
 			pCodePages.Add(new OptionItem() { iNumber = 1, Label = pResLoader.GetString("SJIS") });
 
-			this.ListFrame.Navigate(typeof(StudentListPage));
+			//this.ListFrame.Navigate(typeof(StudentListPage));
 		}
 
 		private void LoadOptions_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -75,13 +76,13 @@ namespace StatusBook
 					switch (pOption.iNumber)
 					{
 					case	0:
-						this.ListFrame.Navigate(typeof(StudentListPage));
+						//this.ListFrame.Navigate(typeof(StudentListPage));
 						break;
 					case	1:
-						this.ListFrame.Navigate(typeof(StaffListPage));
+						//this.ListFrame.Navigate(typeof(StaffListPage));
 						break;
 					case	2:
-						this.ListFrame.Navigate(typeof(DeviceListPage));
+						//this.ListFrame.Navigate(typeof(DeviceListPage));
 						break;
 					}
 				}
@@ -358,7 +359,41 @@ namespace StatusBook
 
 		public void OnChecked(string pPath, string pCodeSet, SQLContext pContext, int nItems, int nError, List<StudentCSV> pItems)
 		{
-			this.ListFrame.Navigate(typeof(StudentListPage), pItems);
+			int nLine = 0;
+			this.StudentListView.pStudents.Clear();
+			foreach (var pItem in pItems)
+			{
+				Student pStudent = new Student();
+
+//				pStudent.AccountID
+//				pStudent.Email
+				pStudent.Name = pItem.Name;
+				pStudent.Read = pItem.Read;
+//				pStudent.OrgUnitID
+//				pStudent.Status
+//				pStudent.ExpireAt
+//				pStudent.UpdateAt
+//				pStudent.DeleteAt
+				pStudent.StudentNumber = pItem.StudentNumber;
+//				pStudent.EnterAt
+//				pStudent.LeaveAt
+				pStudent.Year = pItem.Year;
+				pStudent.School = pItem.School;
+				pStudent.Grade = pItem.Grade;
+				pStudent.Sets = pItem.Sets;
+				pStudent.Numbers = pItem.Numbers;
+/*
+				pItem.Gender
+				pItem.BirthAt
+*/
+				this.StudentListView.pStudents.Add(pStudent);
+				nLine ++;
+				if (nLine >= 3)
+				{
+					break;
+				}
+			}
+			this.StudentListView.SetCount(nItems);
 		}
 	}
 }

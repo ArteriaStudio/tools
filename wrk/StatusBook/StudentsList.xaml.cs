@@ -1,4 +1,7 @@
-﻿using LigareBook;
+// Copyright (c) Microsoft Corporation and Contributors.
+// Licensed under the MIT License.
+
+using LigareBook;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
@@ -20,16 +23,18 @@ using Windows.Foundation.Collections;
 
 namespace StatusBook
 {
-	/// <summary>
-	/// An empty page that can be used on its own or navigated to within a Frame.
-	/// </summary>
-	public sealed partial class StudentListPage : Page
+	public sealed partial class StudentsList : UserControl
 	{
-		public StudentListPage()
+		public StudentsList()
 		{
 			this.InitializeComponent();
 		}
 
-		ObservableCollection<Student> pStudents = new ObservableCollection<Student>();
+		public void SetCount(int nStudents)
+		{
+			this.Count.Text = nStudents.ToString();
+		}
+
+		public ObservableCollection<Student> pStudents = new ObservableCollection<Student>();
 	}
 }

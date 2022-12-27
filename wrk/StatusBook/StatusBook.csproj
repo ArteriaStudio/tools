@@ -30,7 +30,7 @@
     <None Remove="StaffListPage.xaml" />
     <None Remove="StartPage.xaml" />
     <None Remove="StatusPage.xaml" />
-    <None Remove="StudentListPage.xaml" />
+    <None Remove="StudentsList.xaml" />
     <None Remove="StudentsPage.xaml" />
   </ItemGroup>
 
@@ -68,6 +68,11 @@
     <ProjectReference Include="..\Ritters\Ritters.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Page Update="StudentsList.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
     <Page Update="DevicesPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -94,11 +99,6 @@
   </ItemGroup>
   <ItemGroup>
     <Page Update="StaffListPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Page Update="StudentListPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
