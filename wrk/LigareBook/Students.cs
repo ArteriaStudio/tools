@@ -148,7 +148,7 @@ namespace LigareBook
 
 	public interface StudentsCursorEventListener
 	{
-		public abstract void OnChecked(string pPath, string pCodeSet, SQLContext pContext, int nItems, int nError, List<StudentCSV> pItems);
+		public abstract void OnCheckedStudents(string pPath, string pCodeSet, SQLContext pContext, int nItems, int nError, List<StudentCSV> pItems);
 		public virtual void OnListuped()
 		{
 			;
@@ -212,7 +212,7 @@ namespace LigareBook
 				{
 					pCommand.Parameters.Clear();
 
-					var pOrgUnitCode = "000000";
+					var pOrgUnitCode = "00000000";
 					var pEmail = $"{pStudentCSV.StudentNumber}@class.bunri-s.ed.jp";
 					var pEnterAt = new DateTime(2022, 4, 1);
 
@@ -313,7 +313,7 @@ namespace LigareBook
 						nError ++;
 					}
 				}
-				m_pListener.OnChecked(pPath, pCodeSet, pContext, nItems, nError, pItems);
+				m_pListener.OnCheckedStudents(pPath, pCodeSet, pContext, nItems, nError, pItems);
 			}
 
 			return (true);

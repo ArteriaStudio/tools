@@ -28,7 +28,7 @@ namespace LigareBook
 
 
 	//　形として不要なクラス
-	public class StatusSheet : StudentsCursorEventListener
+	public class StatusSheet : StudentsCursorEventListener, StaffsCursorEventListener
 	{
 		static StatusSheet	pInstance = new StatusSheet();
 
@@ -45,11 +45,19 @@ namespace LigareBook
 		//　生徒一覧を取得
 		public ObservableCollection<Student>	ListupStudents(SQLContext pContext)
 		{
-//			var pContext = new Context(pProfileData.DatabaseServer, pProfileData.DatabaseName, pProfileData.SchemaName);
 			var pCursor = new StudentsCursor(this);
 			var pItems = pCursor.Listup(pContext);
 
 			return(pItems);
+		}
+
+		
+		public ObservableCollection<Staff>	ListupStaffs(SQLContext pContext)
+		{
+			var pCursor = new StaffsCursor(this);
+			var pItem = pCursor.Listup(pContext);
+
+			return(pItem);
 		}
 
 		//　一覧を取得
@@ -103,7 +111,12 @@ namespace LigareBook
 			return (pItems);
 		}
 
-		public void OnChecked(string pPath, string pCodeSet, SQLContext pContext, int nItems, int nError, List<StudentCSV> pItems)
+		public void OnCheckedStudents(string pPath, string pCodeSet, SQLContext pContext, int nItems, int nError, List<StudentCSV> pItems)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void OnCheckedStaffs(string pPath, string pCodeSet, SQLContext pContext, int nItems, int nError, List<StaffCSV> pItems)
 		{
 			throw new NotImplementedException();
 		}

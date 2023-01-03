@@ -5,6 +5,7 @@ using Microsoft.UI.Xaml.Controls.Primitives;
 using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
+using Microsoft.UI.Xaml.Media.Imaging;
 using Microsoft.UI.Xaml.Navigation;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.ApplicationModel.Resources;
+using Windows.Devices.Lights.Effects;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 
@@ -32,10 +34,10 @@ namespace StatusBook
 			var pApp = Application.Current as App;
 
 			//　初期選択項目を指定
-			var iList = this.Navigation.MenuItems;
-			foreach (var i in iList)
+			var pMenuItems = this.Navigation.MenuItems;
+			foreach (var pMenuItem in pMenuItems)
 			{
-				var iNavigationViewItem = i as NavigationViewItem;
+				var iNavigationViewItem = pMenuItem as NavigationViewItem;
 				if (pApp.m_pProfile.CurrentPage.Equals(iNavigationViewItem.Tag.ToString()) == true) {
 					this.Navigation.SelectedItem = iNavigationViewItem;
 					break;
@@ -92,6 +94,10 @@ namespace StatusBook
 			else if (pTargetPage.Equals("PersonsView") == true)
 			{
 				this.FragmentsFrame.Navigate(typeof(PersonsPage));
+			}
+			else if (pTargetPage.Equals("StaffsView") == true)
+			{
+				this.FragmentsFrame.Navigate(typeof(StaffsPage));
 			}
 			else if (pTargetPage.Equals("StudentsView") == true)
 			{

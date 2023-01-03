@@ -34,14 +34,9 @@ namespace StatusBook
 			var pProfile = pApp.m_pProfile;
 			var pContext = pApp.m_pContext;
 			var pStatusSheet = StatusSheet.GetInstance();
-			pItems = pStatusSheet.Listup(pProfile);
-			if (pItems != null)
-			{
-				pStudents = pStatusSheet.ListupStudents(pContext);
-			}
+			pStaffs = pStatusSheet.ListupStaffs(pContext);
 		}
 
-		ObservableCollection<Person> pItems = new ObservableCollection<Person>();
-		ObservableCollection<Student> pStudents = new ObservableCollection<Student>();
+		ObservableCollection<Staff> pStaffs = new ObservableCollection<Staff>();
 	}
 }

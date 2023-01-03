@@ -1,4 +1,7 @@
-Ôªøusing LigareBook;
+// Copyright (c) Microsoft Corporation and Contributors.
+// Licensed under the MIT License.
+
+using LigareBook;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
@@ -8,7 +11,6 @@ using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -23,12 +25,18 @@ namespace StatusBook
 	/// <summary>
 	/// An empty page that can be used on its own or navigated to within a Frame.
 	/// </summary>
-	public sealed partial class StaffListPage : Page
+	public sealed partial class StaffsPage : Page
 	{
-		public StaffListPage()
+		public StaffsPage()
 		{
 			this.InitializeComponent();
+
+			//Å@àÍóóÉfÅ[É^Çì¸óÕ
+			var pApp = Application.Current as App;
+			var pProfile = pApp.m_pProfile;
+			var pContext = pApp.m_pContext;
+			var pStatusSheet = StatusSheet.GetInstance();
+			StaffsList.pStaffs = pStatusSheet.ListupStaffs(pContext);
 		}
-		ObservableCollection<Staff> pStaff = new ObservableCollection<Staff>();
 	}
 }

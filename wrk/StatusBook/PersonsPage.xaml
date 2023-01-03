@@ -17,7 +17,31 @@
 			<ColumnDefinition Width="*" />
 		</Grid.ColumnDefinitions>
 
-		<ListView ItemsSource="{x:Bind pItems}" Grid.Column="0" Grid.Row="0">
+		<ListView ItemsSource="{x:Bind pStaffs}" Grid.Column="0" Grid.Row="0">
+			<ListView.HeaderTemplate>
+				<DataTemplate>
+					<Grid Padding="5" Background="{ThemeResource SystemBaseLowColor}">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="42"/>
+							<ColumnDefinition Width="160"/>
+							<ColumnDefinition Width="128"/>
+							<ColumnDefinition Width="128"/>
+							<ColumnDefinition Width="80"/>
+							<ColumnDefinition Width="80"/>
+							<ColumnDefinition Width="80"/>
+							<ColumnDefinition Width="80"/>
+						</Grid.ColumnDefinitions>
+						<TextBlock Grid.Column="0" Text="" />
+						<TextBlock Grid.Column="1" Text="利用者識別子" />
+						<TextBlock Grid.Column="2" Text="名前" />
+						<TextBlock Grid.Column="3" Text="ふりがな" />
+						<TextBlock Grid.Column="4" Text="所属" />
+						<TextBlock Grid.Column="5" Text="職員番号" />
+						<TextBlock Grid.Column="6" Text="職員種別" />
+						<TextBlock Grid.Column="7" Text="契約種別" />
+					</Grid>
+				</DataTemplate>
+			</ListView.HeaderTemplate>
 			<ListView.ItemTemplate>
 				<DataTemplate x:Name="TableDataTemplate" x:DataType="lb:Person">
 					<Grid Height="24" AutomationProperties.Name="{x:Bind Name}">
@@ -30,7 +54,7 @@
 						<!-- アイコンの高さが不自然。宙に浮いてるように見える -->
 						<Ellipse Height="24" Width="24" VerticalAlignment="Center" Grid.Column="0" Grid.Row="0">
 							<Ellipse.Fill>
-								<ImageBrush ImageSource="Assets/person_white_24dp.svg"/>
+								<ImageBrush ImageSource="Assets/person_white_24dp.png"/>
 							</Ellipse.Fill>
 						</Ellipse>
 						<TextBlock Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" Text="{x:Bind Number}" />

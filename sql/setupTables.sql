@@ -123,6 +123,7 @@ INSERT INTO MDomains (Category, Name) VALUES (2, '@staff.bunri-s.ed.jp');
 
 
 /*　組織単位　*/
+DROP TABLE MOrgUnits;
 CREATE TABLE MOrgUnits (
   OrgUnitID     UUID NOT NULL DEFAULT gen_random_uuid(),
   Code          VARCHAR(8) NOT NULL,

@@ -44,7 +44,7 @@ namespace StatusBook
 	/// <summary>
 	/// An empty page that can be used on its own or navigated to within a Frame.
 	/// </summary>
-	public sealed partial class LoaderPage : Page, StudentsCursorEventListener
+	public sealed partial class LoaderPage : Page, StudentsCursorEventListener, StaffsCursorEventListener
 	{
 		List<OptionItem> pLoadOptions;
 		List<OptionItem> pCodePages;
@@ -274,7 +274,7 @@ namespace StatusBook
 					pLoader = new StudentsCursor(this);
 					break;
 				case 1:
-					pLoader = new StaffsCursor();
+					pLoader = new StaffsCursor(this);
 					break;
 				case 2:
 					pLoader = new DevicesCursor();
@@ -325,7 +325,7 @@ namespace StatusBook
 					pLoader = new StudentsCursor(this);
 					break;
 				case 1:
-					pLoader = new StaffsCursor();
+					pLoader = new StaffsCursor(this);
 					break;
 				case 2:
 					pLoader = new DevicesCursor();
@@ -357,7 +357,7 @@ namespace StatusBook
 			throw new NotImplementedException();
 		}
 
-		public void OnChecked(string pPath, string pCodeSet, SQLContext pContext, int nItems, int nError, List<StudentCSV> pItems)
+		public void OnCheckedStudents(string pPath, string pCodeSet, SQLContext pContext, int nItems, int nError, List<StudentCSV> pItems)
 		{
 			int nLine = 0;
 			this.StudentListView.pStudents.Clear();
@@ -394,6 +394,11 @@ namespace StatusBook
 				}
 			}
 			this.StudentListView.SetCount(nItems);
+		}
+
+		public void OnCheckedStaffs(string pPath, string pCodeSet, SQLContext pContext, int nItems, int nError, List<StaffCSV> pItems)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

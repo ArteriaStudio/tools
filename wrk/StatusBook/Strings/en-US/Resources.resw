@@ -216,6 +216,9 @@
   <data name="StaffList" xml:space="preserve">
     <value>StaffList</value>
   </data>
+  <data name="Staffs.Content" xml:space="preserve">
+    <value>Staffs</value>
+  </data>
   <data name="Students.Content" xml:space="preserve">
     <value>Students</value>
   </data>

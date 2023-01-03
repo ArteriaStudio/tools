@@ -29,6 +29,7 @@
 							<ColumnDefinition Width="64"/>
 							<ColumnDefinition Width="96"/>
 							<ColumnDefinition Width="48"/>
+							<ColumnDefinition Width="48"/>
 							<ColumnDefinition Width="24"/>
 							<ColumnDefinition Width="24"/>
 							<ColumnDefinition Width="24"/>
@@ -36,10 +37,11 @@
 						<TextBlock Grid.Column="0" Text="" />
 						<TextBlock Grid.Column="1" Text="学籍番号" />
 						<TextBlock Grid.Column="2" Text="名前" />
-						<TextBlock Grid.Column="3" Text="学校" />
-						<TextBlock Grid.Column="4" Text="年" />
-						<TextBlock Grid.Column="5" Text="組" />
-						<TextBlock Grid.Column="6" Text="番" />
+						<TextBlock Grid.Column="3" Text="ふりがな" />
+						<TextBlock Grid.Column="4" Text="学校" />
+						<TextBlock Grid.Column="5" Text="年" />
+						<TextBlock Grid.Column="6" Text="組" />
+						<TextBlock Grid.Column="7" Text="番" />
 					</Grid>
 				</DataTemplate>
 			</ListView.HeaderTemplate>
@@ -47,9 +49,10 @@
 				<DataTemplate x:Name="TableDataTemplate" x:DataType="lb:Device">
 					<Grid Height="24" AutomationProperties.Name="{x:Bind Name}">
 						<Grid.ColumnDefinitions>
-							<ColumnDefinition Width="32"/>
+							<ColumnDefinition Width="42"/>
 							<ColumnDefinition Width="64"/>
 							<ColumnDefinition Width="96"/>
+							<ColumnDefinition Width="48"/>
 							<ColumnDefinition Width="48"/>
 							<ColumnDefinition Width="24"/>
 							<ColumnDefinition Width="24"/>
@@ -63,10 +66,11 @@
 						</Ellipse>
 						<TextBlock Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" Text="{x:Bind StudentNumber}" />
 						<TextBlock Grid.Column="2" Grid.Row="0" VerticalAlignment="Center" Text="{x:Bind Name}"/>
-						<TextBlock Grid.Column="3" Grid.Row="0" VerticalAlignment="Center" Text="{x:Bind School}"/>
-						<TextBlock Grid.Column="4" Grid.Row="0" VerticalAlignment="Center" Text="{x:Bind Grade}"/>
-						<TextBlock Grid.Column="5" Grid.Row="0" VerticalAlignment="Center" Text="{x:Bind Sets}"/>
-						<TextBlock Grid.Column="6" Grid.Row="0" VerticalAlignment="Center" Text="{x:Bind Numbers}"/>
+						<TextBlock Grid.Column="3" Grid.Row="0" VerticalAlignment="Center" Text="{x:Bind Read}"/>
+						<TextBlock Grid.Column="4" Grid.Row="0" VerticalAlignment="Center" Text="{x:Bind School}"/>
+						<TextBlock Grid.Column="5" Grid.Row="0" VerticalAlignment="Center" Text="{x:Bind Grade}"/>
+						<TextBlock Grid.Column="6" Grid.Row="0" VerticalAlignment="Center" Text="{x:Bind Sets}"/>
+						<TextBlock Grid.Column="7" Grid.Row="0" VerticalAlignment="Center" Text="{x:Bind Numbers}"/>
 					</Grid>
 				</DataTemplate>
 			</ListView.ItemTemplate>

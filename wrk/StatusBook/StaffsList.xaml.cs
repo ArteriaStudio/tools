@@ -1,4 +1,6 @@
-﻿using Arteria_s.Common.LigareBook;
+﻿// Copyright (c) Microsoft Corporation and Contributors.
+// Licensed under the MIT License.
+
 using LigareBook;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -21,22 +23,13 @@ using Windows.Foundation.Collections;
 
 namespace StatusBook
 {
-	/// <summary>
-	/// An empty page that can be used on its own or navigated to within a Frame.
-	/// </summary>
-	public sealed partial class StudentsPage : Page
+	public sealed partial class StaffsList : UserControl
 	{
-		public StudentsPage()
+		public StaffsList()
 		{
 			this.InitializeComponent();
-
-			//　一覧データを入力
-			var pApp = Application.Current as App;
-			var pProfile = pApp.m_pProfile;
-			var pContext = pApp.m_pContext;
-			var pStatusSheet = StatusSheet.GetInstance();
-
-			StudentsList.pStudents = pStatusSheet.ListupStudents(pContext);
 		}
+
+		public ObservableCollection<Staff> pStaffs = new ObservableCollection<Staff>();
 	}
 }
