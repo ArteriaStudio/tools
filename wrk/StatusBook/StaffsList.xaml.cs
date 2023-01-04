@@ -29,6 +29,10 @@ namespace StatusBook
 		{
 			this.InitializeComponent();
 		}
+		public void SetCount(int nStaffs)
+		{
+			this.Count.Text = nStaffs.ToString();
+		}
 
 		public ObservableCollection<Staff> pStaffs = new ObservableCollection<Staff>();
 	}

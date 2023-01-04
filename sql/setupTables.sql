@@ -50,6 +50,14 @@ INSERT INTO MStatus (Ordinal, Code, Text) VALUES (0, 0, 'Active');
 INSERT INTO MStatus (Ordinal, Code, Text) VALUES (1, 1, 'Suspended');
 INSERT INTO MStatus (Ordinal, Code, Text) VALUES (2, 2, 'Archived');
 
+CREATE FUNCTION GetStatusCode (
+  pStatusName   VARCHAR(16)
+) RETURNS INTEGER
+LANGUAGE SQL AS $$
+  SELECT Code FROM MStatus WHERE Text = pStatusName;
+$$;
+
+
 /*　職員種類　*/
 DROP TABLE MStaffTypes;
 CREATE TABLE MStaffTypes (
@@ -66,6 +74,13 @@ INSERT INTO MStaffTypes (Ordinal, StaffType, Text) VALUES (0, 0, 'Unknown');
 INSERT INTO MStaffTypes (Ordinal, StaffType, Text) VALUES (1, 1, '教育職員');
 INSERT INTO MStaffTypes (Ordinal, StaffType, Text) VALUES (2, 2, '事務職員');
 INSERT INTO MStaffTypes (Ordinal, StaffType, Text) VALUES (3, 3, '技術職員');
+
+CREATE FUNCTION GetStaffTypeCode (
+  pStaffTypeName    VARCHAR(16)
+) RETURNS INTEGER
+LANGUAGE SQL AS $$
+  SELECT StaffType FROM MStaffTypes WHERE Text = pStaffTypeName;
+$$;
 
 
 /*　雇用形態　*/
@@ -87,6 +102,14 @@ INSERT INTO MContractTypes (Ordinal, ContractType, Text) VALUES (3, 3, '非常�
 INSERT INTO MContractTypes (Ordinal, ContractType, Text) VALUES (4, 4, '嘱託');
 INSERT INTO MContractTypes (Ordinal, ContractType, Text) VALUES (5, 5, '派遣');
 
+CREATE FUNCTION GetContractTypeCode (
+  pContractTypeName     VARCHAR(16)
+) RETURNS INTEGER
+LANGUAGE SQL AS $$
+  SELECT ContractType FROM MContractTypes WHERE Text = pContractTypeName;
+$$;
+
+
 /*　所属種類　*/
 DROP TABLE MMemberTypes;
 CREATE TABLE MMemberTypes (
@@ -102,6 +125,14 @@ GRANT SELECT ON MMemberTypes TO aploper;
 INSERT INTO MMemberTypes (Ordinal, MemberType, Text) VALUES (0, 0, 'メンバ');
 INSERT INTO MMemberTypes (Ordinal, MemberType, Text) VALUES (1, 1, 'マネージャ');
 INSERT INTO MMemberTypes (Ordinal, MemberType, Text) VALUES (2, 2, 'オーナ');
+
+CREATE FUNCTION GetMemberTypeCode (
+  pMemberTypeName     VARCHAR(16)
+) RETURNS INTEGER
+LANGUAGE SQL AS $$
+  SELECT MemberType FROM MMemberTypes WHERE Text = pMemberTypeName;
+$$;
+
 
 /*　役割種類　*/
 DROP TABLE MDomains;
@@ -120,6 +151,8 @@ GRANT SELECT ON MMemberTypes TO aploper;
 INSERT INTO MDomains (Category, Name) VALUES (0, '@class.bunri-s.ed.jp');
 INSERT INTO MDomains (Category, Name) VALUES (1, '@study.bunri-s.ed.jp');
 INSERT INTO MDomains (Category, Name) VALUES (2, '@staff.bunri-s.ed.jp');
+
+
 
 
 /*　組織単位　*/
@@ -315,7 +348,7 @@ CREATE TABLE MOriginalNames (
     ON DELETE CASCADE ON UPDATE CASCADE
 );
 GRANT ALL ON MOriginalNames TO cmnoper;
-GRANT SELECT ON MOriginalNames TO aploper;
+GRANT SELECT, INSERT, UPDATE, DELETE ON MOriginalNames TO aploper;
 
 CREATE PROCEDURE AddOriginalName (
   pEmail      VARCHAR(256),
@@ -347,7 +380,7 @@ CREATE TABLE MRegisterNames (
     ON DELETE CASCADE ON UPDATE CASCADE
 );
 GRANT ALL ON MRegisterNames TO cmnoper;
-GRANT SELECT ON MRegisterNames TO aploper;
+GRANT SELECT, INSERT, UPDATE, DELETE ON MRegisterNames TO aploper;
 
 CREATE PROCEDURE AddRegisterName (
   pEmail      VARCHAR(256),
@@ -381,7 +414,7 @@ CREATE TABLE MPopularNames (
     ON DELETE CASCADE ON UPDATE CASCADE
 );
 GRANT ALL ON MPopularNames TO cmnoper;
-GRANT SELECT ON MPopularNames TO aploper;
+GRANT SELECT, INSERT, UPDATE, DELETE ON MPopularNames TO aploper;
 
 CREATE PROCEDURE AddPopularName (
   pEmail      VARCHAR(256),
@@ -413,7 +446,7 @@ CREATE TABLE MRegularNames (
     ON DELETE CASCADE ON UPDATE CASCADE
 );
 GRANT ALL ON MRegularNames TO cmnoper;
-GRANT SELECT ON MRegularNames TO aploper;
+GRANT SELECT, INSERT, UPDATE, DELETE ON MRegularNames TO aploper;
 
 CREATE PROCEDURE AddRegularName (
   pEmail      VARCHAR(256),
@@ -445,7 +478,7 @@ CREATE TABLE MAddress (
     ON DELETE CASCADE ON UPDATE CASCADE
 );
 GRANT ALL ON MAddress TO cmnoper;
-GRANT SELECT ON MAddress TO aploper;
+GRANT SELECT, INSERT, UPDATE, DELETE ON MAddress TO aploper;
 
 CREATE PROCEDURE AddAddress (
   pEmail        VARCHAR(256),
@@ -486,11 +519,12 @@ CREATE TABLE MEmploys (
     ON DELETE CASCADE ON UPDATE CASCADE
 );
 GRANT ALL ON MEmploys TO cmnoper;
-GRANT SELECT ON MEmploys TO aploper;
+GRANT SELECT, INSERT, UPDATE, DELETE ON MEmploys TO aploper;
 
+DROP PROCEDURE UpsertEmploy;
 CREATE PROCEDURE UpsertEmploy (
-  pStaffNumber  VARCHAR(5),
   pEmail        VARCHAR(256),
+  pStaffNumber  VARCHAR(5),
   pStaffType    INTEGER,
   pContractType INTEGER
 ) LANGUAGE SQL AS $$
@@ -500,7 +534,7 @@ CREATE PROCEDURE UpsertEmploy (
   DO UPDATE SET StaffNumber = pStaffNumber, StaffType = pStaffType, ContractType = pContractType;
 $$;
 
-CALL UpsertEmploy('1011', 'rink@arteria-s.net', 1, 2);
+CALL UpsertEmploy('rink@arteria-s.net', '1011', 1, 2);
 
 
 /*　学籍　*/
@@ -674,21 +708,104 @@ DROP TABLE MAlignments;
 CREATE TABLE MAlignments (
   AccountID     UUID NOT NULL,
   License       INTEGER NOT NULL,
+  WindowsID     VARCHAR(256) NOT NULL,
   GmailID       VARCHAR(256) NOT NULL,
-  MicrosoftID   VARCHAR(256),
+  MicrosoftID   VARCHAR(256) NOT NULL,
   Sequence      VARCHAR(6),
   SSNCode       VARCHAR(24),
   SSECode       VARCHAR(24),
   PRIMARY KEY ( AccountID ),
   FOREIGN KEY ( AccountID ) REFERENCES MAccounts ( AccountID )
     ON DELETE CASCADE ON UPDATE CASCADE,
+  UNIQUE ( WindowsID ),
   UNIQUE ( GmailID ),
   UNIQUE ( MicrosoftID ),
   UNIQUE ( SSNCode ),
   UNIQUE ( SSECode )
 );
 GRANT ALL ON MAlignments TO cmnoper;
-GRANT SELECT ON MAlignments TO aploper;
+GRANT SELECT, INSERT, UPDATE, DELETE ON MAlignments TO aploper;
+
+DROP PROCEDURE UpsertAlignment;
+CREATE PROCEDURE UpsertAlignment (
+  pAccountID     UUID,
+  iLicense       INTEGER,
+  pWindowsID     VARCHAR(256),
+  pGmailID       VARCHAR(256),
+  pMicrosoftID   VARCHAR(256),
+  pSequence      VARCHAR(6),
+  pSSNCode       VARCHAR(24),
+  pSSECode       VARCHAR(24)
+) LANGUAGE SQL AS $$
+  INSERT INTO MAlignments (AccountID, License, WindowsID, GmailID, MicrosoftID, Sequence, SSNCode, SSECode)
+    VALUES (pAccountID, iLicense, pWindowsID, pGmailID, pMicrosoftID, pSequence, pSSNCode, pSSECode)
+  ON CONFLICT ON CONSTRAINT malignments_pkey
+  DO UPDATE SET License = iLicense, WindowsID = pWindowsID, GmailID = pGmailID, MicrosoftID = pMicrosoftID, Sequence = pSequence, SSNCode = pSSNCode, SSECode = pSSECode;
+$$;
+
+
+
+
+DROP PROCEDURE UpsertEmployAccount;
+CREATE PROCEDURE UpsertEmployAccount (
+  pOrgUnitCode  VARCHAR(8),
+  pEmail        VARCHAR(256),
+  pName         VARCHAR(256),
+  pRead         VARCHAR(256),
+  pStaffNumber  VARCHAR(5),
+  pStaffType    INTEGER,
+  pContractType INTEGER,
+  iLicense      INTEGER,
+  pWindowsID    VARCHAR(256),
+  pGmailID      VARCHAR(256),
+  pMicrosoftID  VARCHAR(256),
+  pSequence     VARCHAR(6),
+  pSSNCode      VARCHAR(24),
+  pSSECode      VARCHAR(24)
+) LANGUAGE 'plpgsql' AS $$
+DECLARE
+  pOrgUnitID     UUID;
+  pAccountID     UUID;
+BEGIN
+  pOrgUnitID = GetOrgUnitID(pOrgUnitCode);
+  CALL UpsertAccount(pEmail, pName, pRead, pOrgUnitID, 0);
+  pAccountID = GetAccountIDByEmail(pEmail);
+  CALL UpsertEmploy(pEmail, pStaffNumber, pStaffType, pContractType);
+  CALL UpsertAlignment(pAccountID, iLicense, pWindowsID, pGmailID, pMicrosoftID, pSequence, pSSNCode, pSSECode);
+END
+$$;
+
+CALL UpsertEmployAccount('00000000', '13001@class.bunri-s.ed.jp', '西野 哲也', 'にしの てつや', '00001', 0, 1, 1, '13001@class.bunri-s.ed.jp', '13001@class.bunri-s.ed.jp', '13001@class.bunri-s.ed.jp', '100001', '10000001', '12001011');
+CALL UpsertEmployAccount('00000000', '1001@staff.arteria-s.net', '西野 哲也', 'にしの てつや', '00001', 0, 1, 1, '13001@class.bunri-s.ed.jp', '13001@class.bunri-s.ed.jp', '13001@class.bunri-s.ed.jp', '100001', '10000001', '12001011');
+
+DROP PROCEDURE UpsertEmployAccountByName;
+CREATE PROCEDURE UpsertEmployAccountByName (
+  pOrgUnitCode          VARCHAR(8),
+  pEmail                VARCHAR(256),
+  pName                 VARCHAR(256),
+  pRead                 VARCHAR(256),
+  pStaffNumber          VARCHAR(5),
+  pStaffTypeName        VARCHAR(16),
+  pContractTypeName     VARCHAR(16),
+  iLicense              INTEGER,
+  pWindowsID            VARCHAR(256),
+  pGmailID              VARCHAR(256),
+  pMicrosoftID          VARCHAR(256),
+  pSequence             VARCHAR(6),
+  pSSNCode              VARCHAR(24),
+  pSSECode              VARCHAR(24)
+) LANGUAGE 'plpgsql' AS $$
+DECLARE
+  pStaffTypeID      INTEGER;
+  pContractTypeID   INTEGER;
+BEGIN
+  SELECT GetStaffTypeCode(pStaffTypeName) INTO pStaffTypeID;
+  SELECT GetContractTypeCode(pContractTypeName) INTO pContractTypeID;
+  CALL UpsertEmployAccount(pOrgUnitCode, pEmail, pName, pRead, pStaffNumber, pStaffTypeID, pContractTypeID, iLicense, pWindowsID, pGmailID, pMicrosoftID, pSequence, pSSNCode, pSSECode);
+END
+$$;
+
+CALL UpsertEmployAccountByName('00000000', '9001@staff.arteria-s.net', '西野 哲也', 'にしの てつや', '00001', '教育職員', '非常勤', 1, '13001@class.bunri-s.ed.jp', '13001@class.bunri-s.ed.jp', '13001@class.bunri-s.ed.jp', '100001', '910000001', '912001011');
 
 
 /*　集団　*/
@@ -705,7 +822,7 @@ CREATE TABLE MGroups (
   UNIQUE ( GroupName )
 );
 GRANT ALL ON MGroups TO cmnoper;
-GRANT SELECT ON MGroups TO aploper;
+GRANT SELECT, INSERT, UPDATE, DELETE ON MGroups TO aploper;
 
 DROP PROCEDURE UpsertGroup;
 CREATE PROCEDURE UpsertGroup (
@@ -735,7 +852,7 @@ CREATE TABLE MMembers (
     ON DELETE CASCADE ON UPDATE CASCADE
 );
 GRANT ALL ON MMembers TO cmnoper;
-GRANT SELECT ON MMembers TO aploper;
+GRANT SELECT, INSERT, UPDATE, DELETE ON MMembers TO aploper;
 
 DROP PROCEDURE UpsertMember;
 CREATE PROCEDURE UpsertMember (

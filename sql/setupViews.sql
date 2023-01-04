@@ -28,6 +28,7 @@ GRANT SELECT ON VStudents TO aploper, cmnoper;
 
 
 /*　職員一覧　*/
+DROP VIEW VEmploys;
 CREATE VIEW VEmploys AS
 SELECT
   MAccounts.AccountID,
@@ -35,16 +36,23 @@ SELECT
   MAccounts.Name,
   MAccounts.Read,
   MAccounts.OrgUnitID,
+  MOrgUnits.Name AS OrgUnitName,
   MAccounts.Status,
   MAccounts.ExpireAt,
   MAccounts.UpdateAt,
   MAccounts.DeleteAt,
   MEmploys.StaffNumber,
   MEmploys.StaffType,
-  MEmploys.ContractType
+  MStaffTypes.Text AS StaffTypeName,
+  MEmploys.ContractType,
+  MContractTypes.Text AS ContractTypeName
 FROM
   MAccounts
-    INNER JOIN MEmploys ON MAccounts.AccountID = MEmploys.AccountID;
+    INNER JOIN MEmploys ON MAccounts.AccountID = MEmploys.AccountID
+    INNER JOIN MOrgUnits ON MAccounts.OrgUnitID = MOrgUnits.OrgUnitID
+    INNER JOIN MStaffTypes ON MEmploys.StaffType = MStaffTypes.StaffType
+    INNER JOIN MContractTypes ON MEmploys.ContractType = MContractTypes.ContractType
+;
 GRANT SELECT ON VEmploys TO aploper, cmnoper;
 
 /*　組織単位　*/

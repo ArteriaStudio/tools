@@ -37,6 +37,7 @@
 			</Grid>
 			<!--　プロパティのラベル（Name）は、省略するとタグが所属するスキーマとして扱われる様子。明示的にスキーマを指定するのが無難（2022/12/24）　-->
 			<local:StudentsList x:Name="StudentListView" Margin="16,4,16,6" />
+			<local:StaffsList x:Name="StaffListView" Margin="16,4,16,6" />
 			<StackPanel Orientation="Horizontal">
 				<Button Name="Check" x:Uid="Check" Margin="16,4" IsEnabled="False" Click="Check_Click" />
 				<Button Name="Upsert" x:Uid="Upsert" Margin="16,4" IsEnabled="False" Click="Upsert_Click" />

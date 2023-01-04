@@ -18,14 +18,16 @@ namespace LigareBook
 			;
 		}
 
+		//　CSV ファイルを入力
 		public virtual bool Load(string pPath, string pCodeSet, SQLContext pContext)
 		{
 			return(false);
 		}
+		//　CSV ファイルを検査
 		public virtual bool Check(string pPath, string pCodeSet, SQLContext pContext)
 		{
 			return(false);
 		}
 	}
-	public delegate bool LoadPointers(string pPath);
+	//public delegate bool LoadPointers(string pPath);
 }

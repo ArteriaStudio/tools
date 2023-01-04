@@ -29,7 +29,6 @@ namespace StatusBook
 		{
 			this.InitializeComponent();
 		}
-
 		public void SetCount(int nStudents)
 		{
 			this.Count.Text = nStudents.ToString();

@@ -30,20 +30,20 @@
 				<DataTemplate>
 					<Grid Padding="5" Background="{ThemeResource SystemBaseLowColor}">
 						<Grid.ColumnDefinitions>
-							<ColumnDefinition Width="42"/>
+							<ColumnDefinition Width="48"/>
 							<ColumnDefinition Width="240"/>
+							<ColumnDefinition Width="80"/>
+							<ColumnDefinition Width="96"/>
 							<ColumnDefinition Width="96"/>
 							<ColumnDefinition Width="64"/>
 							<ColumnDefinition Width="64"/>
-							<ColumnDefinition Width="64"/>
-							<ColumnDefinition Width="64"/>
-							<ColumnDefinition Width="64"/>
+							<ColumnDefinition Width="96"/>
 							<ColumnDefinition Width="64"/>
 							<ColumnDefinition Width="64"/>
 						</Grid.ColumnDefinitions>
 						<TextBlock Grid.Column="0" Text="" />
-						<TextBlock Grid.Column="1" Text="職員番号" />
-						<TextBlock Grid.Column="2" Text="識別子" />
+						<TextBlock Grid.Column="1" Text="識別子" />
+						<TextBlock Grid.Column="2" Text="職員番号" />
 						<TextBlock Grid.Column="3" Text="名前" />
 						<TextBlock Grid.Column="4" Text="ふりがな" />
 						<TextBlock Grid.Column="5" Text="職員種類" />
@@ -58,14 +58,14 @@
 				<DataTemplate x:Name="TableDataTemplate" x:DataType="lb:Staff">
 					<Grid Height="24" AutomationProperties.Name="{x:Bind Name}">
 						<Grid.ColumnDefinitions>
-							<ColumnDefinition Width="42"/>
+							<ColumnDefinition Width="48"/>
 							<ColumnDefinition Width="240"/>
+							<ColumnDefinition Width="80"/>
+							<ColumnDefinition Width="96"/>
 							<ColumnDefinition Width="96"/>
 							<ColumnDefinition Width="64"/>
 							<ColumnDefinition Width="64"/>
-							<ColumnDefinition Width="64"/>
-							<ColumnDefinition Width="64"/>
-							<ColumnDefinition Width="64"/>
+							<ColumnDefinition Width="96"/>
 							<ColumnDefinition Width="64"/>
 							<ColumnDefinition Width="64"/>
 						</Grid.ColumnDefinitions>
@@ -79,16 +79,14 @@
 						<TextBlock Grid.Column="2" Grid.Row="0" VerticalAlignment="Center" Text="{x:Bind StaffNumber}" />
 						<TextBlock Grid.Column="3" Grid.Row="0" VerticalAlignment="Center" Text="{x:Bind Name}"/>
 						<TextBlock Grid.Column="4" Grid.Row="0" VerticalAlignment="Center" Text="{x:Bind Read}"/>
-						<TextBlock Grid.Column="5" Grid.Row="0" VerticalAlignment="Center" Text="{x:Bind StaffType}"/>
-						<TextBlock Grid.Column="6" Grid.Row="0" VerticalAlignment="Center" Text="{x:Bind ContractType}"/>
-						<TextBlock Grid.Column="7" Grid.Row="0" VerticalAlignment="Center" Text="{x:Bind OrgUnitID}"/>
+						<TextBlock Grid.Column="5" Grid.Row="0" VerticalAlignment="Center" Text="{x:Bind StaffTypeName}"/>
+						<TextBlock Grid.Column="6" Grid.Row="0" VerticalAlignment="Center" Text="{x:Bind ContractTypeName}"/>
+						<TextBlock Grid.Column="7" Grid.Row="0" VerticalAlignment="Center" Text="{x:Bind OrgUnitName}"/>
 						<TextBlock Grid.Column="8" Grid.Row="0" VerticalAlignment="Center" Text="{x:Bind Status}"/>
 						<TextBlock Grid.Column="9" Grid.Row="0" VerticalAlignment="Center" Text="{x:Bind ExpireAt}"/>
 					</Grid>
 				</DataTemplate>
 			</ListView.ItemTemplate>
 		</ListView>
-		
 	</Grid>
-
 </UserControl>
