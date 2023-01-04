@@ -190,24 +190,6 @@ CREATE TABLE MOrgRels (
 GRANT ALL ON MOrgRels TO cmnoper;
 GRANT SELECT, INSERT, UPDATE, DELETE ON MOrgRels TO aploper;
 
-CREATE PROCEDURE UpsertMOrgRels (
-  pYear INTEGER, 
-  pCode VARCHAR(8), 
-  pName VARCHAR(32), 
-  pContainerCode VARCHAR(8)
-) LANGUAGE 'plpgsql' AS $$
-DECLARE
-  pOrgUnitID    UUID;
-  pContainerID  UUID;
-BEGIN
-  SELECT GetOrgUnitID(pContainerCode) INTO pContainerID;
-  CALL UpsertOrgUnit(pYear, pCode, pName, pContainerID);
-END
-$$;
-
-CALL UpsertMOrgRels(2022, '00000003', '教育職員2', '00000000');
-CALL UpsertMOrgRels(2022, '00000007', '教育職員3', '00000002');
-
 
 
 
@@ -237,6 +219,25 @@ LANGUAGE SQL AS $$
   ON CONFLICT ON CONSTRAINT morgrels_pkey
   DO UPDATE SET ContainerID = pContainerID;
 $$;
+
+CREATE PROCEDURE UpsertMOrgRels (
+  pYear INTEGER, 
+  pCode VARCHAR(8), 
+  pName VARCHAR(32), 
+  pContainerCode VARCHAR(8)
+) LANGUAGE 'plpgsql' AS $$
+DECLARE
+  pOrgUnitID    UUID;
+  pContainerID  UUID;
+BEGIN
+  SELECT GetOrgUnitID(pContainerCode) INTO pContainerID;
+  CALL UpsertOrgUnit(pYear, pCode, pName, pContainerID);
+END
+$$;
+
+CALL UpsertMOrgRels(2022, '00000003', '教育職員2', '00000000');
+CALL UpsertMOrgRels(2022, '00000007', '教育職員3', '00000002');
+
 
 DROP PROCEDURE UpdateOrgUnit;
 CREATE PROCEDURE UpdateOrgUnit (pOrgUnitID UUID, pCode VARCHAR(8), pName VARCHAR(32))
@@ -615,17 +616,15 @@ INSERT INTO MStudents (StudentNumber, AccountID, Gender, BirthAt) (SELECT '00099
 /* 学年 */
 DROP TABLE MGrade;
 CREATE TABLE MGrade (
-  StudentNumber VARCHAR(5) NOT NULL,
   Year          INTEGER NOT NULL,
   School        VARCHAR(2) NOT NULL,
   Grade         VARCHAR(1) NOT NULL,
   Sets          VARCHAR(2) NOT NULL,
   Numbers       VARCHAR(2) NOT NULL,
   AccountID     UUID NOT NULL,
-  PRIMARY KEY ( StudentNumber, Year ),
+  PRIMARY KEY ( Year, School, Grade, Sets, Numbers ),
   FOREIGN KEY ( AccountID ) REFERENCES MAccounts ( AccountID )
-    ON DELETE CASCADE ON UPDATE CASCADE,
-  UNIQUE ( Year, School, Grade, Sets, Numbers )
+    ON DELETE CASCADE ON UPDATE CASCADE
 );
 GRANT ALL ON MGrade TO cmnoper;
 GRANT SELECT, INSERT, UPDATE ON MGrade TO aploper;
@@ -633,14 +632,14 @@ GRANT SELECT, INSERT, UPDATE ON MGrade TO aploper;
 DROP PROCEDURE InsertGrade;
 CREATE PROCEDURE InsertGrade (
   iYear          INTEGER,
-  pStudentNumber VARCHAR(5),
   pSchool        VARCHAR(2),
   pGrade         VARCHAR(1),
   pSets          VARCHAR(2),
-  pNumbers       VARCHAR(2)
+  pNumbers       VARCHAR(2),
+  pAccountID     UUID
 ) LANGUAGE SQL AS $$
-  INSERT INTO MGrade (StudentNumber, Year, School, Grade, Sets, Numbers, AccountID)
-    (SELECT pStudentNumber, iYear, pSchool, pGrade, pSets, pNumbers, AccountID FROM MStudents WHERE StudentNumber = pStudentNumber)
+  INSERT INTO MGrade (Year, School, Grade, Sets, Numbers, AccountID)
+    VALUES (iYear, pSchool, pGrade, pSets, pNumbers, pAccountID)
 $$;
 
 
@@ -651,21 +650,22 @@ $$;
 DROP PROCEDURE UpsertGrade;
 CREATE PROCEDURE UpsertGrade (
   iYear          INTEGER,
-  pStudentNumber VARCHAR(5),
   pSchool        VARCHAR(3),
   pGrade         VARCHAR(1),
   pSets          VARCHAR(2),
-  pNumbers       VARCHAR(2)
+  pNumbers       VARCHAR(2),
+  pAccountID     UUID
 ) LANGUAGE SQL AS $$
-  INSERT INTO MGrade (StudentNumber, Year, School, Grade, Sets, Numbers, AccountID)
-    (SELECT pStudentNumber, iYear, pSchool, pGrade, pSets, pNumbers, AccountID FROM MStudents WHERE StudentNumber = pStudentNumber)
+  INSERT INTO MGrade (Year, School, Grade, Sets, Numbers, AccountID)
+    VALUES (iYear, pSchool, pGrade, pSets, pNumbers, pAccountID)
   ON CONFLICT ON CONSTRAINT mgrade_pkey
   DO UPDATE SET Year = iYear, School = pSchool, Grade = pGrade, Sets = pSets, Numbers = pNumbers;
 $$;
 
+/*
 CALL UpsertGrade('2022', '00000', '中学', '1', '1', '1');
 CALL UpsertGrade('2022', '00099', '中学', '3', '6', '99');
-
+*/
 
 DROP PROCEDURE InsertStudentAccount;
 CREATE PROCEDURE InsertStudentAccount (
@@ -691,7 +691,7 @@ BEGIN
   CALL InsertAccount(pEmail, pName, pRead, pOrgUnitID, 0);
   pAccountID = GetAccountIDByEmail(pEmail);
   CALL InsertStudent(pStudentNumber, pAccountID, pGender, pBirthAt, pEnterAt);
-  CALL InsertGrade(iYear, pStudentNumber, pSchool, pGrade, pSets, pNumbers);
+  CALL InsertGrade(iYear, pSchool, pGrade, pSets, pNumbers, pAccountID);
 END
 $$;
 
@@ -719,12 +719,28 @@ BEGIN
   CALL UpsertAccount(pEmail, pName, pRead, pOrgUnitID, 0);
   pAccountID = GetAccountIDByEmail(pEmail);
   CALL UpsertStudent(pStudentNumber, pAccountID, pGender, pBirthAt, pEnterAt);
-  CALL UpsertGrade(iYear, pStudentNumber, pSchool, pGrade, pSets, pNumbers);
+  CALL UpsertGrade(iYear, pSchool, pGrade, pSets, pNumbers, pAccountID);
 END
 $$;
 
 CALL InsertStudentAccount('00000000', 'aes@arteria-s.net', '宮部　みゆき', 'みやべ　みゆき', '女', '2000/01/2', '2022/12/22', 2022, '01001', '高校', '2', 'G2', '2');
 CALL UpsertStudentAccount('00000000', 'aes@arteria-s.net', '宮部　みゆき', 'みやべ　みゆき', '女', '2000/01/2', '2022/12/22', 2022, '01001', '高校', '2', 'G2', '2');
+
+/*　学年団　*/
+DROP TABLE MTeams;
+CREATE TABLE MTeams (
+  Year          INTEGER NOT NULL,
+  School        VARCHAR(2) NOT NULL,
+  Grade         VARCHAR(1) NOT NULL,
+  Sets          VARCHAR(2) NOT NULL,
+  Ordinal       INTEGER NOT NULL,
+  AccountID     UUID NOT NULL,
+  PRIMARY KEY ( Year, School, Grade, Sets, Ordinal ),
+  FOREIGN KEY ( AccountID ) REFERENCES MAccounts ( AccountID )
+    ON DELETE CASCADE ON UPDATE CASCADE
+);
+GRANT ALL ON MTeams TO cmnoper;
+GRANT SELECT, INSERT, UPDATE, DELETE ON MTeams TO aploper;
 
 
 

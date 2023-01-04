@@ -1,0 +1,99 @@
+﻿<Page
+	x:Class="StatusBook.pages.ContentsPage"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:local="using:StatusBook"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:muxc="using:Microsoft.UI.Xaml.Controls" 
+	mc:Ignorable="d"
+	Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*" />
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*" />
+		</Grid.RowDefinitions>
+
+		<!--　SVG ファイルにWidthとHeightで寸法が指定されていると予期しない動作を起こす。Google Material Fontsからダウンロードしたファイルは寸法が含まれている（2023/01/03）　-->
+		<!--　恐らくは、Winui3がSVG に非対応（2023/01/03）　-->
+		<!--　画面設定のスケーリングファクタを150%にしたディスプレイで表示すると見切れないアイコンがレンダリングされる現象がある（2023/01/03）　-->
+		<!--　正解は、SVG を使わずラスター画像を指定するのが正解に見える。（2023/01/03）　-->
+		<NavigationView Name="Navigation" PaneDisplayMode="LeftCompact" x:Uid="AppTitle" Grid.Column="0" Grid.Row="0" IsSettingsVisible="False" IsBackButtonVisible="Collapsed">
+			<NavigationView.MenuItems>
+				<NavigationViewItem x:Uid="DashBoard" Tag="DashBoardView">
+					<NavigationViewItem.Icon>
+						<muxc:ImageIcon Name="DashBoardViewIcon" Source="ms-appx:///Assets/dashboard_white_24dp.png" />
+					</NavigationViewItem.Icon>
+				</NavigationViewItem>
+				<NavigationViewItem x:Uid="OrgUnit" Tag="OrgUnitView">
+					<NavigationViewItem.Icon>
+						<ImageIcon Source="/Assets/corporate_fare_white_24dp.png"></ImageIcon>
+					</NavigationViewItem.Icon>
+				</NavigationViewItem>
+				<NavigationViewItem x:Uid="Devices" Tag="DevicesView">
+					<NavigationViewItem.Icon>
+						<ImageIcon Source="/Assets/computer_white_24dp.png"></ImageIcon>
+					</NavigationViewItem.Icon>
+				</NavigationViewItem>
+				<!--
+				<NavigationViewItem x:Uid="Persons" Tag="PersonsView">
+					<NavigationViewItem.Icon>
+						<ImageIcon Source="Assets/people_white_24dp.png"></ImageIcon>
+					</NavigationViewItem.Icon>
+				</NavigationViewItem>
+				-->
+				<NavigationViewItem x:Uid="Staffs" Tag="StaffsView">
+					<NavigationViewItem.Icon>
+						<ImageIcon Source="/Assets/people_white_24dp.png"></ImageIcon>
+					</NavigationViewItem.Icon>
+				</NavigationViewItem>
+				<NavigationViewItem x:Uid="Students" Tag="StudentsView">
+					<NavigationViewItem.Icon>
+						<ImageIcon Source="/Assets/emoji_people_white_24dp.png"></ImageIcon>
+					</NavigationViewItem.Icon>
+				</NavigationViewItem>
+				<NavigationViewItem x:Uid="Loader" Tag="LoaderView">
+					<NavigationViewItem.Icon>
+						<ImageIcon Source="/Assets/import_export_white_24dp.png"></ImageIcon>
+					</NavigationViewItem.Icon>
+				</NavigationViewItem>
+				<NavigationViewItem x:Uid="Media" Tag="MediaView">
+					<NavigationViewItem.Icon>
+						<ImageIcon Source="/Assets/radio_white_24dp.png"></ImageIcon>
+					</NavigationViewItem.Icon>
+				</NavigationViewItem>
+				<NavigationViewItem x:Uid="History" Tag="HistoryView">
+					<NavigationViewItem.Icon>
+						<ImageIcon Source="/Assets/history_white_24dp.png"></ImageIcon>
+					</NavigationViewItem.Icon>
+				</NavigationViewItem>
+			</NavigationView.MenuItems>
+
+			<NavigationView.FooterMenuItems>
+				<NavigationViewItem x:Uid="Settings" Tag="SettingsView">
+					<NavigationViewItem.Icon>
+						<ImageIcon Source="/Assets/settings_white_24dp.png"></ImageIcon>
+					</NavigationViewItem.Icon>
+				</NavigationViewItem>
+			</NavigationView.FooterMenuItems>
+
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*" />
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="auto" />
+					<RowDefinition Height="1" />
+					<RowDefinition Height="*" />
+				</Grid.RowDefinitions>
+				<TextBlock Name="Caption" Text="ページのタイトル欄" Grid.Column="0" Grid.Row="0" Margin="2" Padding="2" FontSize="16" Style="{StaticResource TitleTextBlockStyle}" />
+				<Rectangle Grid.Column="0" Grid.Row="1" Fill="ForestGreen"></Rectangle>
+				<Frame Grid.Column="0" Grid.Row="2" Name="FragmentsFrame" />
+			</Grid>
+
+		</NavigationView>
+	</Grid>
+</Page>

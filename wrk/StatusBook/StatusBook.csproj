@@ -20,16 +20,17 @@
     <None Remove="DevicesPage.xaml" />
     <None Remove="FooterPage.xaml" />
     <None Remove="HistoryPage.xaml" />
-    <None Remove="ListupPage.xaml" />
     <None Remove="LoaderPage.xaml" />
     <None Remove="MediaPage.xaml" />
     <None Remove="OrgUnitPage.xaml" />
     <None Remove="OrgUnitsPage.xaml" />
+    <None Remove="pages\StaffPage.xaml" />
     <None Remove="SettingsPage.xaml" />
     <None Remove="StaffsList.xaml" />
     <None Remove="StaffsPage.xaml" />
     <None Remove="StartPage.xaml" />
     <None Remove="StatusPage.xaml" />
+    <None Remove="StudentPage.xaml" />
     <None Remove="StudentsList.xaml" />
     <None Remove="StudentsPage.xaml" />
   </ItemGroup>
@@ -66,6 +67,16 @@
   <ItemGroup>
     <ProjectReference Include="..\LigareBook\LigareBook.csproj" />
     <ProjectReference Include="..\Ritters\Ritters.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="pages\StaffPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="StudentPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="StaffsList.xaml">
@@ -134,11 +145,6 @@
   </ItemGroup>
   <ItemGroup>
     <Page Update="ContentsPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Page Update="ListupPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>

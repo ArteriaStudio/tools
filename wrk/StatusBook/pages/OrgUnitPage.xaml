@@ -1,0 +1,36 @@
+﻿<Page
+    x:Class="StatusBook.pages.OrgUnitPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:StatusBook"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+	<StackPanel Orientation="Horizontal">
+		<Border BorderBrush="Gray" BorderThickness="1" />
+		<Grid>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="320" />
+			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="auto" />
+				<RowDefinition Height="auto" />
+				<RowDefinition Height="auto" />
+				<RowDefinition Height="auto" />
+				<RowDefinition Height="auto" />
+				<RowDefinition Height="auto" />
+				<RowDefinition Height="*" />
+			</Grid.RowDefinitions>
+
+			<TextBlock Grid.Column="0" Grid.Row="0" Text="caption" Style="{StaticResource TitleTextBlockStyle}" Margin="16,12,12,16" />
+			<TextBox Name="OrgUnitID" Grid.Column="0" Grid.Row="1" Header="OrgUnitID" PlaceholderText="body" IsReadOnly="True" Margin="12,12,12,12" />
+			<TextBox Name="OrgUnitCode" Grid.Column="0" Grid.Row="2" Header="OrgUnitCode" PlaceholderText="body" Margin="12,12,12,12" />
+			<TextBox Name="OrgUnitName" Grid.Column="0" Grid.Row="3" Header="OrgUnitName" PlaceholderText="body" Margin="12,12,12,12" />
+			<TextBox Name="ContainerID" Grid.Column="0" Grid.Row="4" Header="ContainerID" PlaceholderText="body" IsReadOnly="True" Margin="12,12,12,12" />
+			<Button Name="Apply" Grid.Column="0" Grid.Row="5" Content="保存" Margin="12,12,12,12" Click="Apply_Click" />
+
+		</Grid>
+	</StackPanel>
+</Page>

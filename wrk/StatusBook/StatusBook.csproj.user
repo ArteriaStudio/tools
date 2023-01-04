@@ -7,67 +7,16 @@
     <ActiveDebugProfile>StatusBook (Unpackaged)</ActiveDebugProfile>
   </PropertyGroup>
   <ItemGroup>
-    <Page Update="ApexPage.xaml">
-      <SubType>Designer</SubType>
-    </Page>
     <None Update="App.xaml">
       <SubType>Designer</SubType>
     </None>
-    <Page Update="StaffsList.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="StaffsPage.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="StudentsList.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="DevicesPage.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="OrgUnitPage.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="HistoryPage.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="OrgUnitsPage.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="DeviceListPage.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="LoaderPage.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="StudentsPage.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="FooterPage.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="MediaPage.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="ContentsPage.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="ListupPage.xaml">
-      <SubType>Designer</SubType>
-    </Page>
     <None Update="MainWindow.xaml">
       <SubType>Designer</SubType>
     </None>
     <None Update="Package.appxmanifest">
       <SubType>Designer</SubType>
     </None>
-    <Page Update="SettingsPage.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="StatusPage.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="StartPage.xaml">
+    <Page Update="pages\StaffPage.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

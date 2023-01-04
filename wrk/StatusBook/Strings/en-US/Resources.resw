@@ -222,6 +222,12 @@
   <data name="Staffs.Content" xml:space="preserve">
     <value>Staffs</value>
   </data>
+  <data name="StaffsView" xml:space="preserve">
+    <value>StaffsView</value>
+  </data>
+  <data name="StaffView" xml:space="preserve">
+    <value>StaffView</value>
+  </data>
   <data name="StudentList" xml:space="preserve">
     <value>StudentList</value>
   </data>
@@ -230,6 +236,9 @@
   </data>
   <data name="StudentsView" xml:space="preserve">
     <value>Students</value>
+  </data>
+  <data name="StudentView" xml:space="preserve">
+    <value>StudentView</value>
   </data>
   <data name="Upsert.Content" xml:space="preserve">
     <value>Upsert</value>
