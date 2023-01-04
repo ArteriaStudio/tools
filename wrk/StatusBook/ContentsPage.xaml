@@ -38,11 +38,13 @@
 						<ImageIcon Source="Assets/computer_white_24dp.png"></ImageIcon>
 					</NavigationViewItem.Icon>
 				</NavigationViewItem>
+				<!--
 				<NavigationViewItem x:Uid="Persons" Tag="PersonsView">
 					<NavigationViewItem.Icon>
 						<ImageIcon Source="Assets/people_white_24dp.png"></ImageIcon>
 					</NavigationViewItem.Icon>
 				</NavigationViewItem>
+				-->
 				<NavigationViewItem x:Uid="Staffs" Tag="StaffsView">
 					<NavigationViewItem.Icon>
 						<ImageIcon Source="Assets/people_white_24dp.png"></ImageIcon>

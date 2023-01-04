@@ -150,11 +150,11 @@
   <data name="DataType.Header" xml:space="preserve">
     <value>DataType</value>
   </data>
+  <data name="DeviceList" xml:space="preserve">
+    <value>DeviceList</value>
+  </data>
   <data name="Devices.Content" xml:space="preserve">
     <value>Devices</value>
-  </data>
-  <data name="DevicesList" xml:space="preserve">
-    <value>DevicesList</value>
   </data>
   <data name="DevicesView" xml:space="preserve">
     <value>DevicesView</value>
@@ -192,6 +192,9 @@
   <data name="OrgUnit.Content" xml:space="preserve">
     <value>OrgUnit</value>
   </data>
+  <data name="OrgUnitList" xml:space="preserve">
+    <value>OrgUnitList</value>
+  </data>
   <data name="OrgUnitView" xml:space="preserve">
     <value>OrgUnit</value>
   </data>
@@ -219,11 +222,11 @@
   <data name="Staffs.Content" xml:space="preserve">
     <value>Staffs</value>
   </data>
+  <data name="StudentList" xml:space="preserve">
+    <value>StudentList</value>
+  </data>
   <data name="Students.Content" xml:space="preserve">
     <value>Students</value>
-  </data>
-  <data name="StudentsList" xml:space="preserve">
-    <value>StudentsList</value>
   </data>
   <data name="StudentsView" xml:space="preserve">
     <value>Students</value>

@@ -13,9 +13,10 @@ namespace LigareBook
 {
 	public class OrgUnit
 	{
+		public int Year  { get; set; }
 		public Guid OrgUnitID { get; set; }
-		public String OrgUnitCode { get; set; }
-		public String OrgUnitName { get; set; }
+		public string OrgUnitCode { get; set; }
+		public string OrgUnitName { get; set; }
 		public Guid ContainerID { get; set; }
 
 		public bool IsExpanded { get; set; } = false;
@@ -140,14 +141,15 @@ namespace LigareBook
 			return(pOrgUnitID);
 		}
 
-		public void Insert(SQLContext pContext, Guid pContainerID, OrgUnit pOrgUnit)
+		//　指定した組織単位識別子を持つレコードを登録
+		public static void Insert(SQLContext pContext, Guid pContainerID, OrgUnit pOrgUnit)
 		{
 			var pSQL = "CALL AppendOrgUnit(@Year, @Code, @Name, @ContainerID)";
 
 			using (var pCommand = new NpgsqlCommand(pSQL, pContext.m_pConnection))
 			{
 				pCommand.Parameters.Clear();
-				pCommand.Parameters.AddWithValue("Year", 2022);
+				pCommand.Parameters.AddWithValue("Year", pOrgUnit.Year);
 				pCommand.Parameters.AddWithValue("Code", pOrgUnit.OrgUnitCode);
 				pCommand.Parameters.AddWithValue("Name", pOrgUnit.OrgUnitName);
 				pCommand.Parameters.AddWithValue("ContainerID", pContainerID);
@@ -155,6 +157,24 @@ namespace LigareBook
 			}
 		}
 
+		//　指定された年度において指定された上位組織に所属する組織単位を追加
+		//（年度と上位組織をキーにMOrgRelsを更新
+		public static void Insert(SQLContext pContext, string pContainerCode, OrgUnit pOrgUnit)
+		{
+			var pSQL = "CALL UpsertMOrgRels(@Year, @Code, @Name, @ContainerCode)";
+
+			using (var pCommand = new NpgsqlCommand(pSQL, pContext.m_pConnection))
+			{
+				pCommand.Parameters.Clear();
+				pCommand.Parameters.AddWithValue("Year", pOrgUnit.Year);
+				pCommand.Parameters.AddWithValue("Code", pOrgUnit.OrgUnitCode);
+				pCommand.Parameters.AddWithValue("Name", pOrgUnit.OrgUnitName);
+				pCommand.Parameters.AddWithValue("ContainerCode", pContainerCode);
+				pCommand.ExecuteNonQuery();
+			}
+		}
+
+		//　指定した組織単位識別子に該当するレコードのコードと名前を更新
 		public void Update(SQLContext pContext, OrgUnit pOrgUnit)
 		{
 			var pSQL = "CALL UpdateOrgUnit(@OrgUnitID, @Code, @Name)";
@@ -169,6 +189,7 @@ namespace LigareBook
 			}
 		}
 
+		//　指定した組織単位識別子に該当するレコードのコンテナ識別子を更新
 		public void UpdateContainer(SQLContext pContext, OrgUnit pOrgUnit)
 		{
 			var pSQL = "CALL UpdateOrgUnitContainer(@Year, @OrgUnitID, @ContainerID)";
@@ -176,7 +197,7 @@ namespace LigareBook
 			using (var pCommand = new NpgsqlCommand(pSQL, pContext.m_pConnection))
 			{
 				pCommand.Parameters.Clear();
-				pCommand.Parameters.AddWithValue("Year", 2022);
+				pCommand.Parameters.AddWithValue("Year", pOrgUnit.Year);
 				pCommand.Parameters.AddWithValue("OrgUnitID", pOrgUnit.OrgUnitID);
 				pCommand.Parameters.AddWithValue("ContainerID", pOrgUnit.ContainerID);
 				pCommand.ExecuteNonQuery();

@@ -28,7 +28,7 @@ namespace LigareBook
 
 
 	//　形として不要なクラス
-	public class StatusSheet : StudentsCursorEventListener, StaffsLoaderEventListener
+	public class StatusSheet : StudentsLoaderEventListener, StaffsLoaderEventListener
 	{
 		static StatusSheet	pInstance = new StatusSheet();
 
@@ -45,7 +45,7 @@ namespace LigareBook
 		//　生徒一覧を取得
 		public ObservableCollection<Student>	ListupStudents(SQLContext pContext)
 		{
-			var pCursor = new StudentsCursor(this);
+			var pCursor = new StudentsCursor();
 			var pItems = pCursor.Listup(pContext);
 
 			return(pItems);

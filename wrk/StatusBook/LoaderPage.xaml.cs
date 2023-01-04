@@ -44,7 +44,7 @@ namespace StatusBook
 	/// <summary>
 	/// An empty page that can be used on its own or navigated to within a Frame.
 	/// </summary>
-	public sealed partial class LoaderPage : Page, StudentsCursorEventListener, StaffsLoaderEventListener
+	public sealed partial class LoaderPage : Page, StudentsLoaderEventListener, StaffsLoaderEventListener, OrgUnitsLoaderEventListener
 	{
 		List<OptionItem> pLoadOptions;
 		List<OptionItem> pCodePages;
@@ -55,9 +55,10 @@ namespace StatusBook
 
 			var pResLoader = new ResourceLoader();
 			pLoadOptions = new List<OptionItem>();
-			pLoadOptions.Add(new OptionItem() { iNumber = 0, Label = pResLoader.GetString("StudentsList") });
+			pLoadOptions.Add(new OptionItem() { iNumber = 0, Label = pResLoader.GetString("StudentList") });
 			pLoadOptions.Add(new OptionItem() { iNumber = 1, Label = pResLoader.GetString("StaffList") });
-			pLoadOptions.Add(new OptionItem() { iNumber = 2, Label = pResLoader.GetString("DevicesList") });
+			pLoadOptions.Add(new OptionItem() { iNumber = 2, Label = pResLoader.GetString("DeviceList") });
+			pLoadOptions.Add(new OptionItem() { iNumber = 3, Label = pResLoader.GetString("OrgUnitList") });
 			pCodePages = new List<OptionItem>();
 			pCodePages.Add(new OptionItem() { iNumber = 0, Label = pResLoader.GetString("UTF8") });
 			pCodePages.Add(new OptionItem() { iNumber = 1, Label = pResLoader.GetString("SJIS") });
@@ -271,13 +272,16 @@ namespace StatusBook
 			switch (iLoadOption)
 			{
 				case 0:
-					pLoader = new StudentsCursor(this);
+					pLoader = new StudentsLoader(this);
 					break;
 				case 1:
 					pLoader = new StaffsLoader(this);
 					break;
 				case 2:
 					pLoader = new DevicesCursor();
+					break;
+				case 3:
+					pLoader = new OrgUnitsLoader(this);
 					break;
 			}
 
@@ -322,13 +326,16 @@ namespace StatusBook
 			switch (iLoadOption)
 			{
 				case 0:
-					pLoader = new StudentsCursor(this);
+					pLoader = new StudentsLoader(this);
 					break;
 				case 1:
 					pLoader = new StaffsLoader(this);
 					break;
 				case 2:
 					pLoader = new DevicesCursor();
+					break;
+				case 3:
+					pLoader = new OrgUnitsLoader(this);
 					break;
 			}
 
@@ -415,6 +422,11 @@ namespace StatusBook
 				}
 			}
 			this.StaffListView.SetCount(nItems);
+		}
+
+		public void OnCheckedOrgUnits(string pPath, string pCodeSet, SQLContext pContext, int nItems, int nError, List<OrgUnitCSV> pItems)
+		{
+			;
 		}
 	}
 }

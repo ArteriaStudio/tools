@@ -91,10 +91,12 @@ namespace StatusBook
 			{
 				this.FragmentsFrame.Navigate(typeof(DevicesPage));
 			}
+			/*
 			else if (pTargetPage.Equals("PersonsView") == true)
 			{
 				this.FragmentsFrame.Navigate(typeof(PersonsPage));
 			}
+			*/
 			else if (pTargetPage.Equals("StaffsView") == true)
 			{
 				this.FragmentsFrame.Navigate(typeof(StaffsPage));

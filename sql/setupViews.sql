@@ -1,4 +1,5 @@
 ﻿/*　生徒一覧　*/
+DROP VIEW VStudents;
 CREATE VIEW VStudents AS
 SELECT
   MAccounts.AccountID,
@@ -6,6 +7,8 @@ SELECT
   MAccounts.Name,
   MAccounts.Read,
   MAccounts.OrgUnitID,
+  MOrgUnits.Code AS OrgUnitCode,
+  MOrgUnits.Name AS OrgUnitName,
   MAccounts.Status,
   MAccounts.ExpireAt,
   MAccounts.UpdateAt,
@@ -23,7 +26,9 @@ SELECT
   FROM
     MAccounts
       INNER JOIN MGrade ON MAccounts.AccountID = MGrade.AccountID
-      INNER JOIN MStudents ON MAccounts.AccountID = MStudents.AccountID;
+      INNER JOIN MStudents ON MAccounts.AccountID = MStudents.AccountID
+      INNER JOIN MOrgUnits ON MAccounts.OrgUnitID = MOrgUnits.OrgUnitID
+;
 GRANT SELECT ON VStudents TO aploper, cmnoper;
 
 

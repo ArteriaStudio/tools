@@ -82,7 +82,7 @@ namespace StatusBook
 					var pContext = pApp.m_pContext;
 
 					var pOrgUnitsCursor = new OrgUnitsCursor();
-					pOrgUnitsCursor.Insert(pContext, pOrgUnit.ContainerID, pOrgUnit);
+					OrgUnitsCursor.Insert(pContext, pOrgUnit.ContainerID, pOrgUnit);
 					pOrgUnit.OrgUnitID = pOrgUnitsCursor.FetchID(pContext, pOrgUnit.OrgUnitCode);
 
 					m_pListener.OnInsert(pOrgUnit);

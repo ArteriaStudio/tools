@@ -190,6 +190,29 @@ CREATE TABLE MOrgRels (
 GRANT ALL ON MOrgRels TO cmnoper;
 GRANT SELECT, INSERT, UPDATE, DELETE ON MOrgRels TO aploper;
 
+CREATE PROCEDURE UpsertMOrgRels (
+  pYear INTEGER, 
+  pCode VARCHAR(8), 
+  pName VARCHAR(32), 
+  pContainerCode VARCHAR(8)
+) LANGUAGE 'plpgsql' AS $$
+DECLARE
+  pOrgUnitID    UUID;
+  pContainerID  UUID;
+BEGIN
+  SELECT GetOrgUnitID(pContainerCode) INTO pContainerID;
+  CALL UpsertOrgUnit(pYear, pCode, pName, pContainerID);
+END
+$$;
+
+CALL UpsertMOrgRels(2022, '00000003', '教育職員2', '00000000');
+CALL UpsertMOrgRels(2022, '00000007', '教育職員3', '00000002');
+
+
+
+
+
+
 /*　組織単位を追加　*/
 CREATE PROCEDURE AppendOrgUnit (pYear INTEGER, pCode VARCHAR(8), pName VARCHAR(32), pContainerID UUID)
 LANGUAGE SQL AS $$
@@ -198,10 +221,10 @@ LANGUAGE SQL AS $$
 $$;
 
 CREATE FUNCTION GetOrgUnitID (
-  pContainerCode VARCHAR(8)
+  pCode VARCHAR(8)
 ) RETURNS UUID
 LANGUAGE SQL AS $$
-  SELECT OrgUnitID FROM MOrgUnits WHERE Code = pContainerCode;
+  SELECT OrgUnitID FROM MOrgUnits WHERE Code = pCode;
 $$;
 
 DROP PROCEDURE UpsertOrgUnit;
@@ -266,9 +289,10 @@ LANGUAGE SQL AS $$
   UPDATE MOrgRels SET ContainerID = (SELECT OrgUnitID FROM MOrgUnits WHERE Code = pContainerCode) WHERE OrgUnitID = (SELECT OrgUnitID FROM MOrgUnits WHERE Code = pCode);
 $$;
 
+DROP FUNCTION GetRootOrgUnitID;
 CREATE FUNCTION GetRootOrgUnitID() RETURNS UUID
 LANGUAGE SQL AS $$
-  SELECT OrgUnitID FROM MOrgRels WHERE Year = (SELECT Year FROM MCurrent) AND ContainerID = '{00000000-0000-0000-0000-000000000001}';
+  SELECT OrgUnitID FROM MOrgRels WHERE Year = (SELECT Year FROM MCurrent) AND ContainerID = '{00000000-0000-0000-0000-000000000000}';
 $$;
 
 /*　アカウント基本情報　*/
@@ -285,6 +309,8 @@ CREATE TABLE MAccounts (
   DeleteAt      TIMESTAMP    DEFAULT NULL,
   PRIMARY KEY (AccountID),
   FOREIGN KEY (Status) REFERENCES MStatus (Code)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (OrgUnitID) REFERENCES MOrgUnits (OrgUnitID)
     ON DELETE CASCADE ON UPDATE CASCADE,
   UNIQUE (Email)
 );
@@ -312,8 +338,7 @@ CREATE PROCEDURE UpsertAccount (
   pOrgUnit    UUID,
   iStatus     INTEGER)
 LANGUAGE SQL AS $$
-  INSERT INTO MAccounts (Email, Name, Read, OrgUnitID, Status)
-    (SELECT pEmail, pName, pRead, pOrgUnit, iStatus)
+  INSERT INTO MAccounts (Email, Name, Read, OrgUnitID, Status) VALUES (pEmail, pName, pRead, pOrgUnit, iStatus)
   ON CONFLICT ON CONSTRAINT maccounts_email_key
   DO UPDATE SET Email = pEMail, Name = pName, Read = pRead, OrgUnitID = pOrgUnit, Status = iStatus;
 $$;
@@ -350,6 +375,7 @@ CREATE TABLE MOriginalNames (
 GRANT ALL ON MOriginalNames TO cmnoper;
 GRANT SELECT, INSERT, UPDATE, DELETE ON MOriginalNames TO aploper;
 
+DROP PROCEDURE AddOriginalName;
 CREATE PROCEDURE AddOriginalName (
   pEmail      VARCHAR(256),
   pName       VARCHAR(256),
@@ -574,8 +600,7 @@ CREATE PROCEDURE UpsertStudent (
   pBirthAt          TIMESTAMP,
   pEnterAt          TIMESTAMP
 ) LANGUAGE SQL AS $$
-  INSERT INTO MStudents (StudentNumber, AccountID, Gender, BirthAt, EnterAt)
-    (SELECT pStudentNumber, pAccountID, pGender, pBirthAt, pEnterAt)
+  INSERT INTO MStudents (StudentNumber, AccountID, Gender, BirthAt, EnterAt) VALUES (pStudentNumber, pAccountID, pGender, pBirthAt, pEnterAt)
   ON CONFLICT ON CONSTRAINT mstudents_pkey
   DO UPDATE SET Gender = pGender, BirthAt = pBirthAt, EnterAt = pEnterAt;
 $$;
@@ -698,8 +723,8 @@ BEGIN
 END
 $$;
 
-CALL InsertStudentAccount('000000', 'aes@arteria-s.net', '宮部　みゆき', 'みやべ　みゆき', '女', '2000/01/2', '2022/12/22', 2022, '01001', '高校', '2', 'G2', '2');
-CALL UpsertStudentAccount('000000', 'aes@arteria-s.net', '宮部　みゆき', 'みやべ　みゆき', '女', '2000/01/2', '2022/12/22', 2022, '01001', '高校', '2', 'G2', '2');
+CALL InsertStudentAccount('00000000', 'aes@arteria-s.net', '宮部　みゆき', 'みやべ　みゆき', '女', '2000/01/2', '2022/12/22', 2022, '01001', '高校', '2', 'G2', '2');
+CALL UpsertStudentAccount('00000000', 'aes@arteria-s.net', '宮部　みゆき', 'みやべ　みゆき', '女', '2000/01/2', '2022/12/22', 2022, '01001', '高校', '2', 'G2', '2');
 
 
 
