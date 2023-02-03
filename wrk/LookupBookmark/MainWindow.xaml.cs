@@ -1,4 +1,5 @@
-﻿using Microsoft.UI.Xaml;
+﻿using Microsoft.UI.Composition.SystemBackdrops;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
 using Microsoft.UI.Xaml.Data;
@@ -21,11 +22,12 @@ namespace LookupBookmark
 	/// <summary>
 	/// An empty window that can be used on its own or navigated to within a Frame.
 	/// </summary>
-	public sealed partial class MainWindow : Window
+	public partial class MainWindow : Window
 	{
 		public MainWindow()
 		{
 			this.InitializeComponent();
+			//TrySetSystemBackdrop();
 		}
 
 		public void Button_Click(object sender, RoutedEventArgs e)
@@ -33,5 +35,19 @@ namespace LookupBookmark
 
 		}
 
+		MicaController m_backdropController;
+
+		protected bool TrySetSystemBackdrop()
+		{
+			if (MicaController.IsSupported() == true)
+			{
+				m_backdropController = new MicaController()
+				{
+					Kind = MicaKind.BaseAlt
+				};
+				//m_backdropController.AddSystemBackdropTarget(this.As<Microsoft.UI.Composition.ICompositionSupportsSystemBackdrop>());
+			}
+			return(true);
+		}
 	}
 }

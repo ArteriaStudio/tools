@@ -8,9 +8,23 @@
     mc:Ignorable="d">
 
 	<!-- https://docs.microsoft.com/ja-jp/windows/apps/design/controls/text-block -->
-	<StackPanel Orientation="Horizontal" Margin="0,20,0,20">
-		<TextBox x:Name="nameInput" PlaceholderText="Name" HorizontalAlignment="Left" />
-		<Button Content="検索" Click="Button_Click"/>
-	</StackPanel>
-	
+	<Grid>
+		<Grid>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*" />
+			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
+			</Grid.RowDefinitions>
+			<TextBox x:Name="nameInput" PlaceholderText="Name" HorizontalAlignment="Left" Grid.Row="0" />
+			<StackPanel Orientation="Horizontal" Margin="0, 20, 0, 20" Grid.Row="1">
+				<Button Content="検索" Click="Button_Click"/>
+				<Button Content="取消" />
+			</StackPanel>
+		</Grid>
+		<Grid Visibility="Visible">
+			<ProgressBar Value="200" />
+		</Grid>
+	</Grid>
 </Window>
