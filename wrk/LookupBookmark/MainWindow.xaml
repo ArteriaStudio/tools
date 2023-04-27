@@ -16,15 +16,22 @@
 			<Grid.RowDefinitions>
 				<RowDefinition Height="Auto" />
 				<RowDefinition Height="Auto" />
+				<RowDefinition Height="*" />
 			</Grid.RowDefinitions>
-			<TextBox x:Name="nameInput" PlaceholderText="Name" HorizontalAlignment="Left" Grid.Row="0" />
-			<StackPanel Orientation="Horizontal" Margin="0, 20, 0, 20" Grid.Row="1">
+			<TextBox x:Name="nameInput" PlaceholderText="Name" HorizontalAlignment="Left" Grid.Row="0" Grid.Column="0" />
+			<StackPanel Orientation="Horizontal" Margin="0, 20, 0, 20" Grid.Row="1" Grid.Column="0">
 				<Button Content="検索" Click="Button_Click"/>
 				<Button Content="取消" />
 			</StackPanel>
+			<!--
+			<Rectangle Fill="{ThemeResource AcrylicInAppFillColorDefaultBrush}" Grid.Row="2" Grid.Column="0" />
+			<Rectangle Fill="{ThemeResource AcrylicBackgroundFillColorDefaultBrush}" Grid.Row="2" Grid.Column="0" />
+			-->
 		</Grid>
-		<Grid Visibility="Visible">
+		<!--
+		<Grid Visibility="Visible" Canvas.ZIndex="10">
 			<ProgressBar Value="200" />
 		</Grid>
+		-->
 	</Grid>
 </Window>
