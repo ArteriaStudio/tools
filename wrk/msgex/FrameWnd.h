@@ -10,6 +10,7 @@ protected:
 	HWND		m_hWnd;
 
 	HPEN		m_hPen;
+	HPEN		m_hShadowPen;
 	HBRUSH		m_hBrushCaption;
 	HBRUSH		m_hBrushMessage;
 	HFONT		m_hFont;
@@ -20,6 +21,7 @@ protected:
 	COLORREF	m_clrMessageBack;
 
 	void	WriteText(HDC hDC, RECT pClient, COLORREF clrText, COLORREF clrBack, HBRUSH hBackBrush, HFONT hTextFont, UINT uFormat, int nText, LPWSTR pText);
+	void	WriteLine(HDC hDC, RECT pClient, HPEN hPen);
 
 public:
 			 CFrameWnd();

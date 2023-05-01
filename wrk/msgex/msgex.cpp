@@ -13,7 +13,7 @@ CFrameWnd	pFrameWnd;
 // このコード モジュールに含まれる関数の宣言を転送します:
 //ATOM	RegisterWindowClass(HINSTANCE hInstance);
 
-WCHAR	pText[1024] = {TEXT("\n最終帰宅事項まで３０分を切りました。\n\n仕事を整理して帰宅しましょう。\n\n\n管理職より")};
+WCHAR	pText[1024] = {TEXT("\n最終帰宅時刻まで３０分を切りました。\n\n仕事を整理して帰宅しましょう。\n\n\n管理職より")};
 
 int APIENTRY
 wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nCmdShow)
