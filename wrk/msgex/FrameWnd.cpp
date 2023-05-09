@@ -231,7 +231,7 @@ CFrameWnd::OnDraw(HWND hWnd, HDC hDC)
 	LONG	lContentH = h - lCaptionH;
 	LONG	lContentY = lCaptionH;
 
-	pCaption.right = pContent.right = pClient.right;
+	pCaption.right  = pContent.right = pClient.right;
 	pCaption.bottom = lCaptionH;
 	pContent.top    = lCaptionH;
 	pContent.bottom = lContentH + lCaptionH;
