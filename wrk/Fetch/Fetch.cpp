@@ -200,14 +200,11 @@ Fetch()
 
 	// Specify an HTTP server.
 	if( hSession )
-		hConnect = ::WinHttpConnect( hSession, L"www.microsoft.com", INTERNET_DEFAULT_HTTPS_PORT, 0 );
+		hConnect = ::WinHttpConnect(hSession, L"www.microsoft.com", INTERNET_DEFAULT_HTTPS_PORT, 0);
 
 	// Create an HTTP request handle.
 	if( hConnect )
-		hRequest = ::WinHttpOpenRequest( hConnect, L"GET", NULL,
-								   NULL, WINHTTP_NO_REFERER, 
-								   WINHTTP_DEFAULT_ACCEPT_TYPES, 
-								   WINHTTP_FLAG_SECURE );
+		hRequest = ::WinHttpOpenRequest(hConnect, L"GET", NULL, NULL, WINHTTP_NO_REFERER, WINHTTP_DEFAULT_ACCEPT_TYPES, WINHTTP_FLAG_SECURE);
 
 	// Send a request.（ここで実際にコネクションの確立が開始される）
 	if (hRequest) {
