@@ -1,4 +1,9 @@
-# tools"
+﻿# tools"
 DeleteProfile
-�@���[�U�[�v���t�@�C�����폜����R�}���h�ł��B
-�@���́AWindows�̕W���R�}���h�ɑ��݂��Ȃ��̂��킩��܂���B
+　ユーザープロファイルを削除するコマンドです。
+　何故、Windowsの標準コマンドに存在しないのかわかりません。
+gdsctl
+　Google Workspaceのディレクトリを操作する。
+　サービスアカウントで実行するので、Cloudコンソールで事前に幾つかの手続きを必要とする。
+
+
