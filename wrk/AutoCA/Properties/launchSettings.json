@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "AutoCA (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "AutoCA (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
