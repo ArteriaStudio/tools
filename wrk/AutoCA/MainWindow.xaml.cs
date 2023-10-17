@@ -87,8 +87,23 @@ namespace AutoCA
 			File.WriteAllBytes("D:/tmp/certificate.req", pBytes);
 		}
 
-		private void myButton_Click_1(object sender, RoutedEventArgs e)
+		private void MenuItemView_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
+			foreach (var pAddItem in e.AddedItems)
+			{
+				var pItem = pAddItem as ListViewItem;
+				Debug.WriteLine($"{pItem} " + "Tag=" + pItem.Tag);
+			}
+		}
+
+		private void NavigationView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
+		{
+			var clickedItem = args.SelectedItem;
+			var clickedItemContainer = args.SelectedItemContainer;
+
+			var pItem = clickedItem as NavigationViewItem;
+			Debug.WriteLine("Tag=" + pItem.Tag);
+
 
 		}
 	}

@@ -8,11 +8,20 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-		<TextBlock>テキストブロック</TextBlock>
-		<TextBox x:Name="inpFilepath" PlaceholderText="Name" HorizontalAlignment="Left" Grid.Row="0" Grid.Column="0" />
-		<Button x:Name="createRequest" Click="createRequest_Click">署名要求</Button>
-		<Button x:Name="createCertificate" Click="createCertificate_Click">証明書に署名</Button>
-		<Button x:Name="createRootCert" Click="createRootCert_Click">ルート認証局証明書を生成</Button>
-	</StackPanel>
+	<NavigationView PaneDisplayMode="Top" SelectionChanged="NavigationView_SelectionChanged">
+		<NavigationView.MenuItems>
+			<NavigationViewItem Tag="a" Content="Nav Item A"/>
+			<NavigationViewItem Tag="B" Content="Nav Item B"/>
+			<NavigationViewItem Tag="C" Content="Nav Item C"/>
+			<NavigationViewItem Tag="D" Content="Nav Item D">
+				<NavigationViewItem.MenuItems>
+					<NavigationViewItem Tag="E" Content="Nav Item E"/>
+					<NavigationViewItem Tag="F" Content="Nav Item F"/>
+				</NavigationViewItem.MenuItems>
+			</NavigationViewItem>
+		</NavigationView.MenuItems>
+
+		<Frame x:Name="ContentFrame"/>
+	</NavigationView>
+
 </Window>
