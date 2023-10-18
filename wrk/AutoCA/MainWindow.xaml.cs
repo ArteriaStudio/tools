@@ -30,6 +30,7 @@ namespace AutoCA
 		public MainWindow()
 		{
 			this.InitializeComponent();
+			this.ContentFrame.Navigate(typeof(DefaultPage));
 		}
 
 		private void createRootCert_Click(object sender, RoutedEventArgs e)
@@ -104,7 +105,26 @@ namespace AutoCA
 			var pItem = clickedItem as NavigationViewItem;
 			Debug.WriteLine("Tag=" + pItem.Tag);
 
-
+			switch (pItem.Tag.ToString()) {
+			case "ListupCertificate":
+				ContentFrame.Navigate(typeof(DefaultPage));
+				break;
+			case "CreateCertificate":
+				ContentFrame.Navigate(typeof(IssuePage));
+				break;
+			case "Request":
+				ContentFrame.Navigate(typeof(RequestPage));
+				break;
+			case "Signing":
+				ContentFrame.Navigate(typeof(SigningPage));
+				break;
+			case "CreateCA":
+				ContentFrame.Navigate(typeof(CreateCAPage));
+				break;
+			case "Settings":
+				ContentFrame.Navigate(typeof(SettingsPage));
+				break;
+			}
 		}
 	}
 }

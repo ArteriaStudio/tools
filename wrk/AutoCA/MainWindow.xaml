@@ -8,17 +8,20 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-	<NavigationView PaneDisplayMode="Top" SelectionChanged="NavigationView_SelectionChanged">
+	<NavigationView PaneDisplayMode="Left" IsPaneOpen="False" SelectionChanged="NavigationView_SelectionChanged">
+		<NavigationView.PaneHeader>
+			<Image Name="PaneHeader" Source="ms-appx:///Assets/AutoCA.png" />
+		</NavigationView.PaneHeader>
 		<NavigationView.MenuItems>
-			<NavigationViewItem Tag="a" Content="Nav Item A"/>
-			<NavigationViewItem Tag="B" Content="Nav Item B"/>
-			<NavigationViewItem Tag="C" Content="Nav Item C"/>
-			<NavigationViewItem Tag="D" Content="Nav Item D">
+			<NavigationViewItem Tag="ListupCertificate" Icon="Home" Content="発行履歴と失効処理"/>
+			<NavigationViewItem Tag="CreateCertificate" Icon="Add" Content="証明書を作成"/>
+			<NavigationViewItem Tag="PrimitiveProcedure" Icon="Caption" Content="プリミティヴ">
 				<NavigationViewItem.MenuItems>
-					<NavigationViewItem Tag="E" Content="Nav Item E"/>
-					<NavigationViewItem Tag="F" Content="Nav Item F"/>
+					<NavigationViewItem Tag="Request" Icon="Send" Content="署名要求を作成"/>
+					<NavigationViewItem Tag="Signing" Icon="Accept" Content="署名を実行"/>
 				</NavigationViewItem.MenuItems>
 			</NavigationViewItem>
+			<NavigationViewItem Tag="CreateCA" Icon="Admin" Content="ルート証明書を作成"/>
 		</NavigationView.MenuItems>
 
 		<Frame x:Name="ContentFrame"/>

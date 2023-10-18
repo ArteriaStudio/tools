@@ -88,6 +88,11 @@
 								   TintOpacity="0.01"/>
 							<ThemeShadow x:Key="CardShadow" />
 
+							<Color x:Key="CaptionBackgroundColor">#444444</Color>
+							<AcrylicBrush x:Key="CaptionBackground"
+								   TintColor="{ThemeResource CaptionBackgroundColor}"
+								   TintOpacity="0.20"/>
+
 							<Style x:Key="CardStyleStackPanel" TargetType="StackPanel">
 								<Setter Property="Background" Value="{ThemeResource CardBackground}" />
 								<Setter Property="CornerRadius" Value="6" />
@@ -104,6 +109,20 @@
 								<Setter Property="Background" Value="{ThemeResource CardBackground}" />
 								<Setter Property="CornerRadius" Value="6" />
 								<Setter Property="Shadow" Value="{StaticResource CardShadow}" />
+							</Style>
+
+							<Style x:Key="BodyLargeTextBlockStyle" TargetType="TextBlock" BasedOn="{StaticResource BaseTextBlockStyle}">
+								<Setter Property="FontSize" Value="18" />
+								<Setter Property="FontWeight" Value="Normal" />
+							</Style>
+
+							<Style x:Key="CaptionPane" TargetType="Grid">
+								<Setter Property="Background" Value="{StaticResource CaptionBackgroundColor}" />
+								<Setter Property="Shadow" Value="{StaticResource CardShadow}" />
+							</Style>
+
+							<Style x:Key="CaptionText" TargetType="TextBlock" BasedOn="{StaticResource BodyLargeTextBlockStyle}">
+								<Setter Property="Margin" Value="8,8,8,8" />
 							</Style>
 							
 						</ResourceDictionary>
