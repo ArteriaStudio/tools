@@ -30,11 +30,14 @@ namespace AutoCA
 			{
 				return(false);
 			}
+
+			//　組織プロファイル（基礎情報）を入力
 			m_pOrgProfile = LoadOrgProfile(m_pConnection);
 			if (m_pOrgProfile == null)
 			{
 				m_pOrgProfile = new OrgProfile();
 			}
+
 
 			return (true);
 		}
