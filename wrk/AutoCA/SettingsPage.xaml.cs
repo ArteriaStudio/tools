@@ -7,6 +7,7 @@ using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -23,16 +24,44 @@ namespace AutoCA
 	/// </summary>
 	public sealed partial class SettingsPage : Page
 	{
-		public List<Parameter> pParameters;
+		private OrgProfile	m_pProfile;
+
 		public SettingsPage()
 		{
 			this.InitializeComponent();
-			pParameters = new List<Parameter>();
-			pParameters.Add(new Parameter() { ItemName = "çÄñ⁄ñºÇP", ItemValue = "v" });
-			pParameters.Add(new Parameter() { ItemName = "çÄñ⁄ñºÇQ", ItemValue = "v" });
-			pParameters.Add(new Parameter() { ItemName = "çÄñ⁄ñºÇR", ItemValue = "v" });
-			pParameters.Add(new Parameter() { ItemName = "çÄñ⁄ñºÇS", ItemValue = "v" });
-			pParameters.Add(new Parameter() { ItemName = "çÄñ⁄ñºÇT", ItemValue = "v" });
+			var pApp = App.Current as AutoCA.App;
+			var pProfile = pApp.m_pProfile;
+			m_pProfile = pProfile.m_pOrgProfile;
+		}
+
+		private void Save_Click(object sender, RoutedEventArgs e)
+		{
+			if (m_pProfile.OrgName == null) {
+				return;
+			}
+			if (m_pProfile.OrgUnitName == null)
+			{
+				return;
+			}
+			if (m_pProfile.CountryName == null)
+			{
+				return;
+			}
+			if (m_pProfile.ProvinceName == null)
+			{
+				return;
+			}
+			if (m_pProfile.LocalityName == null)
+			{
+				return;
+			}
+
+			/*
+			Debug.WriteLine(m_pProfile.OrgKey);
+			*/
+			var pApp = App.Current as AutoCA.App;
+			var pProfile = pApp.m_pProfile;
+			pProfile.Save();
 		}
 	}
 }
