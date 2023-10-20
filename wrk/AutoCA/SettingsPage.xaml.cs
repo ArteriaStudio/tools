@@ -56,9 +56,6 @@ namespace AutoCA
 				return;
 			}
 
-			/*
-			Debug.WriteLine(m_pProfile.OrgKey);
-			*/
 			var pApp = App.Current as AutoCA.App;
 			var pProfile = pApp.m_pProfile;
 			pProfile.Save();

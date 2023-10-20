@@ -35,7 +35,7 @@
 			<TextBox x:Name="ProvinceName" Margin="8,8,8,8" Header="都道府県（stateOrProvinceName）" PlaceholderText=""  Text="{x:Bind m_pProfile.ProvinceName, Mode=TwoWay}"></TextBox>
 			<TextBox x:Name="CountryName"  Margin="8,8,8,8" Header="国名（countryName）" PlaceholderText=""  Text="{x:Bind m_pProfile.CountryName, Mode=TwoWay}"></TextBox>
 			<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-				<Button Name="Save" Margin="8,8,8,8" IsEnabled="True" Style="{StaticResource AccentButtonStyle}" Content="保存" Click="Save_Click" />
+				<Button Name="Save" Margin="8,8,8,8" IsEnabled="False" Style="{StaticResource AccentButtonStyle}" Content="保存" Click="Save_Click" />
 			</StackPanel>
 		</StackPanel>
 	</Grid>
