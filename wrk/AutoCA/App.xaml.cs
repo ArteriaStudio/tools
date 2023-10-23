@@ -21,6 +21,25 @@ using Windows.Foundation.Collections;
 
 namespace AutoCA
 {
+	public class PrepareFlags
+	{
+		public bool	bIsIdentity;	//　認証局の主体情報が登録されている。
+		public bool	bIsExistCA; 	//　有効な認証局証明書が存在する。
+
+		public PrepareFlags()
+		{
+			bIsIdentity = false;
+			bIsExistCA = false;
+		}
+
+		//　環境の前提条件の状態を検査
+		public void Check()
+		{
+			bIsIdentity = false;
+			bIsExistCA = false;
+		}
+	}
+
 	/// <summary>
 	/// Provides application-specific behavior to supplement the default Application class.
 	/// </summary>
@@ -43,11 +62,14 @@ namespace AutoCA
 		{
 			m_pProfile = new Profile();
 			m_pProfile.Load();
+			m_pPrepareFlags = new PrepareFlags();
+			m_pPrepareFlags.Check();
 			m_window = new MainWindow();
 			m_window.Activate();
 		}
 
 		private Window m_window;
 		public Profile m_pProfile;
+		public PrepareFlags m_pPrepareFlags;	//　前提条件検査結果（）
 	}
 }

@@ -14,8 +14,8 @@ namespace AutoCA
 		public static CertificateRequest CreateSignRequest(OrgProfile pOrgProfile, string pCommonName)
 		{
 			//　署名要求を生成（der形式）
-			string pSubjectEx = @"cn={pCommonName},";
-			string pSubject = "cn=Arteria-RCA";
+			string pSubject = @"cn={pCommonName},";
+			string pSubjectExm = "cn=Arteria-RCA";
 			ECDsaCng pKey = new ECDsaCng();
 			CertificateRequest pRequest = new CertificateRequest(pSubject, pKey, HashAlgorithmName.SHA256);
 			//　CA制約：証明書が認証局であるか否かを指定する。
@@ -50,9 +50,9 @@ namespace AutoCA
 
 
 		//　ルート認証局の証明書を作成
-		public static bool CreateRootCA(OrgProfile pOrgProfile)
+		public static bool CreateRootCA(OrgProfile pOrgProfile, string pCommonName)
 		{
-			var pRequest = CreateSignRequest(pOrgProfile);
+			var pRequest = CreateSignRequest(pOrgProfile, pCommonName);
 			if (pRequest == null)
 			{
 				return(false);

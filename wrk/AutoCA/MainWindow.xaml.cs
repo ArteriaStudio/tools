@@ -30,6 +30,7 @@ namespace AutoCA
 		public MainWindow()
 		{
 			this.InitializeComponent();
+			var pApp = App.Current as App;
 			this.ContentFrame.Navigate(typeof(DefaultPage));
 		}
 
