@@ -7,6 +7,7 @@ using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -26,6 +27,28 @@ namespace AutoCA
 		public CreateCAPage()
 		{
 			this.InitializeComponent();
+			pCommonName = "";
+		}
+
+		private void Create_Click(object sender, RoutedEventArgs e)
+		{
+			Debug.WriteLine(pCommonName);
+			var pApp = App.Current as AutoCA.App;
+			CertificateProvider.CreateRootCA(pApp.m_pProfile.m_pOrgProfile, pCommonName);
+
+		}
+		private string pCommonName; //Å@îFèÿã«ÇÃã§í ñº
+
+		private void CN_TextChanged(object sender, TextChangedEventArgs e)
+		{
+			if (CN.Text.Length <= 0)
+			{
+				Create.IsEnabled = false;
+			}
+			else
+			{
+				Create.IsEnabled = true;
+			}
 		}
 	}
 }

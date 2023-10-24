@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
@@ -13,10 +15,16 @@ namespace AutoCA
 		//　署名要求を生成
 		public static CertificateRequest CreateSignRequest(OrgProfile pOrgProfile, string pCommonName)
 		{
-			//　署名要求を生成（der形式）
-			string pSubject = @"cn={pCommonName},";
-			string pSubjectExm = "cn=Arteria-RCA";
+			string pSubject = $"cn={pCommonName},";
+			//string pSubjectExm = "cn=Arteria-RCA";
+			
+			//　秘密鍵を生成（楕円曲線方式）
 			ECDsaCng pKey = new ECDsaCng();
+			var pTextOfKey1 = pKey.ExportPkcs8PrivateKey();
+			var pText1 = Convert.ToBase64String(pTextOfKey1);
+			Debug.WriteLine("PrivateKey(PKCS#8):" + pText1);
+
+			//　署名要求を生成（der形式）
 			CertificateRequest pRequest = new CertificateRequest(pSubject, pKey, HashAlgorithmName.SHA256);
 			//　CA制約：証明書が認証局であるか否かを指定する。
 			pRequest.CertificateExtensions.Add(new X509BasicConstraintsExtension(true, true, 2, true));
@@ -31,13 +39,23 @@ namespace AutoCA
 			};
 			pRequest.CertificateExtensions.Add(new X509EnhancedKeyUsageExtension(pEnhancedKeyUsageFlags, false));
 
-			var pNotBefore = DateTimeOffset.UtcNow;
-			var pNotAfter = DateTimeOffset.UtcNow.AddDays(365);
+			var pTextOfKey = pKey.ExportPkcs8PrivateKey();
+			var pText = Convert.ToBase64String(pTextOfKey);
+			Debug.WriteLine("PrivateKey(PKCS#8):" + pText);
+
+			var pBytesOfKey = pKey.ExportECPrivateKey();
+			File.WriteAllBytes("D:/tmp/256.txt", pBytesOfKey);
+					
+			var pText2 = Convert.ToBase64String(pBytesOfKey);
+			Debug.WriteLine("PrivateKey():" + pText2);
+
 			/*
-			var pBytes = pRequest.CreateSigningRequest();
-			var pRootCert = pRequest.CreateSelfSigned(pNotBefore, pNotAfter);
-*/
-			return(pRequest);
+						var pNotBefore = DateTimeOffset.UtcNow;
+						var pNotAfter = DateTimeOffset.UtcNow.AddDays(365);
+						var pBytes = pRequest.CreateSigningRequest();
+						var pRootCert = pRequest.CreateSelfSigned(pNotBefore, pNotAfter);
+			*/
+			return (pRequest);
 		}
 
 		//　自己署名証明書を作成
@@ -50,21 +68,41 @@ namespace AutoCA
 
 
 		//　ルート認証局の証明書を作成
-		public static bool CreateRootCA(OrgProfile pOrgProfile, string pCommonName)
+		public static CertficateItem CreateRootCA(OrgProfile pOrgProfile, string pCommonName)
 		{
 			var pRequest = CreateSignRequest(pOrgProfile, pCommonName);
 			if (pRequest == null)
 			{
-				return(false);
+				return(null);
 			}
+
+			//　デバッグ用：署名要求のバイト列を生成
+			var pBytes = pRequest.CreateSigningRequest();
+			Debug.WriteLine(pBytes);
+
 			var iLifeDays = 365 * 10;
 			var pCertificate = CreateSelfCertificate(pRequest, iLifeDays);
 			if (pCertificate == null)
 			{
-				return (false);
+				return (null);
 			}
+			var pPrivateKey = pCertificate.GetECDsaPrivateKey();
+			var pPublicKey = pPrivateKey.ExportSubjectPublicKeyInfo();
 
-			return(true);
+			Debug.WriteLine("PrivateKey: "+Convert.ToBase64String(pPrivateKey.ExportECPrivateKey()));
+			Debug.WriteLine("PublicKey: "+Convert.ToBase64String(pPublicKey));
+
+			var pCertificateItem = new CertficateItem();
+			pCertificateItem.SerialNumber = 0;
+			pCertificateItem.CommonName = "";
+			pCertificateItem.Revoked = 0;
+			pCertificateItem.PemData = "";
+
+
+
+
+
+			return (pCertificateItem);
 		}
 	}
 }

@@ -11,6 +11,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Xml.Linq;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 
@@ -34,24 +35,52 @@ namespace AutoCA
 			m_pProfile = pProfile.m_pOrgProfile;
 		}
 
+		private bool IsNotNull(string pText)
+		{
+			if (pText == null)
+			{
+				return(false);
+			}
+			if (pText.Length <= 0)
+			{
+				return (false);
+			}
+			return (true);
+		}
+
+		private bool Varidate()
+		{
+			if (IsNotNull(CaName.Text) == false)
+			{
+				return(false);
+			}
+			if (IsNotNull(OrgName.Text) == false)
+			{
+				return (false);
+			}
+			if (IsNotNull(OrgUnitName.Text) == false)
+			{
+				return (false);
+			}
+			if (IsNotNull(ProvinceName.Text) == false)
+			{
+				return (false);
+			}
+			if (IsNotNull(LocalityName.Text) == false)
+			{
+				return (false);
+			}
+			if (IsNotNull(CountryName.Text) == false)
+			{
+				return (false);
+			}
+
+			return (true);
+		}
+
 		private void Save_Click(object sender, RoutedEventArgs e)
 		{
-			if (m_pProfile.OrgName == null) {
-				return;
-			}
-			if (m_pProfile.OrgUnitName == null)
-			{
-				return;
-			}
-			if (m_pProfile.CountryName == null)
-			{
-				return;
-			}
-			if (m_pProfile.ProvinceName == null)
-			{
-				return;
-			}
-			if (m_pProfile.LocalityName == null)
+			if (Varidate() == false)
 			{
 				return;
 			}
@@ -59,6 +88,22 @@ namespace AutoCA
 			var pApp = App.Current as AutoCA.App;
 			var pProfile = pApp.m_pProfile;
 			pProfile.Save();
+			Save.IsEnabled = false;
+		}
+
+
+		private void Settings_TextChanged(object sender, TextChangedEventArgs e)
+		{
+			if (Varidate() == false)
+			{
+				Save.IsEnabled = false;
+			}
+			else
+			{
+				Save.IsEnabled = true;
+			}
+
+			return;
 		}
 	}
 }

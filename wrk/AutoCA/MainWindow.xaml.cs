@@ -31,7 +31,21 @@ namespace AutoCA
 		{
 			this.InitializeComponent();
 			var pApp = App.Current as App;
-			this.ContentFrame.Navigate(typeof(DefaultPage));
+			if (pApp.m_pPrepareFlags.bIsIdentity == false)
+			{
+				//　設定情報に遷移
+				this.ContentFrame.Navigate(typeof(SettingsPage));
+			}
+			else if (pApp.m_pPrepareFlags.bIsExistCA == false)
+			{
+				//　認証局証明書発行に遷移
+				this.ContentFrame.Navigate(typeof(CreateCAPage));
+			}
+			else
+			{
+				//　既定の初期画面に遷移
+				this.ContentFrame.Navigate(typeof(DefaultPage));
+			}
 		}
 
 		private void createRootCert_Click(object sender, RoutedEventArgs e)

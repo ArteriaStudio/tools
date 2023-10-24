@@ -12,6 +12,7 @@ namespace AutoCA
 	{
 		public OrgProfile() { }
 		public long OrgKey { get; set; }
+		public string CaName { get; set; }
 		public string OrgName { get; set; }
 		public string OrgUnitName { get; set; }
 		public string LocalityName { get; set; }

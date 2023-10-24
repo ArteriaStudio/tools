@@ -33,9 +33,14 @@ namespace AutoCA
 		}
 
 		//　環境の前提条件の状態を検査
-		public void Check()
+		public void Check(Profile pProfile)
 		{
-			bIsIdentity = false;
+			//　認証局の主体情報が登録されているか？
+			if (pProfile.m_pOrgProfile.OrgName != null)
+			{
+				bIsIdentity = true;
+			}
+			//　有効な認証局証明書が存在するか？
 			bIsExistCA = false;
 		}
 	}
@@ -63,13 +68,16 @@ namespace AutoCA
 			m_pProfile = new Profile();
 			m_pProfile.Load();
 			m_pPrepareFlags = new PrepareFlags();
-			m_pPrepareFlags.Check();
+			m_pPrepareFlags.Check(m_pProfile);
+			m_pCertsStock = new CertsStock();
+			m_pCertsStock.Initialize(m_pProfile.m_pOrgProfile);
 			m_window = new MainWindow();
 			m_window.Activate();
 		}
 
 		private Window m_window;
 		public Profile m_pProfile;
-		public PrepareFlags m_pPrepareFlags;	//　前提条件検査結果（）
+		public PrepareFlags m_pPrepareFlags;		//　前提条件検査結果（）
+		public CertsStock m_pCertsStock;
 	}
 }
