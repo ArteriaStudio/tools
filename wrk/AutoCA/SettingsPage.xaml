@@ -28,13 +28,43 @@
 			<TextBlock Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource CaptionText}"></TextBlock>
 		</Grid>
 		<StackPanel Grid.Column="0" Grid.Row="1" Orientation="Vertical" Style="{StaticResource CardStyleStackPanel}">
-			<TextBlock Margin="8,8,8,8" HorizontalAlignment="Left" VerticalAlignment="Center" Style="{StaticResource SubtitleTextBlockStyle}">認証局の表示項目</TextBlock>
-			<TextBox x:Name="CaName"       Margin="8,8,8,8" Header="認証局名（caName）" PlaceholderText="" Text="{x:Bind m_pProfile.CaName, Mode=TwoWay}" TextChanged="Settings_TextChanged" />
-			<TextBox x:Name="OrgName"      Margin="8,8,8,8" Header="組織名（organizationName）" PlaceholderText="" Text="{x:Bind m_pProfile.OrgName, Mode=TwoWay}" TextChanged="Settings_TextChanged" />
-			<TextBox x:Name="OrgUnitName"  Margin="8,8,8,8" Header="部署名（organizationalUnitName）" PlaceholderText=""  Text="{x:Bind m_pProfile.OrgUnitName, Mode=TwoWay}" TextChanged="Settings_TextChanged" />
-			<TextBox x:Name="LocalityName" Margin="8,8,8,8" Header="市町村（localityName）" PlaceholderText=""  Text="{x:Bind m_pProfile.LocalityName, Mode=TwoWay}" TextChanged="Settings_TextChanged" />
-			<TextBox x:Name="ProvinceName" Margin="8,8,8,8" Header="都道府県（stateOrProvinceName）" PlaceholderText=""  Text="{x:Bind m_pProfile.ProvinceName, Mode=TwoWay}" TextChanged="Settings_TextChanged" />
-			<TextBox x:Name="CountryName"  Margin="8,8,8,8" Header="国名（countryName）" PlaceholderText=""  Text="{x:Bind m_pProfile.CountryName, Mode=TwoWay}" TextChanged="Settings_TextChanged" />
+			<TextBlock Margin="8,8,8,8" HorizontalAlignment="Left" VerticalAlignment="Center" Style="{StaticResource SubtitleTextBlockStyle}">データベース接続情報</TextBlock>
+			<TextBox x:Name="HostName"     Margin="8,8,8,8" Header="サーバのホスト名（HostName）" PlaceholderText="" Text="{x:Bind m_pDbParams.HostName, Mode=TwoWay}" TextChanged="Settings_TextChanged" />
+			<TextBox x:Name="InstanceName" Margin="8,8,8,8" Header="インスタンス名（InstanceName）" PlaceholderText="" Text="{x:Bind m_pDbParams.InstanceName, Mode=TwoWay}" TextChanged="Settings_TextChanged" />
+			<TextBox x:Name="SchemaName"   Margin="8,8,8,8" Header="スキーマ名（SchemaName）" PlaceholderText=""  Text="{x:Bind m_pDbParams.SchemaName, Mode=TwoWay}" TextChanged="Settings_TextChanged" />
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="Auto"/>
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="*"/>
+				</Grid.RowDefinitions>
+				<TextBox x:Name="ClientKey"      Grid.Column="0" Margin="8,8,8,8" Header="クライアント秘密鍵（ClientSecretKey）" PlaceholderText=""  Text="{x:Bind m_pDbParams.ClientKey, Mode=TwoWay}" TextChanged="Settings_TextChanged" />
+				<Button x:Name="BrowseClientKey" Grid.Column="1" Margin="8,8,8,8" Click="BrowseClientKey_Click" Content="ファイルを選択"/>
+			</Grid>
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="Auto"/>
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="*"/>
+				</Grid.RowDefinitions>
+				<TextBox x:Name="ClientCrt"      Grid.Column="0" Margin="8,8,8,8" Header="クライアント証明書（ClientCertificate）" PlaceholderText=""  Text="{x:Bind m_pDbParams.ClientCrt, Mode=TwoWay}" TextChanged="Settings_TextChanged" />
+				<Button x:Name="BrowseClientCrt" Grid.Column="1" Margin="8,8,8,8" Click="BrowseClienCrt_Click" Content="ファイルを選択"/>
+			</Grid>
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="Auto"/>
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="*"/>
+				</Grid.RowDefinitions>
+				<TextBox x:Name="RootCACrt"      Grid.Column="0" Margin="8,8,8,8" Header="ルート（＝信頼端点）証明書（RootCertificate）" PlaceholderText=""  Text="{x:Bind m_pDbParams.TrustCrt, Mode=TwoWay}" TextChanged="Settings_TextChanged" />
+				<Button x:Name="BrowseRootCACrt" Grid.Column="1" Margin="8,8,8,8" Click="BrowseRootCACrt_Click" Content="ファイルを選択"/>
+			</Grid>
 			<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
 				<Button Name="Save" Margin="8,8,8,8" IsEnabled="False" Style="{StaticResource AccentButtonStyle}" Content="保存" Click="Save_Click" />
 			</StackPanel>

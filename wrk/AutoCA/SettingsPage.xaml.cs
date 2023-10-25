@@ -14,6 +14,9 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Xml.Linq;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage.Pickers;
+using Windows.Storage;
+using Arteria_s.UI.Base;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -25,14 +28,16 @@ namespace AutoCA
 	/// </summary>
 	public sealed partial class SettingsPage : Page
 	{
-		private OrgProfile	m_pProfile;
+		private DbParams m_pDbParams;
+		private bool m_bIsDirty;
 
 		public SettingsPage()
 		{
 			this.InitializeComponent();
 			var pApp = App.Current as AutoCA.App;
 			var pProfile = pApp.m_pProfile;
-			m_pProfile = pProfile.m_pOrgProfile;
+			m_pDbParams = pProfile.m_pDbParams;
+			m_bIsDirty = false;
 		}
 
 		private bool IsNotNull(string pText)
@@ -50,27 +55,27 @@ namespace AutoCA
 
 		private bool Varidate()
 		{
-			if (IsNotNull(CaName.Text) == false)
+			if (IsNotNull(HostName.Text) == false)
 			{
 				return(false);
 			}
-			if (IsNotNull(OrgName.Text) == false)
+			if (IsNotNull(InstanceName.Text) == false)
 			{
 				return (false);
 			}
-			if (IsNotNull(OrgUnitName.Text) == false)
+			if (IsNotNull(SchemaName.Text) == false)
 			{
 				return (false);
 			}
-			if (IsNotNull(ProvinceName.Text) == false)
+			if (IsNotNull(ClientKey.Text) == false)
 			{
 				return (false);
 			}
-			if (IsNotNull(LocalityName.Text) == false)
+			if (IsNotNull(ClientCrt.Text) == false)
 			{
 				return (false);
 			}
-			if (IsNotNull(CountryName.Text) == false)
+			if (IsNotNull(RootCACrt.Text) == false)
 			{
 				return (false);
 			}
@@ -86,8 +91,7 @@ namespace AutoCA
 			}
 
 			var pApp = App.Current as AutoCA.App;
-			var pProfile = pApp.m_pProfile;
-			pProfile.Save();
+			var bResult = pApp.m_pProfile.Save();
 			Save.IsEnabled = false;
 		}
 
@@ -100,10 +104,106 @@ namespace AutoCA
 			}
 			else
 			{
-				Save.IsEnabled = true;
+				if (m_bIsDirty == true)
+				{
+					Save.IsEnabled = true;
+				}
 			}
+			m_bIsDirty = true;
 
 			return;
+		}
+
+		private async void BrowseClienCrt_Click(object sender, RoutedEventArgs e)
+		{
+			//　コモンダイアログを使う道は、忘れるか諦めるのが好ましい（2022/10/12）
+			//　最適解：エクスプローラでファイルをドロップしろと利用者に伝える
+			//　相互運用機能に頼る（2022/10/15）
+			var pApp = Application.Current as App;
+			var pOpenPicker = PickerHelper.NewFileOpenPicker(pApp.m_pWindow);
+
+			pOpenPicker.ViewMode = PickerViewMode.List;
+			pOpenPicker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
+			pOpenPicker.FileTypeFilter.Add(".csv");
+			pOpenPicker.FileTypeFilter.Add("*");
+			//　FileTypeFilterのリストから初期表示に使うフィルターを選択する方法は未実装（2023/01/22）
+
+			// 2023/01/22　ChatGPT Suggestion is follow.
+			// pOpenPicker.SuggestedFileType = ".csv";
+			// pOpenPicker.SuggestedFileType = pOpenPicker.FileTypeFilter[1];
+			//　いや理想的な実装はそうだけど、それ（SuggestedFileType）が実装されていないのですよ…
+
+			StorageFile file = await pOpenPicker.PickSingleFileAsync();
+			if (file != null)
+			{
+				this.ClientCrt.Text = file.Path;
+			}
+			else
+			{
+				;
+			}
+		}
+
+		private async void BrowseRootCACrt_Click(object sender, RoutedEventArgs e)
+		{
+			//　コモンダイアログを使う道は、忘れるか諦めるのが好ましい（2022/10/12）
+			//　最適解：エクスプローラでファイルをドロップしろと利用者に伝える
+			//　相互運用機能に頼る（2022/10/15）
+			var pApp = Application.Current as App;
+			var pOpenPicker = PickerHelper.NewFileOpenPicker(pApp.m_pWindow);
+
+			pOpenPicker.ViewMode = PickerViewMode.List;
+			pOpenPicker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
+			pOpenPicker.FileTypeFilter.Add(".csv");
+			pOpenPicker.FileTypeFilter.Add("*");
+			//　FileTypeFilterのリストから初期表示に使うフィルターを選択する方法は未実装（2023/01/22）
+
+			// 2023/01/22　ChatGPT Suggestion is follow.
+			// pOpenPicker.SuggestedFileType = ".csv";
+			// pOpenPicker.SuggestedFileType = pOpenPicker.FileTypeFilter[1];
+			//　いや理想的な実装はそうだけど、それ（SuggestedFileType）が実装されていないのですよ…
+
+			StorageFile file = await pOpenPicker.PickSingleFileAsync();
+			if (file != null)
+			{
+				this.RootCACrt.Text = file.Path;
+			}
+			else
+			{
+				;
+			}
+
+		}
+
+		private async void BrowseClientKey_Click(object sender, RoutedEventArgs e)
+		{
+			//　コモンダイアログを使う道は、忘れるか諦めるのが好ましい（2022/10/12）
+			//　最適解：エクスプローラでファイルをドロップしろと利用者に伝える
+			//　相互運用機能に頼る（2022/10/15）
+			var pApp = Application.Current as App;
+			var pOpenPicker = PickerHelper.NewFileOpenPicker(pApp.m_pWindow);
+
+			pOpenPicker.ViewMode = PickerViewMode.List;
+			pOpenPicker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
+			pOpenPicker.FileTypeFilter.Add(".csv");
+			pOpenPicker.FileTypeFilter.Add("*");
+			//　FileTypeFilterのリストから初期表示に使うフィルターを選択する方法は未実装（2023/01/22）
+
+			// 2023/01/22　ChatGPT Suggestion is follow.
+			// pOpenPicker.SuggestedFileType = ".csv";
+			// pOpenPicker.SuggestedFileType = pOpenPicker.FileTypeFilter[1];
+			//　いや理想的な実装はそうだけど、それ（SuggestedFileType）が実装されていないのですよ…
+
+			StorageFile file = await pOpenPicker.PickSingleFileAsync();
+			if (file != null)
+			{
+				this.ClientKey.Text = file.Path;
+			}
+			else
+			{
+				;
+			}
+
 		}
 	}
 }

@@ -10,7 +10,8 @@ using System.Threading.Tasks;
 
 namespace AutoCA
 {
-	public class CertificateProvider
+	//　証明書、署名要求のデータを作成する関数群（関数を跨いだ状態を持たない）
+	public static class CertificateProvider
 	{
 		//　署名要求を生成
 		public static CertificateRequest CreateSignRequest(OrgProfile pOrgProfile, string pCommonName)
@@ -50,10 +51,10 @@ namespace AutoCA
 			Debug.WriteLine("PrivateKey():" + pText2);
 
 			/*
-						var pNotBefore = DateTimeOffset.UtcNow;
-						var pNotAfter = DateTimeOffset.UtcNow.AddDays(365);
-						var pBytes = pRequest.CreateSigningRequest();
-						var pRootCert = pRequest.CreateSelfSigned(pNotBefore, pNotAfter);
+				var pNotBefore = DateTimeOffset.UtcNow;
+				var pNotAfter = DateTimeOffset.UtcNow.AddDays(365);
+				var pBytes = pRequest.CreateSigningRequest();
+				var pRootCert = pRequest.CreateSelfSigned(pNotBefore, pNotAfter);
 			*/
 			return (pRequest);
 		}
@@ -68,7 +69,7 @@ namespace AutoCA
 
 
 		//　ルート認証局の証明書を作成
-		public static CertficateItem CreateRootCA(OrgProfile pOrgProfile, string pCommonName)
+		public static CertificateItem CreateRootCA(OrgProfile pOrgProfile, string pCommonName)
 		{
 			var pRequest = CreateSignRequest(pOrgProfile, pCommonName);
 			if (pRequest == null)
@@ -92,11 +93,12 @@ namespace AutoCA
 			Debug.WriteLine("PrivateKey: "+Convert.ToBase64String(pPrivateKey.ExportECPrivateKey()));
 			Debug.WriteLine("PublicKey: "+Convert.ToBase64String(pPublicKey));
 
-			var pCertificateItem = new CertficateItem();
-			pCertificateItem.SerialNumber = 0;
-			pCertificateItem.CommonName = "";
+			var pCertificateItem = new CertificateItem();
+			pCertificateItem.SequenceNumber= 0;
+			pCertificateItem.SerialNumber = pCertificate.SerialNumber;
+			pCertificateItem.CommonName = pCertificate.SubjectName.Name;
 			pCertificateItem.Revoked = 0;
-			pCertificateItem.PemData = "";
+			pCertificateItem.PemData = pCertificate.ExportCertificatePem();
 
 
 

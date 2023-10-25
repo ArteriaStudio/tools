@@ -7,28 +7,70 @@ using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Networking;
+using Windows.Security.Authentication.OnlineId;
 
 namespace AutoCA
 {
+	public class DbParams
+	{
+		public DbParams()
+		{
+			UserIdentity = -1;
+			HostName     = "";
+			InstanceName = "";
+			SchemaName   = "";
+			ClientKey    = "";
+			ClientCrt    = "";
+			TrustCrt     = "";
+		}
+
+		public int UserIdentity { get; set; }
+		public string HostName { get; set; }
+		public string InstanceName { get; set; }
+		public string SchemaName { get; set; }
+		public string ClientKey { get; set; }
+		public string ClientCrt { get; set; }
+		public string TrustCrt { get; set; }
+
+	}
+
 	public class Profile : ProfileBase
 	{
 //		private static String m_pProfilePath = null;
 		private static readonly string m_pCompanyName = "Arteria";
 		private static readonly string m_pAppName = "AutoCA";
-		private const long LAYOUT_VERSION = 5;
+		private const long LAYOUT_VERSION = 10;
 		private static SqliteConnection m_pConnection;
 		public OrgProfile m_pOrgProfile;
+		public DbParams m_pDbParams;
 
 		public Profile() : base(m_pCompanyName, m_pAppName)
 		{
 		}
-
+	
 		public bool Load()
 		{
 			m_pConnection = Open(LAYOUT_VERSION);
 			if (m_pConnection == null)
 			{
 				return(false);
+			}
+			//　データベース接続情報を入力
+			m_pDbParams = LoadDbParams(m_pConnection);
+			if (m_pDbParams == null)
+			{
+				var pAppDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+				var pFolderPath = pAppDataFolder + "\\postgresql";
+
+				m_pDbParams = new DbParams();
+				m_pDbParams.UserIdentity = 0;
+				m_pDbParams.HostName     = "";
+				m_pDbParams.InstanceName = m_pAppName;
+				m_pDbParams.SchemaName   = "aploper";
+				m_pDbParams.ClientKey    = pFolderPath + "\\postgresql.key";
+				m_pDbParams.ClientCrt    = pFolderPath + "\\postgresql.crt";
+				m_pDbParams.TrustCrt     = pFolderPath + "\\root.crt";
 			}
 
 			//　組織プロファイル（基礎情報）を入力
@@ -48,7 +90,9 @@ namespace AutoCA
 			{
 				return (false);
 			}
-			return(SaveOrgProfile(m_pConnection, m_pOrgProfile));
+			return(SaveDbParams(m_pConnection, m_pDbParams));
+
+			//return(SaveOrgProfile(m_pConnection, m_pOrgProfile));
 		}
 
 		//　テーブルレイアウトを最新に更新
@@ -59,10 +103,12 @@ namespace AutoCA
 			pSQLs.Add(@"DROP TABLE IF EXISTS LayoutVersion;");
 			pSQLs.Add(@"CREATE TABLE IF NOT EXISTS LayoutVersion (Revision INTEGER);");
 			pSQLs.Add(@$"INSERT INTO LayoutVersion VALUES ({LAYOUT_VERSION});");
+			pSQLs.Add("DROP TABLE IF EXISTS DbParams;");
+			pSQLs.Add("CREATE TABLE DbParams (UserIdentity INTEGER NOT NULL, HostName TEXT NOT NULL, InstanceName TEXT NOT NULL, SchemaName TEXT NOT NULL, ClientKey TEXT NOT NULL, ClientCrt TEXT NOT NULL, TrustCrt TEXT NOT NULL, PRIMARY KEY (UserIdentity))");
 			pSQLs.Add("DROP TABLE OrgProfile;");
 			pSQLs.Add("CREATE TABLE OrgProfile (OrgKey INTEGER NOT NULL, CaName TEXT NOT NULL, OrgName TEXT NOT NULL, OrgUnitName TEXT NOT NULL, localityName TEXT NULL, ProvinceName NOT NULL, countryName NOT NULL, PRIMARY KEY (OrgKey))");
 			pSQLs.Add("DROP TABLE IF EXISTS IssuedCerts;");
-			pSQLs.Add("CREATE TABLE IssuedCerts (SerialNumber INTEGER NOT NULL, CommonName TEXT NOT NULL, Revoked INTEGER NOT NULL,  PemData TEXT NOT NULL, PRIMARY KEY (SerialNumber))");
+			pSQLs.Add("CREATE TABLE IssuedCerts (SequenceNumber INTEGER NOT NULL, SerialNumber TEXT NOT NULL, CommonName TEXT NOT NULL, Revoked INTEGER NOT NULL,  PemData TEXT NOT NULL, PRIMARY KEY (SequenceNumber))");
 
 			foreach (var pSQL in pSQLs)
 			{
@@ -71,6 +117,87 @@ namespace AutoCA
 			}
 
 			return(true);
+		}
+
+		//　
+		protected DbParams LoadDbParams(SqliteConnection pConnection)
+		{
+			var pDbParams = new DbParams();
+
+			try
+			{
+				pConnection.Open();
+				var pSQL = "SELECT UserIdentity, HostName, InstanceName, SchemaName, ClientKey, ClientCrt, TrustCrt FROM DbParams WHERE UserIdentity == 0";
+				var pCommand = new SqliteCommand(pSQL, pConnection);
+				using (var pReader = pCommand.ExecuteReader())
+				{
+					while (pReader.Read())
+					{
+						pDbParams.UserIdentity = pReader.GetInt32(0);
+						pDbParams.HostName     = pReader.GetString(1);
+						pDbParams.InstanceName = pReader.GetString(2);
+						pDbParams.SchemaName   = pReader.GetString(3);
+						pDbParams.ClientKey    = pReader.GetString(4);
+						pDbParams.ClientCrt	   = pReader.GetString(5);
+						pDbParams.TrustCrt     = pReader.GetString(6);
+					}
+				}
+				pConnection.Close();
+			}
+			catch (SqliteException e)
+			{
+				//　Brunch: レイアウトバージョンのテーブルが存在しない
+				System.Diagnostics.Debug.Write("" + e.ToString());
+				if (e.SqliteErrorCode == 1)
+				{
+					return (null);
+				}
+			}
+			if (pDbParams.UserIdentity == -1)
+			{
+				return (null);
+			}
+
+			return (pDbParams);
+		}
+
+		//
+		protected bool SaveDbParams(SqliteConnection pConnection, DbParams pDbParams)
+		{
+			try
+			{
+				pDbParams.UserIdentity = 0;
+				pDbParams.InstanceName = pDbParams.InstanceName.ToLower();
+				pConnection.Open();
+				var pSQL = "INSERT INTO DbParams VALUES (@UserIdentity, @HostName, @InstanceName, @SchemaName, @ClientKey, @ClientCrt, @TrustCrt)";
+				pSQL += " ON CONFLICT (UserIdentity) DO UPDATE SET HostName = @HostName, InstanceName = @InstanceName, SchemaName = @SchemaName, ClientKey = @ClientKey, ClientCrt = @ClientCrt, TrustCrt = @TrustCrt";
+				var pCommand = new SqliteCommand(pSQL, pConnection);
+				pCommand.Parameters.Clear();
+				pCommand.Parameters.Add(new SqliteParameter("UserIdentity", pDbParams.UserIdentity));
+				pCommand.Parameters.Add(new SqliteParameter("HostName",     pDbParams.HostName));
+				pCommand.Parameters.Add(new SqliteParameter("InstanceName", pDbParams.InstanceName));
+				pCommand.Parameters.Add(new SqliteParameter("SchemaName",   pDbParams.SchemaName));
+				pCommand.Parameters.Add(new SqliteParameter("ClientKey",    pDbParams.ClientKey));
+				pCommand.Parameters.Add(new SqliteParameter("ClientCrt",    pDbParams.ClientCrt));
+				pCommand.Parameters.Add(new SqliteParameter("TrustCrt",     pDbParams.TrustCrt));
+				var nCount = pCommand.ExecuteNonQuery();
+				if (nCount <= 0)
+				{
+					return (false);
+				}
+				pConnection.Close();
+			}
+			catch (SqliteException e)
+			{
+				//　Brunch: レイアウトバージョンのテーブルが存在しない
+				System.Diagnostics.Debug.Write("" + e.ToString());
+				if (e.SqliteErrorCode == 1)
+				{
+					return (false);
+				}
+			}
+
+			return (true);
 		}
 
 		//　
@@ -152,14 +279,15 @@ namespace AutoCA
 			return (true);
 		}
 
-		public bool SaveCertificate(SqliteConnection pConnection, CertficateItem pCertficateItem)
+		public bool SaveCertificate(SqliteConnection pConnection, CertificateItem pCertficateItem)
 		{
 			try
 			{
 				pConnection.Open();
-				var pSQL = "INSERT INTO IssuedCerts VALUES (@SerialNumber, @CommonName, false, @PemData)";
+				var pSQL = "INSERT INTO IssuedCerts VALUES (@SequenceNumber, @SerialNumber, @CommonName, false, @PemData)";
 				var pCommand = new SqliteCommand(pSQL, pConnection);
 				pCommand.Parameters.Clear();
+				pCommand.Parameters.Add(new SqliteParameter("SequenceNumber", pCertficateItem.SequenceNumber));
 				pCommand.Parameters.Add(new SqliteParameter("SerialNumber", pCertficateItem.SerialNumber));
 				pCommand.Parameters.Add(new SqliteParameter("CommonName", pCertficateItem.CommonName));
 				pCommand.Parameters.Add(new SqliteParameter("PemData", pCertficateItem.PemData));
@@ -183,31 +311,32 @@ namespace AutoCA
 			return (true);
 		}
 
-		public static CertficateItem GetCertificate(int pSerialNumber)
+		public static CertificateItem GetCertificate(int pSerialNumber)
 		{
 			return(GetCertificate(m_pConnection, pSerialNumber));
 		}
 
 		//　指定したシリアル番号の証明書データを取得
-		protected static CertficateItem GetCertificate(SqliteConnection pConnection, int iSerialNumber)
+		protected static CertificateItem GetCertificate(SqliteConnection pConnection, int iSequenceNumber)
 		{
-			CertficateItem pCertificateItem = new CertficateItem();
+			CertificateItem pCertificateItem = new CertificateItem();
 
 			try
 			{
 				pConnection.Open();
-				var pSQL = "SELECT SerialNumber, CommonName, Revoked, PemData FROM IssuedCerts WHERE SerialNumber == @SerialNumber;";
+				var pSQL = "SELECT SequenceNumber, SerialNumber, CommonName, Revoked, PemData FROM IssuedCerts WHERE SequenceNumber == @SequenceNumber;";
 				var pCommand = new SqliteCommand(pSQL, pConnection);
 				pCommand.Parameters.Clear();
-				pCommand.Parameters.Add(new SqliteParameter("SerialNumber", iSerialNumber));
+				pCommand.Parameters.Add(new SqliteParameter("SequenceNumber", iSequenceNumber));
 				using (var pReader = pCommand.ExecuteReader())
 				{
 					while (pReader.Read())
 					{
-						pCertificateItem.SerialNumber = pReader.GetInt32(0);
-						pCertificateItem.CommonName   = pReader.GetString(1);
-						pCertificateItem.Revoked      = pReader.GetInt32(2);
-						pCertificateItem.PemData      = pReader.GetString(3);
+						pCertificateItem.SequenceNumber = pReader.GetInt32(0);
+						pCertificateItem.SerialNumber   = pReader.GetString(1);
+						pCertificateItem.CommonName     = pReader.GetString(2);
+						pCertificateItem.Revoked        = pReader.GetInt32(3);
+						pCertificateItem.PemData        = pReader.GetString(4);
 					}
 				}
 				pConnection.Close();
@@ -221,7 +350,7 @@ namespace AutoCA
 					return (null);
 				}
 			}
-			if (pCertificateItem.SerialNumber == -1)
+			if (pCertificateItem.SequenceNumber == -1)
 			{
 				return (null);
 			}

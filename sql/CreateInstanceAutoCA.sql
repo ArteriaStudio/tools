@@ -1,0 +1,4 @@
+CREATE DATABASE AutoCA WITH OWNER = bkowner;
+
+
+

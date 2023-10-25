@@ -31,12 +31,17 @@ namespace AutoCA
 		{
 			this.InitializeComponent();
 			var pApp = App.Current as App;
-			if (pApp.m_pPrepareFlags.bIsIdentity == false)
+			if (pApp.m_pPrepareFlags.bExistDbParams == false)
 			{
-				//　設定情報に遷移
+				//　設定情報（接続情報入力画面）に遷移
 				this.ContentFrame.Navigate(typeof(SettingsPage));
 			}
-			else if (pApp.m_pPrepareFlags.bIsExistCA == false)
+			else if (pApp.m_pPrepareFlags.bExistIdentity == false)
+			{
+				//　設定情報（認証局主体者情報入力画面）に遷移
+				this.ContentFrame.Navigate(typeof(IdentityPage));
+			}
+			else if (pApp.m_pPrepareFlags.bExistAuthority == false)
 			{
 				//　認証局証明書発行に遷移
 				this.ContentFrame.Navigate(typeof(CreateCAPage));
@@ -135,6 +140,9 @@ namespace AutoCA
 				break;
 			case "CreateCA":
 				ContentFrame.Navigate(typeof(CreateCAPage));
+				break;
+			case "Identity":
+				ContentFrame.Navigate(typeof(IdentityPage));
 				break;
 			case "Settings":
 				ContentFrame.Navigate(typeof(SettingsPage));

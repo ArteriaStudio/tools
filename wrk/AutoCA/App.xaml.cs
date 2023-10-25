@@ -23,25 +23,79 @@ namespace AutoCA
 {
 	public class PrepareFlags
 	{
-		public bool	bIsIdentity;	//　認証局の主体情報が登録されている。
-		public bool	bIsExistCA; 	//　有効な認証局証明書が存在する。
+		public bool bExistDbParams;		//　データベースとの接続情報が登録されている。
+		public bool	bExistIdentity;		//　認証局の主体情報が登録されている。
+		public bool	bExistAuthority;	//　有効な認証局証明書が存在する。
 
 		public PrepareFlags()
 		{
-			bIsIdentity = false;
-			bIsExistCA = false;
+			bExistDbParams  = false;
+			bExistIdentity  = false;
+			bExistAuthority = false;
+		}
+
+		protected bool IsNull(string pValue)
+		{
+			if (pValue == null)
+			{
+				return(true);
+			}
+			pValue = pValue.Trim();
+			if (pValue.Length <= 0)
+			{
+				return (true);
+			}
+
+			return(false);
+		}
+
+		protected bool CheckDbParams(DbParams pDbParams)
+		{
+			if (pDbParams == null)
+			{
+				return(false);
+			}
+			if (IsNull(pDbParams.TrustCrt) == true)
+			{
+				return (false);
+			}
+			if (IsNull(pDbParams.ClientCrt) == true)
+			{
+				return (false);
+			}
+			if (IsNull(pDbParams.ClientKey) == true)
+			{
+				return (false);
+			}
+			if (IsNull(pDbParams.SchemaName) == true)
+			{
+				return (false);
+			}
+			if (IsNull(pDbParams.InstanceName) == true)
+			{
+				return (false);
+			}
+			if (IsNull(pDbParams.HostName) == true)
+			{
+				return (false);
+			}
+
+			return(true);
 		}
 
 		//　環境の前提条件の状態を検査
 		public void Check(Profile pProfile)
 		{
+			//　データベース接続情報が登録されているか？
+			bExistDbParams = CheckDbParams(pProfile.m_pDbParams);
+
 			//　認証局の主体情報が登録されているか？
 			if (pProfile.m_pOrgProfile.OrgName != null)
 			{
-				bIsIdentity = true;
+				bExistIdentity = true;
 			}
 			//　有効な認証局証明書が存在するか？
-			bIsExistCA = false;
+			bExistAuthority = false;
 		}
 	}
 
@@ -70,12 +124,13 @@ namespace AutoCA
 			m_pPrepareFlags = new PrepareFlags();
 			m_pPrepareFlags.Check(m_pProfile);
 			m_pCertsStock = new CertsStock();
-			m_pCertsStock.Initialize(m_pProfile.m_pOrgProfile);
-			m_window = new MainWindow();
-			m_window.Activate();
+			m_pCertsStock.Initialize(m_pPrepareFlags, m_pProfile.m_pDbParams);
+			//m_pCertsStock.Initialize(m_pProfile.m_pOrgProfile);
+			m_pWindow = new MainWindow();
+			m_pWindow.Activate();
 		}
 
-		private Window m_window;
+		public Window m_pWindow;
 		public Profile m_pProfile;
 		public PrepareFlags m_pPrepareFlags;		//　前提条件検査結果（）
 		public CertsStock m_pCertsStock;
