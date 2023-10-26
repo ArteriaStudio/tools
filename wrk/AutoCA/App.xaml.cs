@@ -43,11 +43,32 @@ namespace AutoCA
 		public void Check(Profile pProfile, Identity pIdentity, OrgProfile pOrgProfile)
 		{
 			//　データベース接続情報が登録されているか？
-			bExistDbParams = pProfile.m_pDbParams.Validate();
+			if (pProfile.m_pDbParams == null)
+			{
+				bExistDbParams = false;
+			}
+			else
+			{
+				bExistDbParams = pProfile.m_pDbParams.Validate();
+			}
 
 			//　認証局の主体情報が登録されているか？
-			bExistIdentity   = pIdentity.Validate();
-			bExistOrgProfile = pOrgProfile.Validate();
+			if (pIdentity == null)
+			{
+				bExistIdentity = false;
+			}
+			else
+			{
+				bExistIdentity = pIdentity.Validate();
+			}
+			if (pOrgProfile == null)
+			{
+				bExistOrgProfile = false;
+			}
+			else
+			{
+				bExistOrgProfile = pOrgProfile.Validate();
+			}
 
 			//　有効な認証局証明書が存在するか？
 			bExistAuthority = false;
@@ -78,15 +99,18 @@ namespace AutoCA
 			m_pProfile.Load();
 
 			//　データベースインスタンスに接続
-			m_pSQLContext = new SQLContext(m_pProfile.m_pDbParams.HostName, m_pProfile.m_pDbParams.InstanceName, m_pProfile.m_pDbParams.SchemaName, m_pProfile.m_pDbParams.ClientKey, m_pProfile.m_pDbParams.ClientCrt, m_pProfile.m_pDbParams.TrustCrt);
+			if (m_pProfile.m_pDbParams.Validate() == true)
+			{
+				m_pSQLContext = new SQLContext(m_pProfile.m_pDbParams.HostName, m_pProfile.m_pDbParams.InstanceName, m_pProfile.m_pDbParams.SchemaName, m_pProfile.m_pDbParams.ClientKey, m_pProfile.m_pDbParams.ClientCrt, m_pProfile.m_pDbParams.TrustCrt);
 
-			var iUserIdentity = 0;
-			m_pIdentity = new Identity();
-			m_pIdentity.Load(m_pSQLContext, iUserIdentity);
-			m_pOrgProfile = new OrgProfile();
-			m_pOrgProfile.Load(m_pSQLContext, iUserIdentity);
-			m_pCertsStock = new CertsStock();
-			m_pCertsStock.Load(m_pSQLContext, m_pIdentity, m_pOrgProfile);
+				var iUserIdentity = 0;
+				m_pIdentity = new Identity();
+				m_pIdentity.Load(m_pSQLContext, iUserIdentity);
+				m_pOrgProfile = new OrgProfile();
+				m_pOrgProfile.Load(m_pSQLContext, iUserIdentity);
+				m_pCertsStock = new CertsStock();
+				m_pCertsStock.Load(m_pSQLContext, m_pIdentity, m_pOrgProfile);
+			}
 			m_pPrepareFlags = new PrepareFlags();
 			m_pPrepareFlags.Check(m_pProfile, m_pIdentity, m_pOrgProfile);
 

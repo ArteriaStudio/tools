@@ -30,7 +30,7 @@ namespace AutoCA
 		public MainWindow()
 		{
 			this.InitializeComponent();
-			var pApp = App.Current as App;
+			var pApp = App.Current as AutoCA.App;
 			if (pApp.m_pPrepareFlags.bExistDbParams == false)
 			{
 				//@İ’èî•ñiÚ‘±î•ñ“ü—Í‰æ–Êj‚É‘JˆÚ

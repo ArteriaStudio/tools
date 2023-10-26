@@ -45,21 +45,35 @@ namespace AutoCA
 
 			if (pIdentity.Validate() == true)
 			{
-				//　ルート認証局の証明書データを入力
-				var pTrustCAItem = new CertificateItem();
-				var pTrustCAName = pIdentity.AuthorityName + "-RCA";
-				pTrustCAItem.Load(pSQLContext, pTrustCAName);
-				//var pTrustCAItem = FetchCertificate(pSQLContext, pTrustCAName);
+				if (pOrgProfile.Validate() == true)
+				{
+					//　ルート認証局の証明書データを入力
+					var pTrustCAItem = new CertificateItem();
+					var pTrustCAName = pIdentity.AuthorityName + "-RCA";
+					if (pTrustCAItem.Load(pSQLContext, pTrustCAName) == false)
+					{
+						//　ルート認証局の証明書を作成
+						if (pTrustCAItem.CreateCA(pOrgProfile, pTrustCAName, null) == false)
+						{
+							//　異常系：証明書の作成に失敗
+							return(false);
+						}
+					}
+					//var pTrustCAItem = FetchCertificate(pSQLContext, pTrustCAName);
 
-				//　発行認証局の証明書データを入力
-				var pIssueCAItem = new CertificateItem();
-				var pIssueCAName = pIdentity.AuthorityName + "-ICA";
-				pIssueCAItem.Load(pSQLContext, pIssueCAName);
-				//var pIssueCAItem = FetchCertificate(pSQLContext, pIssueCAName);
-			}
-			if (pOrgProfile.Validate() == true)
-			{
-				;
+					//　発行認証局の証明書データを入力
+					var pIssueCAItem = new CertificateItem();
+					var pIssueCAName = pIdentity.AuthorityName + "-ICA";
+					if (pIssueCAItem.Load(pSQLContext, pIssueCAName) == false)
+					{
+						if (pIssueCAItem.CreateCA(pOrgProfile, pIssueCAName, pTrustCAItem) == false)
+						{
+							//　異常系：証明書の作成に失敗
+							return (false);
+						}
+					}
+					//var pIssueCAItem = FetchCertificate(pSQLContext, pIssueCAName);
+				}
 			}
 
 			return (true);

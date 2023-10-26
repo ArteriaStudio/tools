@@ -41,6 +41,7 @@ namespace AutoCA
 				pCommand.Parameters.AddWithValue("CommonName", pCommonName);
 				using (var pReader = pCommand.ExecuteReader())
 				{
+					int iCount = 0;
 					while (pReader.Read())
 					{
 						SequenceNumber = pReader.GetInt64(0);
@@ -51,8 +52,23 @@ namespace AutoCA
 						LaunchAt       = pReader.GetDateTime(5);
 						ExpireAt       = pReader.GetDateTime(6);
 						PemData        = pReader.GetString(7);
+						iCount ++;
+					}
+					if (iCount == 0)
+					{
+						return(false);
 					}
 				}
+			}
+
+			return (true);
+		}
+
+		public bool CreateCA(OrgProfile pOrgProfile, string pCommonName, CertificateItem pCACertificate)
+		{
+			if (pCACertificate == null)
+			{
+				CertificateProvider.CreateRootCA(pOrgProfile, pCommonName);
 			}
 
 			return (true);

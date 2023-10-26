@@ -69,7 +69,7 @@ namespace AutoCA
 //		private static String m_pProfilePath = null;
 		private static readonly string m_pCompanyName = "Arteria";
 		private static readonly string m_pAppName = "AutoCA";
-		private const long LAYOUT_VERSION = 10;
+		private const long LAYOUT_VERSION = 11;
 		private static SqliteConnection m_pConnection;
 		//public OrgProfile m_pOrgProfile;
 		public DbParams m_pDbParams;
@@ -137,9 +137,9 @@ namespace AutoCA
 			pSQLs.Add(@$"INSERT INTO LayoutVersion VALUES ({LAYOUT_VERSION});");
 			pSQLs.Add("DROP TABLE IF EXISTS DbParams;");
 			pSQLs.Add("CREATE TABLE DbParams (UserIdentity INTEGER NOT NULL, HostName TEXT NOT NULL, InstanceName TEXT NOT NULL, SchemaName TEXT NOT NULL, ClientKey TEXT NOT NULL, ClientCrt TEXT NOT NULL, TrustCrt TEXT NOT NULL, PRIMARY KEY (UserIdentity))");
-			//pSQLs.Add("DROP TABLE OrgProfile;");
+			pSQLs.Add("DROP TABLE OrgProfile;");
 			//pSQLs.Add("CREATE TABLE OrgProfile (OrgKey INTEGER NOT NULL, CaName TEXT NOT NULL, OrgName TEXT NOT NULL, OrgUnitName TEXT NOT NULL, localityName TEXT NULL, ProvinceName NOT NULL, countryName NOT NULL, PRIMARY KEY (OrgKey))");
-			//pSQLs.Add("DROP TABLE IF EXISTS IssuedCerts;");
+			pSQLs.Add("DROP TABLE IF EXISTS IssuedCerts;");
 			//pSQLs.Add("CREATE TABLE IssuedCerts (SequenceNumber INTEGER NOT NULL, SerialNumber TEXT NOT NULL, CommonName TEXT NOT NULL, Revoked INTEGER NOT NULL,  PemData TEXT NOT NULL, PRIMARY KEY (SequenceNumber))");
 
 			foreach (var pSQL in pSQLs)
@@ -231,7 +231,7 @@ namespace AutoCA
 
 			return (true);
 		}
-
+		/*
 		//　
 		protected OrgProfile LoadOrgProfile(SqliteConnection pConnection)
 		{
@@ -273,7 +273,8 @@ namespace AutoCA
 
 			return(pOrgProfile);
 		}
-
+		*/
+		/*
 		public bool SaveOrgProfile(SqliteConnection pConnection, OrgProfile pOrgProfile)
 		{
 			try
@@ -309,7 +310,8 @@ namespace AutoCA
 
 			return (true);
 		}
-
+		*/
+		/*
 		public bool SaveCertificate(SqliteConnection pConnection, CertificateItem pCertficateItem)
 		{
 			try
@@ -341,12 +343,14 @@ namespace AutoCA
 
 			return (true);
 		}
-
+		*/
+		/*
 		public static CertificateItem GetCertificate(int pSerialNumber)
 		{
 			return(GetCertificate(m_pConnection, pSerialNumber));
 		}
-
+		*/
+		/*
 		//　指定したシリアル番号の証明書データを取得
 		protected static CertificateItem GetCertificate(SqliteConnection pConnection, int iSequenceNumber)
 		{
@@ -388,6 +392,6 @@ namespace AutoCA
 
 			return (pCertificateItem);
 		}
-
+		*/
 	}
 }
