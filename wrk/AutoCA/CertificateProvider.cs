@@ -94,11 +94,11 @@ namespace AutoCA
 			Debug.WriteLine("PublicKey: "+Convert.ToBase64String(pPublicKey));
 
 			var pCertificateItem = new CertificateItem();
-			pCertificateItem.SequenceNumber= 0;
-			pCertificateItem.SerialNumber = pCertificate.SerialNumber;
-			pCertificateItem.CommonName = pCertificate.SubjectName.Name;
-			pCertificateItem.Revoked = 0;
-			pCertificateItem.PemData = pCertificate.ExportCertificatePem();
+			pCertificateItem.SequenceNumber = 0;
+			pCertificateItem.SerialNumber   = pCertificate.SerialNumber;
+			pCertificateItem.CommonName     = pCertificate.SubjectName.Name;
+			pCertificateItem.Revoked        = false;
+			pCertificateItem.PemData        = pCertificate.ExportCertificatePem();
 
 
 

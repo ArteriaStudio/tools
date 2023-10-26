@@ -1,4 +1,5 @@
-﻿using Arteria_s.OS.Base;
+﻿using Arteria_s.DB;
+using Arteria_s.OS.Base;
 using Microsoft.Data.Sqlite;
 using Microsoft.UI.Xaml.Controls;
 using System;
@@ -12,7 +13,7 @@ using Windows.Security.Authentication.OnlineId;
 
 namespace AutoCA
 {
-	public class DbParams
+	public class DbParams : Data
 	{
 		public DbParams()
 		{
@@ -33,6 +34,34 @@ namespace AutoCA
 		public string ClientCrt { get; set; }
 		public string TrustCrt { get; set; }
 
+		public override bool Validate()
+		{
+			if (IsNull(HostName) == true)
+			{
+				return(false);
+			}
+			if (IsNull(InstanceName) == true)
+			{
+				return (false);
+			}
+			if (IsNull(SchemaName) == true)
+			{
+				return (false);
+			}
+			if (IsNull(ClientKey) == true)
+			{
+				return (false);
+			}
+			if (IsNull(ClientCrt) == true)
+			{
+				return (false);
+			}
+			if (IsNull(TrustCrt) == true)
+			{
+				return (false);
+			}
+			return (true);
+		}
 	}
 
 	public class Profile : ProfileBase
@@ -42,7 +71,7 @@ namespace AutoCA
 		private static readonly string m_pAppName = "AutoCA";
 		private const long LAYOUT_VERSION = 10;
 		private static SqliteConnection m_pConnection;
-		public OrgProfile m_pOrgProfile;
+		//public OrgProfile m_pOrgProfile;
 		public DbParams m_pDbParams;
 
 		public Profile() : base(m_pCompanyName, m_pAppName)
@@ -56,6 +85,7 @@ namespace AutoCA
 			{
 				return(false);
 			}
+
 			//　データベース接続情報を入力
 			m_pDbParams = LoadDbParams(m_pConnection);
 			if (m_pDbParams == null)
@@ -73,12 +103,14 @@ namespace AutoCA
 				m_pDbParams.TrustCrt     = pFolderPath + "\\root.crt";
 			}
 
+			/*
 			//　組織プロファイル（基礎情報）を入力
 			m_pOrgProfile = LoadOrgProfile(m_pConnection);
 			if (m_pOrgProfile == null)
 			{
 				m_pOrgProfile = new OrgProfile();
 			}
+			*/
 
 			return (true);
 		}
@@ -105,10 +137,10 @@ namespace AutoCA
 			pSQLs.Add(@$"INSERT INTO LayoutVersion VALUES ({LAYOUT_VERSION});");
 			pSQLs.Add("DROP TABLE IF EXISTS DbParams;");
 			pSQLs.Add("CREATE TABLE DbParams (UserIdentity INTEGER NOT NULL, HostName TEXT NOT NULL, InstanceName TEXT NOT NULL, SchemaName TEXT NOT NULL, ClientKey TEXT NOT NULL, ClientCrt TEXT NOT NULL, TrustCrt TEXT NOT NULL, PRIMARY KEY (UserIdentity))");
-			pSQLs.Add("DROP TABLE OrgProfile;");
-			pSQLs.Add("CREATE TABLE OrgProfile (OrgKey INTEGER NOT NULL, CaName TEXT NOT NULL, OrgName TEXT NOT NULL, OrgUnitName TEXT NOT NULL, localityName TEXT NULL, ProvinceName NOT NULL, countryName NOT NULL, PRIMARY KEY (OrgKey))");
-			pSQLs.Add("DROP TABLE IF EXISTS IssuedCerts;");
-			pSQLs.Add("CREATE TABLE IssuedCerts (SequenceNumber INTEGER NOT NULL, SerialNumber TEXT NOT NULL, CommonName TEXT NOT NULL, Revoked INTEGER NOT NULL,  PemData TEXT NOT NULL, PRIMARY KEY (SequenceNumber))");
+			//pSQLs.Add("DROP TABLE OrgProfile;");
+			//pSQLs.Add("CREATE TABLE OrgProfile (OrgKey INTEGER NOT NULL, CaName TEXT NOT NULL, OrgName TEXT NOT NULL, OrgUnitName TEXT NOT NULL, localityName TEXT NULL, ProvinceName NOT NULL, countryName NOT NULL, PRIMARY KEY (OrgKey))");
+			//pSQLs.Add("DROP TABLE IF EXISTS IssuedCerts;");
+			//pSQLs.Add("CREATE TABLE IssuedCerts (SequenceNumber INTEGER NOT NULL, SerialNumber TEXT NOT NULL, CommonName TEXT NOT NULL, Revoked INTEGER NOT NULL,  PemData TEXT NOT NULL, PRIMARY KEY (SequenceNumber))");
 
 			foreach (var pSQL in pSQLs)
 			{
@@ -209,19 +241,18 @@ namespace AutoCA
 			try
 			{
 				pConnection.Open();
-				var pSQL = "SELECT OrgKey, CaName, OrgName, OrgUnitName, LocalityName, ProvinceName, CountryName FROM OrgProfile WHERE OrgKey == 0";
+				var pSQL = "SELECT OrgKey, OrgName, OrgUnitName, LocalityName, ProvinceName, CountryName FROM OrgProfile WHERE OrgKey == 0";
 				var pCommand = new SqliteCommand(pSQL ,pConnection);
 				using (var pReader = pCommand.ExecuteReader())
 				{
 					while (pReader.Read())
 					{
 						pOrgProfile.OrgKey       = pReader.GetInt64(0);
-						pOrgProfile.CaName       = pReader.GetString(1);
-						pOrgProfile.OrgName      = pReader.GetString(2);
-						pOrgProfile.OrgUnitName  = pReader.GetString(3);
-						pOrgProfile.LocalityName = pReader.GetString(4);
-						pOrgProfile.ProvinceName = pReader.GetString(5);
-						pOrgProfile.CountryName  = pReader.GetString(6);
+						pOrgProfile.OrgName      = pReader.GetString(1);
+						pOrgProfile.OrgUnitName  = pReader.GetString(2);
+						pOrgProfile.LocalityName = pReader.GetString(3);
+						pOrgProfile.ProvinceName = pReader.GetString(4);
+						pOrgProfile.CountryName  = pReader.GetString(5);
 					}
 				}
 				pConnection.Close();
@@ -252,7 +283,7 @@ namespace AutoCA
 				pSQL += " ON CONFLICT (OrgKey) DO UPDATE SET CaName = @CaName, OrgName = @OrgName, OrgUnitName = @OrgUnitName, LocalityName = @LocalityName, ProvinceName = @ProvinceName, CountryName = @CountryName";
 				var pCommand = new SqliteCommand(pSQL, pConnection);
 				pCommand.Parameters.Clear();
-				pCommand.Parameters.Add(new SqliteParameter("CaName", pOrgProfile.CaName));
+				pCommand.Parameters.Add(new SqliteParameter("CaName", "N/A"));
 				pCommand.Parameters.Add(new SqliteParameter("OrgKey", pOrgProfile.OrgKey));
 				pCommand.Parameters.Add(new SqliteParameter("OrgName", pOrgProfile.OrgName));
 				pCommand.Parameters.Add(new SqliteParameter("OrgUnitName", pOrgProfile.OrgUnitName));
@@ -335,7 +366,7 @@ namespace AutoCA
 						pCertificateItem.SequenceNumber = pReader.GetInt32(0);
 						pCertificateItem.SerialNumber   = pReader.GetString(1);
 						pCertificateItem.CommonName     = pReader.GetString(2);
-						pCertificateItem.Revoked        = pReader.GetInt32(3);
+						pCertificateItem.Revoked        = pReader.GetBoolean(3);
 						pCertificateItem.PemData        = pReader.GetString(4);
 					}
 				}

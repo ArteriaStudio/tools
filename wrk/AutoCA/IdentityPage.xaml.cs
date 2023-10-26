@@ -23,16 +23,24 @@ namespace AutoCA
 	/// </summary>
 	public sealed partial class IdentityPage : Page
 	{
-		private OrgProfile m_pProfile;
+		private Identity m_pIdentity;
+		private OrgProfile m_pOrgProfile;
 
 		public IdentityPage()
 		{
 			this.InitializeComponent();
 			var pApp = App.Current as AutoCA.App;
+			m_pIdentity   = pApp.m_pIdentity;
+			m_pOrgProfile = pApp.m_pOrgProfile;
+			/*
 			var pProfile = pApp.m_pProfile;
-			m_pProfile = pProfile.m_pOrgProfile;
+			var pCertsStock = pApp.m_pCertsStock;
+			*/
+
+			//m_pProfile = pProfile.m_pOrgProfile;
 		}
 
+		//　TODO: データオブジェクト側に検査処理を寄せること
 		private bool IsNotNull(string pText)
 		{
 			if (pText == null)
@@ -46,9 +54,9 @@ namespace AutoCA
 			return (true);
 		}
 
-		private bool Varidate()
+		private bool Validate()
 		{
-			if (IsNotNull(CaName.Text) == false)
+			if (IsNotNull(AuthorityName.Text) == false)
 			{
 				return (false);
 			}
@@ -78,21 +86,30 @@ namespace AutoCA
 
 		private void Save_Click(object sender, RoutedEventArgs e)
 		{
-			if (Varidate() == false)
+			if (Validate() == false)
 			{
 				return;
 			}
 
 			var pApp = App.Current as AutoCA.App;
-			var pProfile = pApp.m_pProfile;
-			pProfile.Save();
+			pApp.SaveIdentity();
+			pApp.SaveOrgProfile();
+			//pApp.m_pOrgProfile.Save();
+
+
+			//var pCertsStock = pApp.m_pCertsStock;
+			//pCertsStock.Save()
+
+
+			//var pProfile = pApp.m_pProfile;
+			//pProfile.Save();
 			Save.IsEnabled = false;
 		}
 
 
 		private void Settings_TextChanged(object sender, TextChangedEventArgs e)
 		{
-			if (Varidate() == false)
+			if (Validate() == false)
 			{
 				Save.IsEnabled = false;
 			}

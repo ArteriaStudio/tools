@@ -43,6 +43,11 @@ namespace AutoCA
 			}
 			else if (pApp.m_pPrepareFlags.bExistAuthority == false)
 			{
+				//　設定情報（認証局主体者情報入力画面）に遷移
+				this.ContentFrame.Navigate(typeof(IdentityPage));
+			}
+			else if (pApp.m_pPrepareFlags.bExistAuthority == false)
+			{
 				//　認証局証明書発行に遷移
 				this.ContentFrame.Navigate(typeof(CreateCAPage));
 			}

@@ -1,4 +1,6 @@
-﻿using Microsoft.UI.Xaml;
+﻿using Arteria_s.DB;
+using Arteria_s.DB.Base;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
 using Microsoft.UI.Xaml.Data;
@@ -15,6 +17,7 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Security.Authentication.OnlineId;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -25,75 +28,27 @@ namespace AutoCA
 	{
 		public bool bExistDbParams;		//　データベースとの接続情報が登録されている。
 		public bool	bExistIdentity;		//　認証局の主体情報が登録されている。
+		public bool bExistOrgProfile;	//　
 		public bool	bExistAuthority;	//　有効な認証局証明書が存在する。
 
 		public PrepareFlags()
 		{
-			bExistDbParams  = false;
-			bExistIdentity  = false;
-			bExistAuthority = false;
-		}
-
-		protected bool IsNull(string pValue)
-		{
-			if (pValue == null)
-			{
-				return(true);
-			}
-			pValue = pValue.Trim();
-			if (pValue.Length <= 0)
-			{
-				return (true);
-			}
-
-			return(false);
-		}
-
-		protected bool CheckDbParams(DbParams pDbParams)
-		{
-			if (pDbParams == null)
-			{
-				return(false);
-			}
-			if (IsNull(pDbParams.TrustCrt) == true)
-			{
-				return (false);
-			}
-			if (IsNull(pDbParams.ClientCrt) == true)
-			{
-				return (false);
-			}
-			if (IsNull(pDbParams.ClientKey) == true)
-			{
-				return (false);
-			}
-			if (IsNull(pDbParams.SchemaName) == true)
-			{
-				return (false);
-			}
-			if (IsNull(pDbParams.InstanceName) == true)
-			{
-				return (false);
-			}
-			if (IsNull(pDbParams.HostName) == true)
-			{
-				return (false);
-			}
-
-			return(true);
+			bExistDbParams   = false;
+			bExistIdentity   = false;
+			bExistOrgProfile = false;
+			bExistAuthority  = false;
 		}
 
 		//　環境の前提条件の状態を検査
-		public void Check(Profile pProfile)
+		public void Check(Profile pProfile, Identity pIdentity, OrgProfile pOrgProfile)
 		{
 			//　データベース接続情報が登録されているか？
-			bExistDbParams = CheckDbParams(pProfile.m_pDbParams);
+			bExistDbParams = pProfile.m_pDbParams.Validate();
 
 			//　認証局の主体情報が登録されているか？
-			if (pProfile.m_pOrgProfile.OrgName != null)
-			{
-				bExistIdentity = true;
-			}
+			bExistIdentity   = pIdentity.Validate();
+			bExistOrgProfile = pOrgProfile.Validate();
+
 			//　有効な認証局証明書が存在するか？
 			bExistAuthority = false;
 		}
@@ -121,17 +76,48 @@ namespace AutoCA
 		{
 			m_pProfile = new Profile();
 			m_pProfile.Load();
-			m_pPrepareFlags = new PrepareFlags();
-			m_pPrepareFlags.Check(m_pProfile);
+
+			//　データベースインスタンスに接続
+			m_pSQLContext = new SQLContext(m_pProfile.m_pDbParams.HostName, m_pProfile.m_pDbParams.InstanceName, m_pProfile.m_pDbParams.SchemaName, m_pProfile.m_pDbParams.ClientKey, m_pProfile.m_pDbParams.ClientCrt, m_pProfile.m_pDbParams.TrustCrt);
+
+			var iUserIdentity = 0;
+			m_pIdentity = new Identity();
+			m_pIdentity.Load(m_pSQLContext, iUserIdentity);
+			m_pOrgProfile = new OrgProfile();
+			m_pOrgProfile.Load(m_pSQLContext, iUserIdentity);
 			m_pCertsStock = new CertsStock();
-			m_pCertsStock.Initialize(m_pPrepareFlags, m_pProfile.m_pDbParams);
-			//m_pCertsStock.Initialize(m_pProfile.m_pOrgProfile);
+			m_pCertsStock.Load(m_pSQLContext, m_pIdentity, m_pOrgProfile);
+			m_pPrepareFlags = new PrepareFlags();
+			m_pPrepareFlags.Check(m_pProfile, m_pIdentity, m_pOrgProfile);
+
 			m_pWindow = new MainWindow();
 			m_pWindow.Activate();
 		}
 
+		//　
+		public void SaveIdentity()
+		{
+			if (m_pSQLContext != null)
+			{
+				m_pIdentity.Save(m_pSQLContext);
+			}
+		}
+
+		//　組織プロファイルを保存
+		public void SaveOrgProfile()
+		{
+			if (m_pSQLContext != null)
+			{
+				m_pOrgProfile.Save(m_pSQLContext);
+			}
+		}
+
+		protected SQLContext m_pSQLContext;
+
 		public Window m_pWindow;
 		public Profile m_pProfile;
+		public Identity m_pIdentity;
+		public OrgProfile m_pOrgProfile;
 		public PrepareFlags m_pPrepareFlags;		//　前提条件検査結果（）
 		public CertsStock m_pCertsStock;
 	}

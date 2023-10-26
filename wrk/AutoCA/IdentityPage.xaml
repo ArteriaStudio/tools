@@ -29,12 +29,12 @@
 		</Grid>
 		<StackPanel Grid.Column="0" Grid.Row="1" Orientation="Vertical" Style="{StaticResource CardStyleStackPanel}">
 			<TextBlock Margin="8,8,8,8" HorizontalAlignment="Left" VerticalAlignment="Center" Style="{StaticResource SubtitleTextBlockStyle}">認証局の表示項目</TextBlock>
-			<TextBox x:Name="CaName"       Margin="8,8,8,8" Header="認証局名（caName）" PlaceholderText="" Text="{x:Bind m_pProfile.CaName, Mode=TwoWay}" TextChanged="Settings_TextChanged" />
-			<TextBox x:Name="OrgName"      Margin="8,8,8,8" Header="組織名（organizationName）" PlaceholderText="" Text="{x:Bind m_pProfile.OrgName, Mode=TwoWay}" TextChanged="Settings_TextChanged" />
-			<TextBox x:Name="OrgUnitName"  Margin="8,8,8,8" Header="部署名（organizationalUnitName）" PlaceholderText=""  Text="{x:Bind m_pProfile.OrgUnitName, Mode=TwoWay}" TextChanged="Settings_TextChanged" />
-			<TextBox x:Name="LocalityName" Margin="8,8,8,8" Header="市町村（localityName）" PlaceholderText=""  Text="{x:Bind m_pProfile.LocalityName, Mode=TwoWay}" TextChanged="Settings_TextChanged" />
-			<TextBox x:Name="ProvinceName" Margin="8,8,8,8" Header="都道府県（stateOrProvinceName）" PlaceholderText=""  Text="{x:Bind m_pProfile.ProvinceName, Mode=TwoWay}" TextChanged="Settings_TextChanged" />
-			<TextBox x:Name="CountryName"  Margin="8,8,8,8" Header="国名（countryName）" PlaceholderText=""  Text="{x:Bind m_pProfile.CountryName, Mode=TwoWay}" TextChanged="Settings_TextChanged" />
+			<TextBox x:Name="AuthorityName" Margin="8,8,8,8" Header="認証局名（authorityName）" PlaceholderText="" Text="{x:Bind m_pIdentity.AuthorityName, Mode=TwoWay}" TextChanged="Settings_TextChanged" />
+			<TextBox x:Name="OrgName"       Margin="8,8,8,8" Header="組織名（organizationName）" PlaceholderText="" Text="{x:Bind m_pOrgProfile.OrgName, Mode=TwoWay}" TextChanged="Settings_TextChanged" />
+			<TextBox x:Name="OrgUnitName"   Margin="8,8,8,8" Header="部署名（organizationalUnitName）" PlaceholderText=""  Text="{x:Bind m_pOrgProfile.OrgUnitName, Mode=TwoWay}" TextChanged="Settings_TextChanged" />
+			<TextBox x:Name="LocalityName"  Margin="8,8,8,8" Header="市町村（localityName）" PlaceholderText=""  Text="{x:Bind m_pOrgProfile.LocalityName, Mode=TwoWay}" TextChanged="Settings_TextChanged" />
+			<TextBox x:Name="ProvinceName"  Margin="8,8,8,8" Header="都道府県（stateOrProvinceName）" PlaceholderText=""  Text="{x:Bind m_pOrgProfile.ProvinceName, Mode=TwoWay}" TextChanged="Settings_TextChanged" />
+			<TextBox x:Name="CountryName"   Margin="8,8,8,8" Header="国名（countryName）" PlaceholderText=""  Text="{x:Bind m_pOrgProfile.CountryName, Mode=TwoWay}" TextChanged="Settings_TextChanged" />
 			<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
 				<Button Name="Save" Margin="8,8,8,8" IsEnabled="False" Style="{StaticResource AccentButtonStyle}" Content="保存" Click="Save_Click" />
 			</StackPanel>

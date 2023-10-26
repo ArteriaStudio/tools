@@ -34,7 +34,10 @@ namespace AutoCA
 		{
 			Debug.WriteLine(pCommonName);
 			var pApp = App.Current as AutoCA.App;
-			CertificateProvider.CreateRootCA(pApp.m_pProfile.m_pOrgProfile, pCommonName);
+			
+
+
+			//CertificateProvider.CreateRootCA(pApp.m_pProfile.m_pOrgProfile, pCommonName);
 
 		}
 		private string pCommonName; //Å@îFèÿã«ÇÃã§í ñº
