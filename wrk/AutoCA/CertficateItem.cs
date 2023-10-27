@@ -4,9 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Security.Authentication.OnlineId;
+using Windows.System;
 
 namespace AutoCA
 {
@@ -15,21 +17,22 @@ namespace AutoCA
 		public CertificateItem()
 		{
 			SequenceNumber = -1;
-			SerialNumber = "";
-			CommonName = "";
-			CA = false;
-			Revoked = false;
-			PemData = "";
+			SerialNumber   = "";
+			CommonName     = "";
+			CA             = false;
+			Revoked        = false;
+			PemData        = "";
 		}
 
-		public long SequenceNumber { get; set; }
-		public string SerialNumber { get; set; }
-		public string CommonName { get; set; }
-		public bool CA { get; set; }
-		public bool Revoked { get; set; }
-		public DateTime	LaunchAt { get; set; }
-		public DateTime ExpireAt { get; set; }
-		public string PemData { get; set; }
+		public long 				SequenceNumber { get; set; }
+		public string				SerialNumber { get; set; }
+		public string				CommonName { get; set; }
+		public bool 				CA { get; set; }
+		public bool 				Revoked { get; set; }
+		public DateTime 			LaunchAt { get; set; }
+		public DateTime 			ExpireAt { get; set; }
+		public string				PemData { get; set; }
+		public X509Certificate2		m_pCertificate { get; set; }
 
 		//　共通名が一致する証明書を入力
 		public bool Load(SQLContext pSQLContext, string pCommonName)
@@ -64,11 +67,52 @@ namespace AutoCA
 			return (true);
 		}
 
+		//　
+		public bool Save(SQLContext pSQLContext)
+		{
+			var pSQL = "INSERT INTO TIssuedCerts VALUES (@SequenceNumber, @SerialNumber, @CommonName, @CA, @Revoked, @LaunchAt, @ExpireAt, @PemData)";
+			pSQL += " ON CONFLICT ON CONSTRAINT tissuedcerts_pkey DO UPDATE SET SerialNumber = @SerialNumber, CommonName = @CommonName, CA  = @CA, Revoked = @Revoked, LaunchAt = @LaunchAt , ExpireAt = @ExpireAt, PemData = @PemData;";
+			using (var pCommand = new NpgsqlCommand(pSQL, pSQLContext.m_pConnection))
+			{
+				pCommand.Parameters.Clear();
+				pCommand.Parameters.AddWithValue("SequenceNumber", SequenceNumber);
+				pCommand.Parameters.AddWithValue("SerialNumber", SerialNumber);
+				pCommand.Parameters.AddWithValue("CommonName", CommonName);
+				pCommand.Parameters.AddWithValue("CA", CA);
+				pCommand.Parameters.AddWithValue("Revoked", Revoked);
+				pCommand.Parameters.AddWithValue("LaunchAt", LaunchAt);
+				pCommand.Parameters.AddWithValue("ExpireAt", ExpireAt);
+				pCommand.Parameters.AddWithValue("PemData", PemData);
+				pCommand.ExecuteNonQuery();
+			}
+
+			return (true);
+		}
+
+		//　認証局証明書を生成
+		//　
+		//　pCommonName：
+		//　pCACertificate：署名する認証局の証明書データ
 		public bool CreateCA(OrgProfile pOrgProfile, string pCommonName, CertificateItem pCACertificate)
 		{
 			if (pCACertificate == null)
 			{
-				CertificateProvider.CreateRootCA(pOrgProfile, pCommonName);
+				//　ルート認証局の証明書と秘密鍵を生成
+				var iLifeDays = 365 * 10;
+				m_pCertificate = CertificateProvider.CreateRootCA(pOrgProfile, pCommonName, iLifeDays);
+				if (m_pCertificate == null)
+				{
+					return(false);
+				}
+				//　証明書記載情報の主要なものをキャッシュ
+				SequenceNumber = 0;
+				SerialNumber   = m_pCertificate.SerialNumber;
+				CommonName     = m_pCertificate.SubjectName.Name;
+				CA             = true;
+				Revoked        = false;
+				LaunchAt       = m_pCertificate.NotBefore;
+				ExpireAt       = m_pCertificate.NotAfter;
+				PemData        = m_pCertificate.ExportCertificatePem();
 			}
 
 			return (true);

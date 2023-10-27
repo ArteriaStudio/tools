@@ -58,6 +58,10 @@ namespace AutoCA
 							//　異常系：証明書の作成に失敗
 							return(false);
 						}
+						if (pTrustCAItem.Save(pSQLContext) == false)
+						{
+							return (false);
+						}
 					}
 					//var pTrustCAItem = FetchCertificate(pSQLContext, pTrustCAName);
 
