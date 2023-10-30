@@ -40,7 +40,7 @@ namespace AutoCA
 		}
 
 		//　環境の前提条件の状態を検査
-		public void Check(Profile pProfile, Identity pIdentity, OrgProfile pOrgProfile)
+		public void Check(Profile pProfile, Identity pIdentity, OrgProfile pOrgProfile, CertsStock pCertsStock)
 		{
 			//　データベース接続情報が登録されているか？
 			if (pProfile.m_pDbParams == null)
@@ -71,7 +71,14 @@ namespace AutoCA
 			}
 
 			//　有効な認証局証明書が存在するか？
-			bExistAuthority = false;
+			if ((pCertsStock == null) || (pCertsStock.Validate() == false))
+			{
+				bExistAuthority = false;
+			}
+			else
+			{
+				bExistAuthority = true;
+			}
 		}
 	}
 
@@ -112,7 +119,7 @@ namespace AutoCA
 				m_pCertsStock.Load(m_pSQLContext, m_pIdentity, m_pOrgProfile);
 			}
 			m_pPrepareFlags = new PrepareFlags();
-			m_pPrepareFlags.Check(m_pProfile, m_pIdentity, m_pOrgProfile);
+			m_pPrepareFlags.Check(m_pProfile, m_pIdentity, m_pOrgProfile, m_pCertsStock);
 
 			m_pWindow = new MainWindow();
 			m_pWindow.Activate();

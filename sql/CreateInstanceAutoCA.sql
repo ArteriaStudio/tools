@@ -1,7 +1,11 @@
 CREATE DATABASE AutoCA WITH OWNER = bkowner;
 \c autoca bkowner
 
+CREATE SEQUENCE SQ_CERTS;
+GRANT USAGE ON SEQUENCE SQ_CERTS TO aploper
+
 /* 発行した証明書 */
+DROP TABLE TIssuedCerts;
 CREATE TABLE TIssuedCerts (
   SequenceNumber INTEGER NOT NULL,
   SerialNumber   VARCHAR(48) NOT NULL,
@@ -11,10 +15,11 @@ CREATE TABLE TIssuedCerts (
   LaunchAt       TIMESTAMP NOT NULL,
   ExpireAt       TIMESTAMP NOT NULL,
   PemData        TEXT NOT NULL,
+  KeyData        TEXT NULL,
   PRIMARY KEY (SequenceNumber),
   UNIQUE (SerialNumber)
 );
-GRANT SELECT, UPDATE , INSERT, DELETE ON TIssuedCerts TO aploper;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TIssuedCerts TO aploper;
 
 /* 組織プロファイル */
 CREATE TABLE TOrgProfile (

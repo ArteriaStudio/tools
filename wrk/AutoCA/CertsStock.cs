@@ -16,11 +16,23 @@ namespace AutoCA
 	//　証明書データをコレクションするクラス
 	public class CertsStock
 	{
-		//private SQLContext	m_pSQLContext;
-		//public OrgProfile	m_pOrgProfile;
-
 		public CertsStock() { }
 
+		public CertificateItem	pTrustCAItem;
+		public CertificateItem	pIssueCAItem;
+
+		public bool Validate()
+		{
+			if (pTrustCAItem.Validate() == false)
+			{
+				return(false);
+			}
+			if (pIssueCAItem.Validate() == false)
+			{
+				return (false);
+			}
+			return (true);
+		}
 		//　
 		public bool Load(SQLContext pSQLContext, Identity pIdentity, OrgProfile pOrgProfile)
 		{
@@ -42,13 +54,12 @@ namespace AutoCA
 			var pIdentity = FetchIdentity(pSQLContext, iUserIdentity);
 			m_pOrgProfile = FetchOrgProfile(pSQLContext, iUserIdentity);
 			*/
-
 			if (pIdentity.Validate() == true)
 			{
 				if (pOrgProfile.Validate() == true)
 				{
 					//　ルート認証局の証明書データを入力
-					var pTrustCAItem = new CertificateItem();
+					pTrustCAItem = new CertificateItem();
 					var pTrustCAName = pIdentity.AuthorityName + "-RCA";
 					if (pTrustCAItem.Load(pSQLContext, pTrustCAName) == false)
 					{
@@ -63,10 +74,9 @@ namespace AutoCA
 							return (false);
 						}
 					}
-					//var pTrustCAItem = FetchCertificate(pSQLContext, pTrustCAName);
 
 					//　発行認証局の証明書データを入力
-					var pIssueCAItem = new CertificateItem();
+					pIssueCAItem = new CertificateItem();
 					var pIssueCAName = pIdentity.AuthorityName + "-ICA";
 					if (pIssueCAItem.Load(pSQLContext, pIssueCAName) == false)
 					{
@@ -75,8 +85,11 @@ namespace AutoCA
 							//　異常系：証明書の作成に失敗
 							return (false);
 						}
+						if (pIssueCAItem.Save(pSQLContext) == false)
+						{
+							return (false);
+						}
 					}
-					//var pIssueCAItem = FetchCertificate(pSQLContext, pIssueCAName);
 				}
 			}
 

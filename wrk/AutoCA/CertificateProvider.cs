@@ -7,6 +7,7 @@ using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Security.Cryptography.Certificates;
 
 namespace AutoCA
 {
@@ -67,10 +68,10 @@ namespace AutoCA
 		}
 
 		//　自己署名証明書を作成
-		public static X509Certificate2	CreateSelfCertificate(CertificateRequest pCertificateRequest, int iDays)
+		public static X509Certificate2	CreateSelfCertificate(CertificateRequest pCertificateRequest, int iLifeDays)
 		{
 			var pNotBefore = DateTimeOffset.UtcNow;
-			var pNotAfter = DateTimeOffset.UtcNow.AddDays(iDays);
+			var pNotAfter = DateTimeOffset.UtcNow.AddDays(iLifeDays);
 			return(pCertificateRequest.CreateSelfSigned(pNotBefore, pNotAfter));
 		}
 
@@ -110,6 +111,15 @@ namespace AutoCA
 			*/
 
 			return (pCertificate);
+		}
+
+		//　証明要求に署名を行い、証明書を作成する。
+		public static X509Certificate2 CreateCertificate(CertificateRequest pRequest, CertificateItem pTrustCrt, Int64 uSerialNumber, int iLifeDays)
+		{
+			var pNotBefore    = DateTimeOffset.UtcNow;
+			var pNotAfter     = DateTimeOffset.UtcNow.AddDays(iLifeDays);
+			var pSerialNumber = BitConverter.GetBytes(uSerialNumber);
+			return (pRequest.Create(pTrustCrt.m_pCertificate, pNotBefore, pNotAfter, pSerialNumber));
 		}
 	}
 }
