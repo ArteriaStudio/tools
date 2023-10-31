@@ -4,19 +4,28 @@ using Npgsql;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design.Serialization;
+using System.Data;
 using System.Globalization;
 using System.Linq;
+using System.Security.AccessControl;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Windows.Security.Authentication.OnlineId;
+using Windows.System;
 
 namespace AutoCA
 {
 	//　証明書データをコレクションするクラス
 	public class CertsStock
 	{
-		public CertsStock() { }
+		private CertsStock()
+		{
+			;
+		}
+
+		public static CertsStock Instance { get; set; } = new CertsStock();
 
 		public CertificateItem	pTrustCAItem;
 		public CertificateItem	pIssueCAItem;
@@ -145,6 +154,44 @@ namespace AutoCA
 
 			return (pOrgProfile);
 		}
+
+		public List<CertificateItem>	Listup(SQLContext pSQLContext)
+		{
+			var pCertificates = new List<CertificateItem>();
+
+			var pSQL = "SELECT SequenceNumber, SerialNumber, CommonName, CA, Revoked, LaunchAt, ExpireAt, PemData, KeyData FROM TIssuedCerts WHERE Revoked = FALSE AND LaunchAt <= now() AND now() < ExpireAt;";
+			using (var pCommand = new NpgsqlCommand(pSQL, pSQLContext.m_pConnection))
+			{
+				pCommand.Parameters.Clear();
+				//pCommand.Parameters.AddWithValue("CommonName", pCommonName);
+				using (var pReader = pCommand.ExecuteReader())
+				{
+					while (pReader.Read())
+					{
+						var pCertificateItem = new CertificateItem();
+						pCertificateItem.SequenceNumber = pReader.GetInt64(0);
+						pCertificateItem.SerialNumber   = pReader.GetString(1);
+						pCertificateItem.CommonName     = pReader.GetString(2);
+						pCertificateItem.CA             = pReader.GetBoolean(3);
+						pCertificateItem.Revoked        = pReader.GetBoolean(4);
+						pCertificateItem.LaunchAt       = pReader.GetDateTime(5);
+						pCertificateItem.ExpireAt       = pReader.GetDateTime(6);
+						pCertificateItem.PemData        = pReader.GetString(7);
+						pCertificateItem.KeyData        = pReader.GetString(8);
+						pCertificateItem.Prepare();
+
+						pCertificates.Add(pCertificateItem);
+					}
+					if (pCertificates.Count == 0)
+					{
+						return (null);
+					}
+				}
+			}
+
+			return (pCertificates);
+		}
+
 		/*
 		//　
 		protected CertificateItem FetchCertificate(SQLContext pSQLContext, string pCN)
@@ -200,7 +247,7 @@ namespace AutoCA
 			return;
 		}
 		*/
-		
+
 
 		//public List<CertficateItem> m_pCertItems;   //　
 	}

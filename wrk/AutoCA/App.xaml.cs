@@ -18,6 +18,7 @@ using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Security.Authentication.OnlineId;
+using Windows.Storage;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -79,8 +80,12 @@ namespace AutoCA
 			{
 				bExistAuthority = true;
 			}
+
+			return;
 		}
 	}
+
+
 
 	/// <summary>
 	/// Provides application-specific behavior to supplement the default Application class.
@@ -115,7 +120,7 @@ namespace AutoCA
 				m_pIdentity.Load(m_pSQLContext, iUserIdentity);
 				m_pOrgProfile = new OrgProfile();
 				m_pOrgProfile.Load(m_pSQLContext, iUserIdentity);
-				m_pCertsStock = new CertsStock();
+				m_pCertsStock = CertsStock.Instance;
 				m_pCertsStock.Load(m_pSQLContext, m_pIdentity, m_pOrgProfile);
 			}
 			m_pPrepareFlags = new PrepareFlags();
@@ -141,6 +146,11 @@ namespace AutoCA
 			{
 				m_pOrgProfile.Save(m_pSQLContext);
 			}
+		}
+
+		public SQLContext	GetSQLContext()
+		{
+			return (m_pSQLContext);
 		}
 
 		protected SQLContext m_pSQLContext;

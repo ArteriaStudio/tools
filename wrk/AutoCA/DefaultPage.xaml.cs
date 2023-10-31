@@ -1,3 +1,4 @@
+using Arteria_s.DB.Base;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
@@ -12,6 +13,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Security.Cryptography.Certificates;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -23,12 +25,25 @@ namespace AutoCA
 	/// </summary>
 	public sealed partial class DefaultPage : Page
 	{
-		private List<Certificate> pCertificates;
+		private List<CertificateItem> pCertificates;
 		public DefaultPage()
 		{
 			this.InitializeComponent();
-			pCertificates = new List<Certificate>();
-			//pCertificates.Add(new Certificate() { pCN="CommonName", pFilename = "filename"});
+
+			var pApp = App.Current as AutoCA.App;
+			var pSQLContext = pApp.GetSQLContext();
+			var pCertsStock = CertsStock.Instance;
+			pCertificates = pCertsStock.Listup(pSQLContext);
+		}
+
+		private void MenuBarItem_Tapped(object sender, TappedRoutedEventArgs e)
+		{
+			var b = 0;
+		}
+
+		private void MenuFlyoutItem_Click(object sender, RoutedEventArgs e)
+		{
+			var c = 0;
 		}
 	}
 }

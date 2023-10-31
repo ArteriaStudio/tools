@@ -80,6 +80,44 @@ namespace AutoCA
 			return (true);
 		}
 
+		public void Prepare()
+		{
+			if ((KeyData != null) && (KeyData.Length > 0))
+			{
+				m_pCertificate = X509Certificate2.CreateFromPem(PemData, KeyData);
+			}
+			else
+			{
+				m_pCertificate = X509Certificate2.CreateFromPem(PemData);
+			}
+
+			return;
+		}
+
+		public void LoadBridge(NpgsqlDataReader pReader)
+		{
+			SequenceNumber = pReader.GetInt64(0);
+			SerialNumber   = pReader.GetString(1);
+			CommonName     = pReader.GetString(2);
+			CA             = pReader.GetBoolean(3);
+			Revoked        = pReader.GetBoolean(4);
+			LaunchAt       = pReader.GetDateTime(5);
+			ExpireAt       = pReader.GetDateTime(6);
+			PemData        = pReader.GetString(7);
+			KeyData        = pReader.GetString(8);
+
+			if ((KeyData != null) && (KeyData.Length > 0))
+			{
+				m_pCertificate = X509Certificate2.CreateFromPem(PemData, KeyData);
+			}
+			else
+			{
+				m_pCertificate = X509Certificate2.CreateFromPem(PemData);
+			}
+
+			return;
+		}
+
 		//　
 		public bool Save(SQLContext pSQLContext)
 		{

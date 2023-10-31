@@ -61,6 +61,10 @@
 							<Style x:Key="CardStyleTextBlock" TargetType="TextBlock">
 								<Setter Property="Shadow" Value="{StaticResource CardShadow}" />
 							</Style>
+
+							<Style x:Key="ItemCaptionTextBlockStyle" TargetType="TextBlock" BasedOn="{StaticResource CaptionTextBlockStyle}">
+								<Setter Property="Foreground" Value="Gray"/>
+							</Style>
 						</ResourceDictionary>
 
 						<ResourceDictionary x:Key="Dark">
@@ -124,7 +128,10 @@
 							<Style x:Key="CaptionText" TargetType="TextBlock" BasedOn="{StaticResource BodyLargeTextBlockStyle}">
 								<Setter Property="Margin" Value="8,8,8,8" />
 							</Style>
-							
+
+							<Style x:Key="ItemCaptionTextBlockStyle" TargetType="TextBlock" BasedOn="{StaticResource CaptionTextBlockStyle}">
+								<Setter Property="Foreground" Value="LightGray"/>
+							</Style>
 						</ResourceDictionary>
 
 						<ResourceDictionary x:Key="HighContrast">
