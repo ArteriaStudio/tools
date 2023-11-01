@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection.PortableExecutable;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -15,21 +16,12 @@ namespace AutoCA
 	public static class CertificateProvider
 	{
 		//　署名要求を生成
-		public static CertificateRequest CreateSignRequest(OrgProfile pOrgProfile, string pCommonName)
+		public static CertificateRequest CreateSignRequest(ECDsaCng pKeys, OrgProfile pOrgProfile, string pCommonName)
 		{
 			string pSubject = $"C={pOrgProfile.CountryName},L={pOrgProfile.LocalityName},O={pOrgProfile.OrgName},CN={pCommonName},";
-			
-			//　秘密鍵を生成（楕円曲線方式）
-			ECDsaCng pKey = new ECDsaCng();
-			/*
-			 * 秘密鍵をテキストに変換
-			var pTextOfKey1 = pKey.ExportPkcs8PrivateKey();
-			var pText1 = Convert.ToBase64String(pTextOfKey1);
-			Debug.WriteLine("PrivateKey(PKCS#8):" + pText1);
-			*/
 
 			//　署名要求を生成（der形式）
-			CertificateRequest pRequest = new CertificateRequest(pSubject, pKey, HashAlgorithmName.SHA256);
+			CertificateRequest pRequest = new CertificateRequest(pSubject, pKeys, HashAlgorithmName.SHA256);
 
 			//　CA制約：証明書が認証局であるか否かを指定する。
 			pRequest.CertificateExtensions.Add(new X509BasicConstraintsExtension(true, true, 2, true));
@@ -43,7 +35,101 @@ namespace AutoCA
 				new Oid("1.3.6.1.5.5.7.3.3"),	//　codeSigning
 				new Oid("1.3.6.1.5.5.7.3.4"),	//　emailProtection
 			};
+			//pRequest.CertificateExtensions.Add(new X509EnhancedKeyUsageExtension(pEnhancedKeyUsageFlags, false));
+
+			/*
+			var pTextOfKey = pKey.ExportPkcs8PrivateKey();
+			var pText = Convert.ToBase64String(pTextOfKey);
+			Debug.WriteLine("PrivateKey(PKCS#8):" + pText);
+
+			var pBytesOfKey = pKey.ExportECPrivateKey();
+			File.WriteAllBytes("D:/tmp/256.txt", pBytesOfKey);
+					
+			var pText2 = Convert.ToBase64String(pBytesOfKey);
+			Debug.WriteLine("PrivateKey():" + pText2);
+			*/
+
+			/*
+			var pNotBefore = DateTimeOffset.UtcNow;
+			var pNotAfter = DateTimeOffset.UtcNow.AddDays(365);
+			var pBytes = pRequest.CreateSigningRequest();
+			var pRootCert = pRequest.CreateSelfSigned(pNotBefore, pNotAfter);
+			*/
+
+			return (pRequest);
+		}
+
+		//　署名要求（メール証明書）を生成
+		public static CertificateRequest CreateSignRequestForClient(ECDsaCng pKeys, OrgProfile pOrgProfile, string pCommonName, string pEmail)
+		{
+			string pSubject = $"C={pOrgProfile.CountryName},L={pOrgProfile.LocalityName},O={pOrgProfile.OrgName},CN={pCommonName},";
+			
+			//　署名要求を生成（der形式）
+			CertificateRequest pRequest = new CertificateRequest(pSubject, pKeys, HashAlgorithmName.SHA256);
+
+			//　CA制約：証明書が認証局であるか否かを指定する。
+			pRequest.CertificateExtensions.Add(new X509BasicConstraintsExtension(true, true, 2, true));
+			pRequest.CertificateExtensions.Add(new X509SubjectKeyIdentifierExtension(pRequest.PublicKey, false));
+			var pKeyUsageFlags = X509KeyUsageFlags.NonRepudiation | X509KeyUsageFlags.KeyCertSign | X509KeyUsageFlags.DigitalSignature | X509KeyUsageFlags.EncipherOnly;
+			pRequest.CertificateExtensions.Add(new X509KeyUsageExtension(pKeyUsageFlags, false));
+			OidCollection pEnhancedKeyUsageFlags = new OidCollection
+			{
+				// https://oidref.com/1.3.6.1.5.5.7.3.2
+				new Oid("1.3.6.1.5.5.7.3.4"),	//　emailProtection
+			};
 			pRequest.CertificateExtensions.Add(new X509EnhancedKeyUsageExtension(pEnhancedKeyUsageFlags, false));
+
+			var pBuilder = new SubjectAlternativeNameBuilder();
+			pBuilder.AddEmailAddress(pEmail);
+			var pExtBuilt = pBuilder.Build(true);
+			pRequest.CertificateExtensions.Add(new X509SubjectAlternativeNameExtension(pExtBuilt.RawData));
+
+			/*
+			var pTextOfKey = pKey.ExportPkcs8PrivateKey();
+			var pText = Convert.ToBase64String(pTextOfKey);
+			Debug.WriteLine("PrivateKey(PKCS#8):" + pText);
+
+			var pBytesOfKey = pKey.ExportECPrivateKey();
+			File.WriteAllBytes("D:/tmp/256.txt", pBytesOfKey);
+					
+			var pText2 = Convert.ToBase64String(pBytesOfKey);
+			Debug.WriteLine("PrivateKey():" + pText2);
+			*/
+
+			/*
+			var pNotBefore = DateTimeOffset.UtcNow;
+			var pNotAfter = DateTimeOffset.UtcNow.AddDays(365);
+			var pBytes = pRequest.CreateSigningRequest();
+			var pRootCert = pRequest.CreateSelfSigned(pNotBefore, pNotAfter);
+			*/
+
+			return (pRequest);
+		}
+
+		//　署名要求（サーバ証明書）を生成
+		public static CertificateRequest CreateSignRequestForServer(ECDsaCng pKeys, OrgProfile pOrgProfile, string pCommonName, string pDnsName)
+		{
+			string pSubject = $"C={pOrgProfile.CountryName},L={pOrgProfile.LocalityName},O={pOrgProfile.OrgName},CN={pCommonName},";
+
+			//　署名要求を生成（der形式）
+			CertificateRequest pRequest = new CertificateRequest(pSubject, pKeys, HashAlgorithmName.SHA256);
+
+			//　CA制約：証明書が認証局であるか否かを指定する。
+			pRequest.CertificateExtensions.Add(new X509BasicConstraintsExtension(true, true, 2, true));
+			pRequest.CertificateExtensions.Add(new X509SubjectKeyIdentifierExtension(pRequest.PublicKey, false));
+			var pKeyUsageFlags = X509KeyUsageFlags.NonRepudiation | X509KeyUsageFlags.KeyCertSign | X509KeyUsageFlags.DigitalSignature | X509KeyUsageFlags.EncipherOnly;
+			pRequest.CertificateExtensions.Add(new X509KeyUsageExtension(pKeyUsageFlags, false));
+			OidCollection pEnhancedKeyUsageFlags = new OidCollection
+			{
+				// https://oidref.com/1.3.6.1.5.5.7.3.2
+				new Oid("1.3.6.1.5.5.7.3.1"),   //　serverAuth
+			};
+			pRequest.CertificateExtensions.Add(new X509EnhancedKeyUsageExtension(pEnhancedKeyUsageFlags, false));
+
+			var pBuilder = new SubjectAlternativeNameBuilder();
+			pBuilder.AddDnsName(pDnsName);
+			var pExtBuilt = pBuilder.Build(true);
+			pRequest.CertificateExtensions.Add(new X509SubjectAlternativeNameExtension(pExtBuilt.RawData));
 
 			/*
 			var pTextOfKey = pKey.ExportPkcs8PrivateKey();
@@ -75,11 +161,12 @@ namespace AutoCA
 			return(pCertificateRequest.CreateSelfSigned(pNotBefore, pNotAfter));
 		}
 
-
+#if (false)
 		//　ルート認証局の証明書を作成
-		public static X509Certificate2	CreateRootCA(OrgProfile pOrgProfile, string pCommonName, int iLifeDays)
+		public static X509Certificate2	CreateRootCA(ECDsaCng pKeys, OrgProfile pOrgProfile, string pCommonName, int iLifeDays)
 		{
-			var pRequest = CreateSignRequest(pOrgProfile, pCommonName);
+			//　署名要求を生成
+			var pRequest = CreateSignRequest(pKeys, pOrgProfile, pCommonName);
 			if (pRequest == null)
 			{
 				return(null);
@@ -101,7 +188,7 @@ namespace AutoCA
 			*/
 			/*
 			//　
-			var pCertificateItem = new CertificateItem();
+			var pCertificateItem = new Certificate();
 			pCertificateItem.SequenceNumber = 0;
 			pCertificateItem.SerialNumber   = pCertificate.SerialNumber;
 			pCertificateItem.CommonName     = pCertificate.SubjectName.Name;
@@ -112,9 +199,9 @@ namespace AutoCA
 
 			return (pCertificate);
 		}
-
+#endif
 		//　証明要求に署名を行い、証明書を作成する。
-		public static X509Certificate2 CreateCertificate(CertificateRequest pRequest, CertificateItem pTrustCrt, Int64 uSerialNumber, int iLifeDays)
+		public static X509Certificate2 CreateCertificate(CertificateRequest pRequest, Certificate pTrustCrt, Int64 uSerialNumber, int iLifeDays)
 		{
 			var pNotBefore    = DateTimeOffset.UtcNow;
 			var pNotAfter     = DateTimeOffset.UtcNow.AddDays(iLifeDays);

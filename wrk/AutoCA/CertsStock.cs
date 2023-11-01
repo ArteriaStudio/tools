@@ -18,6 +18,7 @@ using Windows.System;
 namespace AutoCA
 {
 	//　証明書データをコレクションするクラス
+	//　認証局クラス
 	public class CertsStock
 	{
 		private CertsStock()
@@ -27,11 +28,15 @@ namespace AutoCA
 
 		public static CertsStock Instance { get; set; } = new CertsStock();
 
-		public CertificateItem	pTrustCAItem;
-		public CertificateItem	pIssueCAItem;
+		public Certificate	pTrustCAItem;
+		public Certificate	pIssueCAItem;
 
 		public bool Validate()
 		{
+			if ((pTrustCAItem == null)|| (pIssueCAItem == null))
+			{
+				return (false);
+			}
 			if (pTrustCAItem.Validate() == false)
 			{
 				return(false);
@@ -42,9 +47,20 @@ namespace AutoCA
 			}
 			return (true);
 		}
-		//　
-		public bool Load(SQLContext pSQLContext, Identity pIdentity, OrgProfile pOrgProfile)
+
+		public Identity 	m_pIdentity;
+		public OrgProfile	m_pOrgProfile;
+
+		//　認証局の証明書と鍵を入力
+		public bool Load(SQLContext pSQLContext)
 		{
+			var iUserIdentity = 0;
+			m_pIdentity = new Identity();
+			m_pIdentity.Load(pSQLContext, iUserIdentity);
+			m_pOrgProfile = new OrgProfile();
+			m_pOrgProfile.Load(pSQLContext, iUserIdentity);
+
+
 			/*
 			if (pDbParams.Validate() == false)
 			{
@@ -63,17 +79,17 @@ namespace AutoCA
 			var pIdentity = FetchIdentity(pSQLContext, iUserIdentity);
 			m_pOrgProfile = FetchOrgProfile(pSQLContext, iUserIdentity);
 			*/
-			if (pIdentity.Validate() == true)
+			if (m_pIdentity.Validate() == true)
 			{
-				if (pOrgProfile.Validate() == true)
+				if (m_pOrgProfile.Validate() == true)
 				{
 					//　ルート認証局の証明書データを入力
-					pTrustCAItem = new CertificateItem();
-					var pTrustCAName = pIdentity.AuthorityName + "-RCA";
+					pTrustCAItem = new Certificate();
+					var pTrustCAName = m_pIdentity.AuthorityName + "-RCA";
 					if (pTrustCAItem.Load(pSQLContext, pTrustCAName) == false)
 					{
 						//　ルート認証局の証明書を作成
-						if (pTrustCAItem.CreateCA(pOrgProfile, pTrustCAName, null) == false)
+						if (pTrustCAItem.CreateCA(m_pOrgProfile, pTrustCAName, null) == false)
 						{
 							//　異常系：証明書の作成に失敗
 							return(false);
@@ -85,11 +101,11 @@ namespace AutoCA
 					}
 
 					//　発行認証局の証明書データを入力
-					pIssueCAItem = new CertificateItem();
-					var pIssueCAName = pIdentity.AuthorityName + "-ICA";
+					pIssueCAItem = new Certificate();
+					var pIssueCAName = m_pIdentity.AuthorityName + "-ICA";
 					if (pIssueCAItem.Load(pSQLContext, pIssueCAName) == false)
 					{
-						if (pIssueCAItem.CreateCA(pOrgProfile, pIssueCAName, pTrustCAItem) == false)
+						if (pIssueCAItem.CreateCA(m_pOrgProfile, pIssueCAName, pTrustCAItem) == false)
 						{
 							//　異常系：証明書の作成に失敗
 							return (false);
@@ -100,6 +116,22 @@ namespace AutoCA
 						}
 					}
 				}
+			}
+
+			return (true);
+		}
+
+		//　サーバ証明書を生成する。
+		public bool CreateForServer(SQLContext pSQLContext, string pCommonName, string pFQDN)
+		{
+			var pCertificate = new Certificate();
+			if (pCertificate.CreateForServer(m_pOrgProfile, pCommonName, pFQDN, pIssueCAItem) == false)
+			{
+				return(false);
+			}
+			if (pCertificate.Save(pSQLContext) == false)
+			{
+				return (false);
 			}
 
 			return (true);
@@ -155,9 +187,10 @@ namespace AutoCA
 			return (pOrgProfile);
 		}
 
-		public List<CertificateItem>	Listup(SQLContext pSQLContext)
+		//　
+		public List<Certificate>	Listup(SQLContext pSQLContext)
 		{
-			var pCertificates = new List<CertificateItem>();
+			var pCertificates = new List<Certificate>();
 
 			var pSQL = "SELECT SequenceNumber, SerialNumber, CommonName, CA, Revoked, LaunchAt, ExpireAt, PemData, KeyData FROM TIssuedCerts WHERE Revoked = FALSE AND LaunchAt <= now() AND now() < ExpireAt;";
 			using (var pCommand = new NpgsqlCommand(pSQL, pSQLContext.m_pConnection))
@@ -168,7 +201,7 @@ namespace AutoCA
 				{
 					while (pReader.Read())
 					{
-						var pCertificateItem = new CertificateItem();
+						var pCertificateItem = new Certificate();
 						pCertificateItem.SequenceNumber = pReader.GetInt64(0);
 						pCertificateItem.SerialNumber   = pReader.GetString(1);
 						pCertificateItem.CommonName     = pReader.GetString(2);
@@ -194,9 +227,9 @@ namespace AutoCA
 
 		/*
 		//　
-		protected CertificateItem FetchCertificate(SQLContext pSQLContext, string pCN)
+		protected Certificate FetchCertificate(SQLContext pSQLContext, string pCN)
 		{
-			var pCertificateItem = new CertificateItem();
+			var pCertificateItem = new Certificate();
 
 			var pSQL = "SELECT SequenceNumber, SerialNumber, CommonName, Revoked, PemData FROM TIssuedCerts WHERE SequenceNumber = @SequenceNumber;";
 			using (var pCommand = new NpgsqlCommand(pSQL, pSQLContext.m_pConnection))
@@ -250,5 +283,17 @@ namespace AutoCA
 
 
 		//public List<CertficateItem> m_pCertItems;   //　
+
+		//　
+		public void SaveIdentity(SQLContext pSQLContext)
+		{
+			m_pIdentity.Save(pSQLContext);
+		}
+
+		//　
+		public void SaveOrgProfile(SQLContext pSQLContext)
+		{
+			m_pOrgProfile.Save(pSQLContext);
+		}
 	}
 }

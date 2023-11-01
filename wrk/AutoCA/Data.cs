@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Arteria_s.DB
 {
 	public abstract class Data
 	{
-		protected bool IsNotNull(string pText)
+		public static bool IsNotNull(string pText)
 		{
 			if (pText == null)
 			{
@@ -21,7 +22,7 @@ namespace Arteria_s.DB
 			return (true);
 		}
 
-		protected bool IsNull(string pValue)
+		public static bool IsNull(string pValue)
 		{
 			if (pValue == null)
 			{
@@ -33,6 +34,53 @@ namespace Arteria_s.DB
 				return (true);
 			}
 			return (false);
+		}
+
+		//　メールアドレスの書式検査
+		public static bool IsValidMail(string pValue)
+		{
+			if (IsNotNull(pValue) == false)
+			{
+				return (false);
+			}
+			var pRegex = new Regex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$");
+			if (pRegex.IsMatch(pValue) == false)
+			{
+				return (false);
+			}
+
+			return (true);
+		}
+
+		//　メールアドレスの書式検査
+		public static bool IsValidFQDN(string pValue)
+		{
+			if (IsNotNull(pValue) == false)
+			{
+				return (false);
+			}
+			var pRegex = new Regex(@"[^@\s]+\.[^@\s]+$");
+			if (pRegex.IsMatch(pValue) == false)
+			{
+				return (false);
+			}
+
+			return (true);
+		}
+
+		public static bool IsValidCommonName(string pValue)
+		{
+			if (IsNotNull(pValue) == false)
+			{
+				return (false);
+			}
+			if (pValue.IndexOf(';') != -1)
+			{
+				//　使用不可文字を検出
+				return (false);
+			}
+
+			return (true);
 		}
 
 		public abstract bool Validate();

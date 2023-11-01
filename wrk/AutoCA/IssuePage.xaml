@@ -23,10 +23,34 @@
 				<ColumnDefinition Width="*"/>
 				<ColumnDefinition Width="*"/>
 			</Grid.ColumnDefinitions>
-			<TextBlock Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Style="{StaticResource CaptionText}">証明書発行</TextBlock>
-			<TextBlock Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource CaptionText}"></TextBlock>
+			<TextBlock Grid.Column="0" HorizontalAlignment="Left"  VerticalAlignment="Center" Style="{StaticResource CaptionText}">証明書発行</TextBlock>
+			<TextBlock Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource CaptionText}">00000000</TextBlock>
 		</Grid>
-		<Grid Grid.Column="0" Grid.Row="1" Background="Gray">
+		<Grid Grid.Column="0" Grid.Row="1" Background="#202020">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*"/>
+			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="*"/>
+			</Grid.RowDefinitions>
+
+			<StackPanel Grid.Column="0" Grid.Row="0" Margin="8, 8, 8, 8" Orientation="Horizontal">
+				<ComboBox x:Name="CertType" Header="証明書の種類" Margin="2, 2, 2, 2" SelectionChanged="CertType_SelectionChanged">
+					<ComboBoxItem Tag="Host" Content="サーバ証明書"/>
+					<ComboBoxItem Tag="Mail" Content="メール証明書"/>
+				</ComboBox>
+			</StackPanel>
+			<TextBox x:Name="CommonName"  Grid.Column="0" Grid.Row="1" Margin="8, 8, 8, 8" Header="共通名" Text="{x:Bind m_pForm.m_pCommonName, Mode=TwoWay}"  PlaceholderText="証明書に記載する名前"  TextChanged="TextBox_TextChanged" />
+			<TextBox x:Name="HostName"    Grid.Column="0" Grid.Row="2" Margin="8, 8, 8, 8" Header="FQDN"  Text="{x:Bind m_pForm.m_pHostName, Mode=TwoWay}"    PlaceholderText="FQDN形式での識別名称" TextChanged="TextBox_TextChanged" />
+			<TextBox x:Name="MailAddress" Grid.Column="0" Grid.Row="3" Margin="8, 8, 8, 8" Header="メール" Text="{x:Bind m_pForm.m_pMailAddress, Mode=TwoWay}" PlaceholderText="メールアドレス"       TextChanged="TextBox_TextChanged" />
+			<StackPanel Grid.Column="0" Grid.Row="4" Margin="8, 8, 8, 8" Orientation="Horizontal" HorizontalAlignment="Right">
+				<Button x:Name="IssueButton" Style="{StaticResource AccentButtonStyle}" IsEnabled="False" Content="発行" Click="IssueButton_Click" />
+			</StackPanel>
 		</Grid>
 	</Grid>
 </Page>

@@ -41,7 +41,7 @@ namespace AutoCA
 		}
 
 		//　環境の前提条件の状態を検査
-		public void Check(Profile pProfile, Identity pIdentity, OrgProfile pOrgProfile, CertsStock pCertsStock)
+		public void Check(Profile pProfile, CertsStock pCertsStock)
 		{
 			//　データベース接続情報が登録されているか？
 			if (pProfile.m_pDbParams == null)
@@ -54,21 +54,21 @@ namespace AutoCA
 			}
 
 			//　認証局の主体情報が登録されているか？
-			if (pIdentity == null)
+			if (pCertsStock.m_pIdentity == null)
 			{
 				bExistIdentity = false;
 			}
 			else
 			{
-				bExistIdentity = pIdentity.Validate();
+				bExistIdentity = pCertsStock.m_pIdentity.Validate();
 			}
-			if (pOrgProfile == null)
+			if (pCertsStock.m_pOrgProfile == null)
 			{
 				bExistOrgProfile = false;
 			}
 			else
 			{
-				bExistOrgProfile = pOrgProfile.Validate();
+				bExistOrgProfile = pCertsStock.m_pOrgProfile.Validate();
 			}
 
 			//　有効な認証局証明書が存在するか？
@@ -115,16 +115,11 @@ namespace AutoCA
 			{
 				m_pSQLContext = new SQLContext(m_pProfile.m_pDbParams.HostName, m_pProfile.m_pDbParams.InstanceName, m_pProfile.m_pDbParams.SchemaName, m_pProfile.m_pDbParams.ClientKey, m_pProfile.m_pDbParams.ClientCrt, m_pProfile.m_pDbParams.TrustCrt);
 
-				var iUserIdentity = 0;
-				m_pIdentity = new Identity();
-				m_pIdentity.Load(m_pSQLContext, iUserIdentity);
-				m_pOrgProfile = new OrgProfile();
-				m_pOrgProfile.Load(m_pSQLContext, iUserIdentity);
 				m_pCertsStock = CertsStock.Instance;
-				m_pCertsStock.Load(m_pSQLContext, m_pIdentity, m_pOrgProfile);
+				m_pCertsStock.Load(m_pSQLContext);
 			}
 			m_pPrepareFlags = new PrepareFlags();
-			m_pPrepareFlags.Check(m_pProfile, m_pIdentity, m_pOrgProfile, m_pCertsStock);
+			m_pPrepareFlags.Check(m_pProfile, m_pCertsStock);
 
 			m_pWindow = new MainWindow();
 			m_pWindow.Activate();
@@ -135,7 +130,7 @@ namespace AutoCA
 		{
 			if (m_pSQLContext != null)
 			{
-				m_pIdentity.Save(m_pSQLContext);
+				m_pCertsStock.m_pIdentity.Save(m_pSQLContext);
 			}
 		}
 
@@ -144,7 +139,7 @@ namespace AutoCA
 		{
 			if (m_pSQLContext != null)
 			{
-				m_pOrgProfile.Save(m_pSQLContext);
+				m_pCertsStock.m_pOrgProfile.Save(m_pSQLContext);
 			}
 		}
 
@@ -157,8 +152,6 @@ namespace AutoCA
 
 		public Window m_pWindow;
 		public Profile m_pProfile;
-		public Identity m_pIdentity;
-		public OrgProfile m_pOrgProfile;
 		public PrepareFlags m_pPrepareFlags;		//　前提条件検査結果（）
 		public CertsStock m_pCertsStock;
 	}

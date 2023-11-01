@@ -312,7 +312,7 @@ namespace AutoCA
 		}
 		*/
 		/*
-		public bool SaveCertificate(SqliteConnection pConnection, CertificateItem pCertficateItem)
+		public bool SaveCertificate(SqliteConnection pConnection, Certificate pCertficateItem)
 		{
 			try
 			{
@@ -345,16 +345,16 @@ namespace AutoCA
 		}
 		*/
 		/*
-		public static CertificateItem GetCertificate(int pSerialNumber)
+		public static Certificate GetCertificate(int pSerialNumber)
 		{
 			return(GetCertificate(m_pConnection, pSerialNumber));
 		}
 		*/
 		/*
 		//　指定したシリアル番号の証明書データを取得
-		protected static CertificateItem GetCertificate(SqliteConnection pConnection, int iSequenceNumber)
+		protected static Certificate GetCertificate(SqliteConnection pConnection, int iSequenceNumber)
 		{
-			CertificateItem pCertificateItem = new CertificateItem();
+			Certificate pCertificateItem = new Certificate();
 
 			try
 			{

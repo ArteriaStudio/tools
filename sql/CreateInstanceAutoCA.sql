@@ -22,14 +22,16 @@ CREATE TABLE TIssuedCerts (
 GRANT SELECT, UPDATE, INSERT, DELETE ON TIssuedCerts TO aploper;
 
 /* 組織プロファイル */
+DROP TABLE TOrgProfile;
 CREATE TABLE TOrgProfile (
-  OrgKey        INTEGER     NOT NULL,
-  OrgName       VARCHAR(64) NOT NULL,
-  OrgUnitName   VARCHAR(48) NOT NULL,
-  LocalityName  VARCHAR(32) NOT NULL,
-  ProvinceName  VARCHAR(32) NOT NULL,
-  CountryName   VARCHAR(2)  NOT NULL,
-  UpdateAt      TIMESTAMP   NOT NULL,
+  OrgKey        INTEGER      NOT NULL,
+  OrgName       VARCHAR(64)  NOT NULL,
+  OrgUnitName   VARCHAR(48)  NOT NULL,
+  LocalityName  VARCHAR(32)  NOT NULL,
+  ProvinceName  VARCHAR(32)  NOT NULL,
+  CountryName   VARCHAR(2)   NOT NULL,
+  ServerName    VARCHAR(256) NOT NULL,
+  UpdateAt      TIMESTAMP    NOT NULL,
   PRIMARY KEY (OrgKey)
 );
 GRANT SELECT, UPDATE , INSERT, DELETE ON TOrgProfile TO aploper;

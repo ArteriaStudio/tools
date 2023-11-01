@@ -27,6 +27,7 @@ namespace AutoCA
 		public string LocalityName { get; set; }
 		public string ProvinceName { get; set; }
 		public string CountryName { get; set; }
+		public string ServerName { get; set; }
 		public DateTime UpdataAt { get; set; }
 
 		public override bool Validate()
@@ -51,13 +52,17 @@ namespace AutoCA
 			{
 				return (false);
 			}
+			if (IsNotNull(ServerName) == false)
+			{
+				return (false);
+			}
 			return (true);
 		}
 
 		//　データベースから入力
 		public bool Load(SQLContext pSQLContext, int iUserIdentity)
 		{
-			var pSQL = "SELECT OrgKey, OrgName, OrgUnitName, LocalityName, ProvinceName, CountryName, UpdateAt FROM TOrgProfile WHERE OrgKey = @OrgKey;";
+			var pSQL = "SELECT OrgKey, OrgName, OrgUnitName, LocalityName, ProvinceName, CountryName, ServerName, UpdateAt FROM TOrgProfile WHERE OrgKey = @OrgKey;";
 			using (var pCommand = new NpgsqlCommand(pSQL, pSQLContext.m_pConnection))
 			{
 				pCommand.Parameters.Clear();
@@ -72,7 +77,8 @@ namespace AutoCA
 						LocalityName = pReader.GetString(3);
 						ProvinceName = pReader.GetString(4);
 						CountryName  = pReader.GetString(5);
-						UpdataAt     = pReader.GetDateTime(6);
+						ServerName   = pReader.GetString(6);
+						UpdataAt     = pReader.GetDateTime(7);
 					}
 				}
 			}
@@ -83,8 +89,8 @@ namespace AutoCA
 		//　データベースに保存
 		public bool Save(SQLContext pSQLContext)
 		{
-			var pSQL = "INSERT INTO TOrgProfile VALUES (@OrgKey, @OrgName, @OrgUnitName, @LocalityName, @ProvinceName, @CountryName, now())";
-			pSQL += " ON CONFLICT ON CONSTRAINT torgprofile_pkey DO UPDATE SET OrgName = @OrgName, OrgUnitName = @OrgUnitName, LocalityName = @LocalityName, ProvinceName = @ProvinceName, CountryName = @CountryName, UpdateAt = now()";
+			var pSQL = "INSERT INTO TOrgProfile VALUES (@OrgKey, @OrgName, @OrgUnitName, @LocalityName, @ProvinceName, @CountryName, @ServerName, now())";
+			pSQL += " ON CONFLICT ON CONSTRAINT torgprofile_pkey DO UPDATE SET OrgName = @OrgName, OrgUnitName = @OrgUnitName, LocalityName = @LocalityName, ProvinceName = @ProvinceName, CountryName = @CountryName, ServerName = @ServerName, UpdateAt = now()";
 			using (var pCommand = new NpgsqlCommand(pSQL, pSQLContext.m_pConnection))
 			{
 				pCommand.Parameters.Clear();
@@ -94,6 +100,7 @@ namespace AutoCA
 				pCommand.Parameters.AddWithValue("LocalityName", LocalityName);
 				pCommand.Parameters.AddWithValue("ProvinceName", ProvinceName);
 				pCommand.Parameters.AddWithValue("CountryName", CountryName);
+				pCommand.Parameters.AddWithValue("ServerName", ServerName);
 				pCommand.ExecuteNonQuery();
 			}
 			return (true);

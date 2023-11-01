@@ -29,9 +29,10 @@ namespace AutoCA
 		public IdentityPage()
 		{
 			this.InitializeComponent();
-			var pApp = App.Current as AutoCA.App;
-			m_pIdentity   = pApp.m_pIdentity;
-			m_pOrgProfile = pApp.m_pOrgProfile;
+
+			var m_pCertsStock = CertsStock.Instance;
+			m_pIdentity   = m_pCertsStock.m_pIdentity;
+			m_pOrgProfile = m_pCertsStock.m_pOrgProfile;
 			/*
 			var pProfile = pApp.m_pProfile;
 			var pCertsStock = pApp.m_pCertsStock;
@@ -92,8 +93,8 @@ namespace AutoCA
 			}
 
 			var pApp = App.Current as AutoCA.App;
-			pApp.SaveIdentity();
 			pApp.SaveOrgProfile();
+			pApp.SaveIdentity();
 			//pApp.m_pOrgProfile.Save();
 
 

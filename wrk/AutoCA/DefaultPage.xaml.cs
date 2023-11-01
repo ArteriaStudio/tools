@@ -25,7 +25,7 @@ namespace AutoCA
 	/// </summary>
 	public sealed partial class DefaultPage : Page
 	{
-		private List<CertificateItem> pCertificates;
+		private List<Certificate> pCertificates;
 		public DefaultPage()
 		{
 			this.InitializeComponent();
@@ -38,12 +38,12 @@ namespace AutoCA
 
 		private void MenuBarItem_Tapped(object sender, TappedRoutedEventArgs e)
 		{
-			var b = 0;
+			//var b = 0;
 		}
 
 		private void MenuFlyoutItem_Click(object sender, RoutedEventArgs e)
 		{
-			var c = 0;
+			//var c = 0;
 		}
 	}
 }
