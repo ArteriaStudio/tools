@@ -33,12 +33,6 @@ namespace AutoCA
 			var m_pCertsStock = Authority.Instance;
 			m_pIdentity   = m_pCertsStock.m_pIdentity;
 			m_pOrgProfile = m_pCertsStock.m_pOrgProfile;
-			/*
-			var pProfile = pApp.m_pProfile;
-			var pAuthority = pApp.m_pCertsStock;
-			*/
-
-			//m_pProfile = pProfile.m_pOrgProfile;
 		}
 
 		//　TODO: データオブジェクト側に検査処理を寄せること
@@ -95,15 +89,7 @@ namespace AutoCA
 			var pApp = App.Current as AutoCA.App;
 			pApp.SaveOrgProfile();
 			pApp.SaveIdentity();
-			//pApp.m_pOrgProfile.Save();
 
-
-			//var pAuthority = pApp.m_pCertsStock;
-			//pAuthority.Save()
-
-
-			//var pProfile = pApp.m_pProfile;
-			//pProfile.Save();
 			Save.IsEnabled = false;
 		}
 

@@ -29,6 +29,7 @@ namespace AutoCA
 			pRequest.CertificateExtensions.Add(new X509SubjectKeyIdentifierExtension(pRequest.PublicKey, false));
 			var pKeyUsageFlags = X509KeyUsageFlags.NonRepudiation | X509KeyUsageFlags.KeyCertSign | X509KeyUsageFlags.DigitalSignature | X509KeyUsageFlags.EncipherOnly;
 			pRequest.CertificateExtensions.Add(new X509KeyUsageExtension(pKeyUsageFlags, false));
+			/*
 			OidCollection pEnhancedKeyUsageFlags = new OidCollection
 			{
 				// https://oidref.com/1.3.6.1.5.5.7.3.2
@@ -36,26 +37,8 @@ namespace AutoCA
 				new Oid("1.3.6.1.5.5.7.3.3"),	//　codeSigning
 				new Oid("1.3.6.1.5.5.7.3.4"),	//　emailProtection
 			};
+			*/
 			//pRequest.CertificateExtensions.Add(new X509EnhancedKeyUsageExtension(pEnhancedKeyUsageFlags, false));
-
-			/*
-			var pTextOfKey = pKey.ExportPkcs8PrivateKey();
-			var pText = Convert.ToBase64String(pTextOfKey);
-			Debug.WriteLine("PrivateKey(PKCS#8):" + pText);
-
-			var pBytesOfKey = pKey.ExportECPrivateKey();
-			File.WriteAllBytes("D:/tmp/256.txt", pBytesOfKey);
-					
-			var pText2 = Convert.ToBase64String(pBytesOfKey);
-			Debug.WriteLine("PrivateKey():" + pText2);
-			*/
-
-			/*
-			var pNotBefore = DateTimeOffset.UtcNow;
-			var pNotAfter = DateTimeOffset.UtcNow.AddDays(365);
-			var pBytes = pRequest.CreateSigningRequest();
-			var pRootCert = pRequest.CreateSelfSigned(pNotBefore, pNotAfter);
-			*/
 
 			return (pRequest);
 		}
@@ -85,25 +68,6 @@ namespace AutoCA
 			var pExtBuilt = pBuilder.Build(true);
 			pRequest.CertificateExtensions.Add(new X509SubjectAlternativeNameExtension(pExtBuilt.RawData));
 
-			/*
-			var pTextOfKey = pKey.ExportPkcs8PrivateKey();
-			var pText = Convert.ToBase64String(pTextOfKey);
-			Debug.WriteLine("PrivateKey(PKCS#8):" + pText);
-
-			var pBytesOfKey = pKey.ExportECPrivateKey();
-			File.WriteAllBytes("D:/tmp/256.txt", pBytesOfKey);
-					
-			var pText2 = Convert.ToBase64String(pBytesOfKey);
-			Debug.WriteLine("PrivateKey():" + pText2);
-			*/
-
-			/*
-			var pNotBefore = DateTimeOffset.UtcNow;
-			var pNotAfter = DateTimeOffset.UtcNow.AddDays(365);
-			var pBytes = pRequest.CreateSigningRequest();
-			var pRootCert = pRequest.CreateSelfSigned(pNotBefore, pNotAfter);
-			*/
-
 			return (pRequest);
 		}
 
@@ -132,25 +96,6 @@ namespace AutoCA
 			var pExtBuilt = pBuilder.Build(true);
 			pRequest.CertificateExtensions.Add(new X509SubjectAlternativeNameExtension(pExtBuilt.RawData));
 
-			/*
-			var pTextOfKey = pKey.ExportPkcs8PrivateKey();
-			var pText = Convert.ToBase64String(pTextOfKey);
-			Debug.WriteLine("PrivateKey(PKCS#8):" + pText);
-
-			var pBytesOfKey = pKey.ExportECPrivateKey();
-			File.WriteAllBytes("D:/tmp/256.txt", pBytesOfKey);
-					
-			var pText2 = Convert.ToBase64String(pBytesOfKey);
-			Debug.WriteLine("PrivateKey():" + pText2);
-			*/
-
-			/*
-			var pNotBefore = DateTimeOffset.UtcNow;
-			var pNotAfter = DateTimeOffset.UtcNow.AddDays(365);
-			var pBytes = pRequest.CreateSigningRequest();
-			var pRootCert = pRequest.CreateSelfSigned(pNotBefore, pNotAfter);
-			*/
-
 			return (pRequest);
 		}
 
@@ -168,7 +113,6 @@ namespace AutoCA
 			pCDP.Add("http://" + pServerName + "/" + CommonName + ".crl");
 			var pCDPExtension = CertificateRevocationListBuilder.BuildCrlDistributionPointExtension(pCDP, false);
 			pRequest.CertificateExtensions.Add(pCDPExtension);
-
 
 			//　認証局識別子を署名要求に追加。発行認証局の「鍵識別子（SKI）」
 			X509SubjectKeyIdentifierExtension	pSKI = null;
@@ -192,65 +136,9 @@ namespace AutoCA
 			return(pRequest.CreateSelfSigned(pNotBefore, pNotAfter));
 		}
 
-#if (false)
-		//　ルート認証局の証明書を作成
-		public static X509Certificate2	CreateRootCA(ECDsaCng pKeys, OrgProfile pOrgProfile, string pCommonName, int iLifeDays)
-		{
-			//　署名要求を生成
-			var pRequest = CreateSignRequest(pKeys, pOrgProfile, pCommonName);
-			if (pRequest == null)
-			{
-				return(null);
-			}
-			//　デバッグ用：署名要求のバイト列を生成
-			//var pBytes = pRequest.CreateSigningRequest();
-
-			var pCertificate = CreateSelfCertificate(pRequest, iLifeDays);
-			if (pCertificate == null)
-			{
-				return (null);
-			}
-			/*
-			var pPrivateKey = pCertificate.GetECDsaPrivateKey();
-			var pPublicKey = pPrivateKey.ExportSubjectPublicKeyInfo();
-
-			Debug.WriteLine("PrivateKey: "+Convert.ToBase64String(pPrivateKey.ExportECPrivateKey()));
-			Debug.WriteLine("PublicKey: "+Convert.ToBase64String(pPublicKey));
-			*/
-			/*
-			//　
-			var pCertificateItem = new Certificate();
-			pCertificateItem.SequenceNumber = 0;
-			pCertificateItem.SerialNumber   = pCertificate.SerialNumber;
-			pCertificateItem.CommonName     = pCertificate.SubjectName.Name;
-			pCertificateItem.Revoked        = false;
-			pCertificateItem.PemData        = pCertificate.ExportCertificatePem();
-			pCertificateItem.pCertificate   = pCertificate;
-			*/
-
-			return (pCertificate);
-		}
-#endif
 		//　証明要求に署名を行い、証明書を作成する。
 		public static X509Certificate2 CreateCertificate(CertificateRequest pRequest, Certificate pTrustCrt, int iLifeDays, string pServerName)
 		{
-			//　署名要求に認証局の機関情報アクセスと失効リストのURLを追加する。
-			//pTrustCrt.m_pCertificate.Extensions;
-			/*
-			var pBuilder = new SubjectAlternativeNameBuilder();
-			pBuilder.AddDnsName(pDnsName);
-			var pExtBuilt = pBuilder.Build(true);
-			*/
-			//X509Extension	pExtension = new X509Extension()
-
-			/*
-			var pExtension = new X509AuthorityInformationAccessExtension();
-			//pExtensions;
-			pExtension.Oid.Value = "1.3.6.1.5.5.7.1.1";
-			*/
-
-
-
 			//　機関情報アクセスを署名要求に追加
 			List<string> pOCSP = new List<string>();
 			List<string> pICAs = new List<string>();
@@ -278,7 +166,6 @@ namespace AutoCA
 
 			var pNotBefore    = DateTimeOffset.UtcNow;
 			var pNotAfter     = DateTimeOffset.UtcNow.AddDays(iLifeDays);
-			//var pSerialNumber = BitConverter.GetBytes(uSerialNumber);
 
 			//　※ 自己署名証明書の生成時に使っているロジック（ユニーク性は保証されていない）
 			Span<byte> pSerialNumber = stackalloc byte[8];

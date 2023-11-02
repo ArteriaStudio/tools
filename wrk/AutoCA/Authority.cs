@@ -54,31 +54,13 @@ namespace AutoCA
 		//　認証局の証明書と鍵を入力
 		public bool Load(SQLContext pSQLContext)
 		{
+			//　組織プロファイルと認証局情報を入力
 			var iUserIdentity = 0;
 			m_pIdentity = new Identity();
 			m_pIdentity.Load(pSQLContext, iUserIdentity);
 			m_pOrgProfile = new OrgProfile();
 			m_pOrgProfile.Load(pSQLContext, iUserIdentity);
 
-
-			/*
-			if (pDbParams.Validate() == false)
-			{
-				//　準正常：接続情報が未登録のため、ここでの処理なし
-				return (true);
-			}
-			*/
-			/*
-			//　データベースインスタンスに接続
-			m_pSQLContext = new SQLContext(pDbParams.HostName, pDbParams.InstanceName, pDbParams.SchemaName, pDbParams.ClientKey, pDbParams.ClientCrt, pDbParams.TrustCrt);
-			*/
-
-			//　認証局の主体者情報を入力
-			/*
-			var iUserIdentity = 0;
-			var pIdentity = FetchIdentity(pSQLContext, iUserIdentity);
-			m_pOrgProfile = FetchOrgProfile(pSQLContext, iUserIdentity);
-			*/
 			if (m_pIdentity.Validate() == true)
 			{
 				if (m_pOrgProfile.Validate() == true)
@@ -217,19 +199,18 @@ namespace AutoCA
 				{
 					while (pReader.Read())
 					{
-						var pCertificateItem = new Certificate();
-						pCertificateItem.SequenceNumber = pReader.GetInt64(0);
-						pCertificateItem.SerialNumber   = pReader.GetString(1);
-						pCertificateItem.CommonName     = pReader.GetString(2);
-						pCertificateItem.TypeOf         = (CertificateType)pReader.GetInt32(3);
-						pCertificateItem.Revoked        = pReader.GetBoolean(4);
-						pCertificateItem.LaunchAt       = pReader.GetDateTime(5);
-						pCertificateItem.ExpireAt       = pReader.GetDateTime(6);
-						pCertificateItem.PemData        = pReader.GetString(7);
-						pCertificateItem.KeyData        = pReader.GetString(8);
-						pCertificateItem.Prepare();
-
-						pCertificates.Add(pCertificateItem);
+						var pCertificate = new Certificate();
+						pCertificate.SequenceNumber = pReader.GetInt64(0);
+						pCertificate.SerialNumber   = pReader.GetString(1);
+						pCertificate.CommonName     = pReader.GetString(2);
+						pCertificate.TypeOf         = (CertificateType)pReader.GetInt32(3);
+						pCertificate.Revoked        = pReader.GetBoolean(4);
+						pCertificate.LaunchAt       = pReader.GetDateTime(5);
+						pCertificate.ExpireAt       = pReader.GetDateTime(6);
+						pCertificate.PemData        = pReader.GetString(7);
+						pCertificate.KeyData        = pReader.GetString(8);
+						pCertificate.Prepare();
+						pCertificates.Add(pCertificate);
 					}
 					if (pCertificates.Count == 0)
 					{
@@ -278,72 +259,13 @@ namespace AutoCA
 			return (pCertificate);
 		}
 
-		/*
-		//　
-		protected Certificate FetchCertificate(SQLContext pSQLContext, string pCN)
-		{
-			var pCertificateItem = new Certificate();
-
-			var pSQL = "SELECT SequenceNumber, SerialNumber, CommonName, Revoked, PemData FROM TIssuedCerts WHERE SequenceNumber = @SequenceNumber;";
-			using (var pCommand = new NpgsqlCommand(pSQL, pSQLContext.m_pConnection))
-			{
-				pCommand.Parameters.Clear();
-				pCommand.Parameters.AddWithValue("SequenceNumber", 0);
-				using (var pReader = pCommand.ExecuteReader())
-				{
-					while (pReader.Read())
-					{
-						pCertificateItem.SequenceNumber = pReader.GetInt32(0);
-						pCertificateItem.SerialNumber   = pReader.GetString(1);
-						pCertificateItem.CommonName     = pReader.GetString(2);
-						pCertificateItem.Revoked        = pReader.GetBoolean(3);
-						pCertificateItem.PemData        = pReader.GetString(4);
-					}
-				}
-			}
-
-			return (pCertificateItem);
-		}
-		*/
-		/*
-		//　
-		public void Initialize2(Identity pIdentity, OrgProfile pOrgProfile)
-		{
-			//m_pCertItems = new List<CertficateItem>();
-
-			//　ルート証明書をロード
-			var pCertificate = Profile.GetCertificate(0);
-			if (pCertificate == null )
-			{
-				if ((pIdentity.Validate() == true) && (pOrgProfile.Validate() == true))
-				{
-					//　準正常：初回起動かルート証明書がなく、主体情報の入力は済んでいるため再作成
-					string pCommonName = pIdentity.AuthorityName + "-RCA";
-					var pCertificateItem = CertificateProvider.CreateRootCA(pOrgProfile, pCommonName);
-					
-					//m_pCertItems.Add(pCertificateItem);
-				}
-				else
-				{
-					//　準正常：初回起動かルート証明書がなく、主体情報が未入力
-					//　この時点での処理はない（ルート証明書を作成できないので、主体情報の入力を促す）
-				}
-			}
-
-			return;
-		}
-		*/
-
-
-		//public List<CertficateItem> m_pCertItems;   //　
-
-		//　
+		//　認証局情報を保存
 		public void SaveIdentity(SQLContext pSQLContext)
 		{
 			m_pIdentity.Save(pSQLContext);
 		}
 
-		//　
+		//　組織プロファイルを保存
 		public void SaveOrgProfile(SQLContext pSQLContext)
 		{
 			m_pOrgProfile.Save(pSQLContext);

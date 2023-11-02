@@ -28,6 +28,15 @@
 						</ResourceDictionary>
 						
 						<ResourceDictionary x:Key="Light">
+							<Color x:Key="Tone_0">#8F8F8F</Color>
+							<Color x:Key="Tone_1">#9F9F9F</Color>
+							<Color x:Key="Tone_2">#AFAFAF</Color>
+							<Color x:Key="Tone_3">#BFBFBF</Color>
+							<Color x:Key="Tone_4">#CFCFCF</Color>
+							<Color x:Key="Tone_5">#DFDFDF</Color>
+							<Color x:Key="Tone_6">#EFEFEF</Color>
+							<Color x:Key="Tone_7">#FFFFFF</Color>
+
 							<AcrylicBrush x:Key="NavigationViewTopPaneBackground"
 								   TintColor="{ThemeResource SystemAccentColor}"
 								   TintOpacity=".6"/>
@@ -85,6 +94,15 @@
 							<Color x:Key="ListViewItemBackgroundPointerOver">#118833</Color>
 							<Color x:Key="ListViewItemBackgroundSelected">#225522</Color>
 							<Color x:Key="ListViewItemBackgroundSelectedPointerOver">#118833</Color>
+
+							<Color x:Key="Tone_0">#0F0F0F</Color>
+							<Color x:Key="Tone_1">#1F1F1F</Color>
+							<Color x:Key="Tone_2">#2F2F2F</Color>
+							<Color x:Key="Tone_3">#3F3F3F</Color>
+							<Color x:Key="Tone_4">#4F4F4F</Color>
+							<Color x:Key="Tone_5">#5F5F5F</Color>
+							<Color x:Key="Tone_6">#6F6F6F</Color>
+							<Color x:Key="Tone_7">#7F7F7F</Color>
 
 							<Color x:Key="CardBackgroundColor">#a9a9a9</Color>
 							<AcrylicBrush x:Key="CardBackground"

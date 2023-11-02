@@ -41,11 +41,16 @@
 
 			<StackPanel Grid.Column="0" Grid.Row="0" Margin="8, 8, 8, 8" Orientation="Horizontal">
 				<ComboBox x:Name="CertType" Header="証明書の種類" Margin="2, 2, 2, 2" SelectionChanged="CertType_SelectionChanged">
-					<ComboBoxItem Tag="Host"     Content="サーバ証明書"/>
-					<ComboBoxItem Tag="Mail"     Content="メール証明書"/>
-					<ComboBoxItem Tag="Postgres" Content="PostgreSQLクライアント証明書"/>
-					<ComboBoxItem Tag="Web"      Content="ウェブサーバ証明書"/>
+					<ComboBoxItem Tag="Server" Content="サーバー証明書" />
+					<ComboBoxItem Tag="Client" Content="クライアント証明書" />
 				</ComboBox>
+				<!--
+				<ComboBox x:Name="Application" Header="利用するアプリケーション" Margin="2, 2, 2, 2" SelectionChanged="Application_SelectionChanged">
+					<ComboBoxItem Tag="Web"      Content="ウェブ" />
+					<ComboBoxItem Tag="Postgres" Content="PostgreSQL" />
+					<ComboBoxItem Tag="Mail"     Content="メール" />
+				</ComboBox>
+				-->
 			</StackPanel>
 			<TextBox x:Name="CommonName"  Grid.Column="0" Grid.Row="1" Margin="8, 8, 8, 8" Header="共通名" Text="{x:Bind m_pForm.m_pCommonName, Mode=TwoWay}"  PlaceholderText="証明書に記載する名前"  TextChanged="TextBox_TextChanged" />
 			<TextBox x:Name="HostName"    Grid.Column="0" Grid.Row="2" Margin="8, 8, 8, 8" Header="FQDN"  Text="{x:Bind m_pForm.m_pHostName, Mode=TwoWay}"    PlaceholderText="FQDN形式での識別名称" TextChanged="TextBox_TextChanged" />

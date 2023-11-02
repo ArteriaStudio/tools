@@ -13,7 +13,6 @@
     <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="CreateCAPage.xaml" />
     <None Remove="DefaultPage.xaml" />
     <None Remove="IdentityPage.xaml" />
     <None Remove="IssuePage.xaml" />
@@ -61,11 +60,6 @@
   </ItemGroup>
   <ItemGroup>
     <Page Update="Settings.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Page Update="CreateCAPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>

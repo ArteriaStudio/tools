@@ -46,11 +46,6 @@ namespace AutoCA
 				//　設定情報（認証局主体者情報入力画面）に遷移
 				this.ContentFrame.Navigate(typeof(IdentityPage));
 			}
-			else if (pApp.m_pPrepareFlags.bExistAuthority == false)
-			{
-				//　認証局証明書発行に遷移
-				this.ContentFrame.Navigate(typeof(CreateCAPage));
-			}
 			else
 			{
 				//　既定の初期画面に遷移
@@ -142,9 +137,6 @@ namespace AutoCA
 				break;
 			case "Signing":
 				ContentFrame.Navigate(typeof(SigningPage));
-				break;
-			case "CreateCA":
-				ContentFrame.Navigate(typeof(CreateCAPage));
 				break;
 			case "Identity":
 				ContentFrame.Navigate(typeof(IdentityPage));

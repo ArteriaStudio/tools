@@ -114,9 +114,8 @@ namespace AutoCA
 
 		private void CertType_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
-			Debug.WriteLine("Selected: " + CertType.SelectedIndex);
-
 			IssueButton.IsEnabled = IsValidForm();
+
 			UpdateFormState();
 		}
 
@@ -125,13 +124,13 @@ namespace AutoCA
 			switch (CertType.SelectedIndex)
 			{
 				case 0:
-					//　サーバ証明書にメールアドレスは不要
+					//　サーバー証明書にメールアドレスは不要
 					CommonName.IsEnabled = true;
 					HostName.IsEnabled = true;
 					MailAddress.IsEnabled = false;
 					break;
 				case 1:
-					//　メール証明書にFQDNは不要
+					//　クライアント証明書にFQDNは不要
 					CommonName.IsEnabled = true;
 					HostName.IsEnabled = false;
 					MailAddress.IsEnabled = true;
@@ -166,8 +165,6 @@ namespace AutoCA
 				pAuthority.CreateForClient(pSQLContext, m_pForm.m_pCommonName, m_pForm.m_pMailAddress);
 				break;
 			}
-
-
 		}
 	}
 }

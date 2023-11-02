@@ -21,7 +21,6 @@
 					<NavigationViewItem Tag="Signing" Icon="Accept" Content="署名を実行"/>
 				</NavigationViewItem.MenuItems>
 			</NavigationViewItem>
-			<NavigationViewItem Tag="CreateCA" Icon="Admin" Content="認証局を作成"/>
 			<NavigationViewItem Tag="Identity" Icon="ShowResults" Content="認証局主体者情報"/>
 		</NavigationView.MenuItems>
 
