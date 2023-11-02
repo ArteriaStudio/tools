@@ -275,6 +275,23 @@ namespace AutoCA
 			return (true);
 		}
 
+		//　証明書を失効
+		public void Revoke(SQLContext pSQLContext)
+		{
+			var pSQL = "UPDATE TIssuedCerts SET Revoked = @Revoked WHERE SerialNumber = @SerialNumber";
+			using (var pCommand = new NpgsqlCommand(pSQL, pSQLContext.m_pConnection))
+			{
+				Revoked = true;
+
+				pCommand.Parameters.Clear();
+				pCommand.Parameters.AddWithValue("SerialNumber", SerialNumber);
+				pCommand.Parameters.AddWithValue("Revoked", Revoked);
+				pCommand.ExecuteNonQuery();
+			}
+
+			return;
+		}
+
 		public bool	Validate()
 		{
 			if (SequenceNumber == -1)

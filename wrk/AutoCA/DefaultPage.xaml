@@ -35,16 +35,22 @@
 					<TextBlock Margin="12, 0, 0, 0" Text="失効" />
 				</StackPanel>
 			</Button>
-			<Button x:Name="UpdateButton" Margin="4, 8, 4, 8" Style="{StaticResource ButtonRevealStyle}">
+			<Button x:Name="UpdateButton" Margin="4, 8, 4, 8" Style="{StaticResource ButtonRevealStyle}" Click="UpdateButton_Click">
 				<StackPanel Orientation="Horizontal">
-					<SymbolIcon Symbol="Refresh" />
-					<TextBlock Margin="12, 0, 0, 0" Text="更新" />
+					<SymbolIcon Symbol="Go" />
+					<TextBlock Margin="12, 0, 0, 0" Text="証明書を更新" />
 				</StackPanel>
 			</Button>
 			<Button x:Name="ExportButton" Margin="4, 8, 4, 8" Style="{StaticResource ButtonRevealStyle}" Click="ExportButton_Click">
 				<StackPanel Orientation="Horizontal">
 					<SymbolIcon Symbol="Download" />
 					<TextBlock Margin="12, 0, 0, 0" Text="ファイルに出力" />
+				</StackPanel>
+			</Button>
+			<Button x:Name="ReloadButton" Margin="4, 8, 4, 8" Style="{StaticResource ButtonRevealStyle}">
+				<StackPanel Orientation="Horizontal">
+					<SymbolIcon Symbol="Refresh" />
+					<TextBlock Margin="12, 0, 0, 0" Text="再表示" />
 				</StackPanel>
 			</Button>
 		</StackPanel>

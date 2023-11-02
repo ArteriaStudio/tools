@@ -28,6 +28,7 @@ namespace AutoCA
 	public sealed partial class DefaultPage : Page
 	{
 		private List<Certificate> pCertificates;
+
 		public DefaultPage()
 		{
 			this.InitializeComponent();
@@ -51,7 +52,14 @@ namespace AutoCA
 				IsEnabled = false;
 			}
 			RevokeButton.IsEnabled = IsEnabled;
+			UpdateButton.IsEnabled = IsEnabled;
 			ExportButton.IsEnabled = IsEnabled;
+		}
+
+		//　
+		private void CertsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			UpdateFormState();
 		}
 
 		//　
@@ -114,9 +122,79 @@ namespace AutoCA
 			return;
 		}
 
-		private void CertsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		//　有効期限を更新した証明書を発行
+		private void UpdateButton_Click(object sender, RoutedEventArgs e)
 		{
-			UpdateFormState();
+			if (CertsList.SelectedIndex == -1)
+			{
+				//　選択項目がなければ処理なし
+				return;
+			}
+
+			var pCommonName   = pCertificates[CertsList.SelectedIndex].CommonName;
+			var pSerialNumber = pCertificates[CertsList.SelectedIndex].SerialNumber;
+
+			DisplayUpdateDialog(pCommonName, pSerialNumber);
+
+			return;
 		}
+
+		//　
+		private async void DisplayUpdateDialog(string pCommonName, string pSerialNumber)
+		{
+			ContentDialog pExportDialog = new ContentDialog
+			{
+				Title = "証明書を更新",
+				Content = "証明書（" + pCommonName + "：" + pSerialNumber + "）の有効期限を延長した証明書を発行します。\nよろしいですか？",
+				CloseButtonText = "いいえ",
+				PrimaryButtonText = "はい",
+				DefaultButton = ContentDialogButton.Primary,
+				XamlRoot = this.Content.XamlRoot
+			};
+
+			try
+			{
+				var eResult = await pExportDialog.ShowAsync();
+				this.OnChoiceUpdateDialog(eResult, pSerialNumber);
+			}
+			catch (Exception ex)
+			{
+				Debug.WriteLine(ex);
+			}
+
+			return;
+		}
+
+		//　証明書の有効期限を延長した証明書を発行する処理（利用者の同意を得た契機）
+		private void OnChoiceUpdateDialog(ContentDialogResult eResult, string pSerialNumber)
+		{
+			if (eResult != ContentDialogResult.Primary)
+			{
+				return;
+			}
+
+			//　
+			var pApp = App.Current as AutoCA.App;
+			var pSQLContext = pApp.GetSQLContext();
+			var pAuthority = Authority.Instance;
+			var pCertificate = pAuthority.Fetch(pSQLContext, pSerialNumber);
+
+			//　更新した証明書を発行する。
+			pAuthority.Update(pSQLContext, pCertificate);
+
+			//　証明書を失効する。
+			pAuthority.Revoke(pSQLContext, pCertificate);
+
+			//　
+			foreach (var pCert in pCertificates)
+			{
+				if (pCert.SerialNumber == pSerialNumber)
+				{
+					pCert.Revoked = true;
+					break;
+				}
+			}
+		}
+
 	}
 }

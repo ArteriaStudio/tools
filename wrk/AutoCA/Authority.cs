@@ -259,6 +259,18 @@ namespace AutoCA
 			return (pCertificate);
 		}
 
+		//　有効期限を延長した証明書を発行
+		public void Update(SQLContext pSQLContext, Certificate pCertificate)
+		{
+			;
+		}
+
+		//　証明書を失効
+		public void Revoke(SQLContext pSQLContext, Certificate pCertificate)
+		{
+			pCertificate.Revoke(pSQLContext);
+		}
+
 		//　認証局情報を保存
 		public void SaveIdentity(SQLContext pSQLContext)
 		{

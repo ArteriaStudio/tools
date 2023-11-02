@@ -122,6 +122,7 @@ namespace AutoCA
 			m_pPrepareFlags.Check(m_pProfile, m_pCertsStock);
 
 			m_pWindow = new MainWindow();
+			m_pWindow.Title = "EasyCA";
 			m_pWindow.Activate();
 		}
 
