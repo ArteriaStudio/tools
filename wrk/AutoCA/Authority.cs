@@ -19,14 +19,14 @@ namespace AutoCA
 {
 	//　証明書データをコレクションするクラス
 	//　認証局クラス
-	public class CertsStock
+	public class Authority
 	{
-		private CertsStock()
+		private Authority()
 		{
 			;
 		}
 
-		public static CertsStock Instance { get; set; } = new CertsStock();
+		public static Authority Instance { get; set; } = new Authority();
 
 		public Certificate	pTrustCAItem;
 		public Certificate	pIssueCAItem;
@@ -137,6 +137,22 @@ namespace AutoCA
 			return (true);
 		}
 
+		//　メール証明書を生成する。
+		public bool CreateForClient(SQLContext pSQLContext, string pCommonName, string pMailAddress)
+		{
+			var pCertificate = new Certificate();
+			if (pCertificate.CreateForClient(m_pOrgProfile, pCommonName, pMailAddress, pIssueCAItem) == false)
+			{
+				return (false);
+			}
+			if (pCertificate.Save(pSQLContext) == false)
+			{
+				return (false);
+			}
+
+			return (true);
+		}
+
 		//　
 		protected Identity FetchIdentity(SQLContext pSQLContext, int iAuthorityKey)
 		{
@@ -192,7 +208,7 @@ namespace AutoCA
 		{
 			var pCertificates = new List<Certificate>();
 
-			var pSQL = "SELECT SequenceNumber, SerialNumber, CommonName, CA, Revoked, LaunchAt, ExpireAt, PemData, KeyData FROM TIssuedCerts WHERE Revoked = FALSE AND LaunchAt <= now() AND now() < ExpireAt;";
+			var pSQL = "SELECT SequenceNumber, SerialNumber, CommonName, TypeOf, Revoked, LaunchAt, ExpireAt, PemData, KeyData FROM TIssuedCerts WHERE Revoked = FALSE AND LaunchAt <= now() AND now() < ExpireAt;";
 			using (var pCommand = new NpgsqlCommand(pSQL, pSQLContext.m_pConnection))
 			{
 				pCommand.Parameters.Clear();
@@ -205,7 +221,7 @@ namespace AutoCA
 						pCertificateItem.SequenceNumber = pReader.GetInt64(0);
 						pCertificateItem.SerialNumber   = pReader.GetString(1);
 						pCertificateItem.CommonName     = pReader.GetString(2);
-						pCertificateItem.CA             = pReader.GetBoolean(3);
+						pCertificateItem.TypeOf         = (CertificateType)pReader.GetInt32(3);
 						pCertificateItem.Revoked        = pReader.GetBoolean(4);
 						pCertificateItem.LaunchAt       = pReader.GetDateTime(5);
 						pCertificateItem.ExpireAt       = pReader.GetDateTime(6);
@@ -223,6 +239,43 @@ namespace AutoCA
 			}
 
 			return (pCertificates);
+		}
+
+		//　シリアル番号で証明書を取得
+		public Certificate Fetch(SQLContext pSQLContext, string pSerialNumber)
+		{
+			var pCertificate = new Certificate();
+
+			var pSQL = "SELECT SequenceNumber, SerialNumber, CommonName, TypeOf, Revoked, LaunchAt, ExpireAt, PemData, KeyData FROM TIssuedCerts WHERE SerialNumber = @SerialNumber;";
+			using (var pCommand = new NpgsqlCommand(pSQL, pSQLContext.m_pConnection))
+			{
+				pCommand.Parameters.Clear();
+				pCommand.Parameters.AddWithValue("SerialNumber", pSerialNumber);
+				using (var pReader = pCommand.ExecuteReader())
+				{
+					var iCount = 0;
+					while (pReader.Read())
+					{
+						pCertificate.SequenceNumber = pReader.GetInt64(0);
+						pCertificate.SerialNumber   = pReader.GetString(1);
+						pCertificate.CommonName     = pReader.GetString(2);
+						pCertificate.TypeOf         = (CertificateType)pReader.GetInt32(3);
+						pCertificate.Revoked        = pReader.GetBoolean(4);
+						pCertificate.LaunchAt       = pReader.GetDateTime(5);
+						pCertificate.ExpireAt       = pReader.GetDateTime(6);
+						pCertificate.PemData        = pReader.GetString(7);
+						pCertificate.KeyData        = pReader.GetString(8);
+						pCertificate.Prepare();
+						iCount ++;
+					}
+					if (iCount == 0)
+					{
+						return (null);
+					}
+				}
+			}
+
+			return (pCertificate);
 		}
 
 		/*

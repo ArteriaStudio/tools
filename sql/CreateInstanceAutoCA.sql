@@ -10,7 +10,7 @@ CREATE TABLE TIssuedCerts (
   SequenceNumber INTEGER NOT NULL,
   SerialNumber   VARCHAR(48) NOT NULL,
   CommonName     VARCHAR(256) NOT NULL,
-  CA             BOOLEAN NOT NULL,
+  TypeOf         INTEGER NOT NULL,
   Revoked        BOOLEAN NOT NULL,
   LaunchAt       TIMESTAMP NOT NULL,
   ExpireAt       TIMESTAMP NOT NULL,
@@ -22,7 +22,7 @@ CREATE TABLE TIssuedCerts (
 GRANT SELECT, UPDATE, INSERT, DELETE ON TIssuedCerts TO aploper;
 
 /* 組織プロファイル */
-DROP TABLE TOrgProfile;
+DROP TABLE TOrgProfile CASCADE;
 CREATE TABLE TOrgProfile (
   OrgKey        INTEGER      NOT NULL,
   OrgName       VARCHAR(64)  NOT NULL,

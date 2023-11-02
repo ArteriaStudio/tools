@@ -8,12 +8,14 @@ using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Security.Cryptography.Certificates;
+using Windows.Storage;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -32,18 +34,89 @@ namespace AutoCA
 
 			var pApp = App.Current as AutoCA.App;
 			var pSQLContext = pApp.GetSQLContext();
-			var pCertsStock = CertsStock.Instance;
-			pCertificates = pCertsStock.Listup(pSQLContext);
+			var pAuthority = Authority.Instance;
+			pCertificates = pAuthority.Listup(pSQLContext);
+			UpdateFormState();
 		}
 
-		private void MenuBarItem_Tapped(object sender, TappedRoutedEventArgs e)
+		private void UpdateFormState()
 		{
-			//var b = 0;
+			bool IsEnabled = true;
+			if (CertsList.Items.Count <= 0)
+			{
+				IsEnabled = false;
+			}
+			else if (CertsList.SelectedIndex == -1)
+			{
+				IsEnabled = false;
+			}
+			RevokeButton.IsEnabled = IsEnabled;
+			ExportButton.IsEnabled = IsEnabled;
 		}
 
-		private void MenuFlyoutItem_Click(object sender, RoutedEventArgs e)
+		//　
+		private async void DisplayExportDialog(string pCommonName, string pSerialNumber)
 		{
-			//var c = 0;
+			ContentDialog pExportDialog = new ContentDialog
+			{
+				Title = "証明書をエクスポート",
+				Content = "証明書（" + pCommonName + "：" + pSerialNumber + "）をファイルに出力します。\nよろしいですか？",
+				CloseButtonText = "いいえ",
+				PrimaryButtonText = "はい",
+				DefaultButton = ContentDialogButton.Primary,
+				XamlRoot = this.Content.XamlRoot
+			};
+
+			try
+			{
+				var eResult = await pExportDialog.ShowAsync();
+				this.OnChoiceExportDialog(eResult, pSerialNumber);
+			}
+			catch (Exception ex)
+			{
+				Debug.WriteLine(ex);
+			}
+
+			return;
+		}
+
+		//　証明書をエクスポートする処理（利用者の同意を得た契機）
+		private void OnChoiceExportDialog(ContentDialogResult eResult, string pSerialNumber)
+		{
+			if (eResult != ContentDialogResult.Primary)
+			{
+				return;
+			}
+			var pApp = App.Current as AutoCA.App;
+			var pSQLContext = pApp.GetSQLContext();
+			var pAuthority = Authority.Instance;
+			var pCertificate = pAuthority.Fetch(pSQLContext, pSerialNumber);
+
+			//　ダウンロードフォルダにファイルを出力する。
+			var pExportFolder = System.Environment.GetEnvironmentVariable("USERPROFILE") + "\\Downloads";
+			pCertificate.Export(pExportFolder);
+		}
+
+		//　選択した証明書をファイルに出力する。
+		private void ExportButton_Click(object sender, RoutedEventArgs e)
+		{
+			if (CertsList.SelectedIndex == -1)
+			{
+				//　選択項目がなければ処理なし
+				return;
+			}
+
+			var pCommonName   = pCertificates[CertsList.SelectedIndex].CommonName;
+			var pSerialNumber = pCertificates[CertsList.SelectedIndex].SerialNumber;
+
+			DisplayExportDialog(pCommonName, pSerialNumber);
+
+			return;
+		}
+
+		private void CertsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			UpdateFormState();
 		}
 	}
 }

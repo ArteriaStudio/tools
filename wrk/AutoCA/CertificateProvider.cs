@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection.PortableExecutable;
+using System.Security.AccessControl;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -154,11 +155,41 @@ namespace AutoCA
 		}
 
 		//　自己署名証明書を作成
-		public static X509Certificate2	CreateSelfCertificate(CertificateRequest pCertificateRequest, int iLifeDays)
+		public static X509Certificate2	CreateSelfCertificate(CertificateRequest pRequest, string CommonName, int iLifeDays, string pServerName)
 		{
+			//　機関情報アクセスを署名要求に追加
+			List<string> pOCSP = new List<string>();
+			List<string> pICAs = new List<string>();
+			pICAs.Add("http://" + pServerName + "/" + CommonName + ".crt");
+			pRequest.CertificateExtensions.Add(new X509AuthorityInformationAccessExtension(pOCSP, pICAs, false));
+
+			//　失効リスト配布ポイントを署名要求に追加
+			List<string> pCDP = new List<string>();
+			pCDP.Add("http://" + pServerName + "/" + CommonName + ".crl");
+			var pCDPExtension = CertificateRevocationListBuilder.BuildCrlDistributionPointExtension(pCDP, false);
+			pRequest.CertificateExtensions.Add(pCDPExtension);
+
+
+			//　認証局識別子を署名要求に追加。発行認証局の「鍵識別子（SKI）」
+			X509SubjectKeyIdentifierExtension	pSKI = null;
+			foreach (var pExtension in pRequest.CertificateExtensions)
+			{
+				//　拡張情報からSKIを探索し、そのキーをAKIに転写
+				if (pExtension.Oid.Value == "2.5.29.14")
+				{
+					pSKI = (X509SubjectKeyIdentifierExtension)pExtension;
+					break;
+				}
+			}
+			if (pSKI != null)
+			{
+				var pAKI = X509AuthorityKeyIdentifierExtension.CreateFromSubjectKeyIdentifier(pSKI);
+				pRequest.CertificateExtensions.Add(pAKI);
+			}
+
 			var pNotBefore = DateTimeOffset.UtcNow;
 			var pNotAfter = DateTimeOffset.UtcNow.AddDays(iLifeDays);
-			return(pCertificateRequest.CreateSelfSigned(pNotBefore, pNotAfter));
+			return(pRequest.CreateSelfSigned(pNotBefore, pNotAfter));
 		}
 
 #if (false)
@@ -201,11 +232,58 @@ namespace AutoCA
 		}
 #endif
 		//　証明要求に署名を行い、証明書を作成する。
-		public static X509Certificate2 CreateCertificate(CertificateRequest pRequest, Certificate pTrustCrt, Int64 uSerialNumber, int iLifeDays)
+		public static X509Certificate2 CreateCertificate(CertificateRequest pRequest, Certificate pTrustCrt, int iLifeDays, string pServerName)
 		{
+			//　署名要求に認証局の機関情報アクセスと失効リストのURLを追加する。
+			//pTrustCrt.m_pCertificate.Extensions;
+			/*
+			var pBuilder = new SubjectAlternativeNameBuilder();
+			pBuilder.AddDnsName(pDnsName);
+			var pExtBuilt = pBuilder.Build(true);
+			*/
+			//X509Extension	pExtension = new X509Extension()
+
+			/*
+			var pExtension = new X509AuthorityInformationAccessExtension();
+			//pExtensions;
+			pExtension.Oid.Value = "1.3.6.1.5.5.7.1.1";
+			*/
+
+
+
+			//　機関情報アクセスを署名要求に追加
+			List<string> pOCSP = new List<string>();
+			List<string> pICAs = new List<string>();
+			pICAs.Add("http://" + pServerName + "/" + pTrustCrt.CommonName + ".crt");
+			pRequest.CertificateExtensions.Add(new X509AuthorityInformationAccessExtension(pOCSP, pICAs, false));
+
+			//　失効リスト配布ポイントを署名要求に追加
+			List<string> pCDP = new List<string>();
+			pCDP.Add("http://" + pServerName + "/" + pTrustCrt.CommonName + ".crl");
+			var pCDPExtension = CertificateRevocationListBuilder.BuildCrlDistributionPointExtension(pCDP, false);
+			pRequest.CertificateExtensions.Add(pCDPExtension);
+
+			//　認証局識別子を署名要求に追加。発行認証局の「鍵識別子（SKI）」
+			foreach (var pExtension in pTrustCrt.m_pCertificate.Extensions)
+			{
+				//　拡張情報からSKIを探索し、そのキーをAKIに転写
+				if (pExtension.Oid.Value == "2.5.29.14")
+				{
+					var pSKI = (X509SubjectKeyIdentifierExtension)pExtension;
+					var pAKI = X509AuthorityKeyIdentifierExtension.CreateFromSubjectKeyIdentifier(pSKI);
+					pRequest.CertificateExtensions.Add(pAKI);
+					break;
+				}
+			}
+
 			var pNotBefore    = DateTimeOffset.UtcNow;
 			var pNotAfter     = DateTimeOffset.UtcNow.AddDays(iLifeDays);
-			var pSerialNumber = BitConverter.GetBytes(uSerialNumber);
+			//var pSerialNumber = BitConverter.GetBytes(uSerialNumber);
+
+			//　※ 自己署名証明書の生成時に使っているロジック（ユニーク性は保証されていない）
+			Span<byte> pSerialNumber = stackalloc byte[8];
+			RandomNumberGenerator.Fill(pSerialNumber);
+
 			return (pRequest.Create(pTrustCrt.m_pCertificate, pNotBefore, pNotAfter, pSerialNumber));
 		}
 	}

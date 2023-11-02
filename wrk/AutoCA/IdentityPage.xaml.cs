@@ -30,12 +30,12 @@ namespace AutoCA
 		{
 			this.InitializeComponent();
 
-			var m_pCertsStock = CertsStock.Instance;
+			var m_pCertsStock = Authority.Instance;
 			m_pIdentity   = m_pCertsStock.m_pIdentity;
 			m_pOrgProfile = m_pCertsStock.m_pOrgProfile;
 			/*
 			var pProfile = pApp.m_pProfile;
-			var pCertsStock = pApp.m_pCertsStock;
+			var pAuthority = pApp.m_pCertsStock;
 			*/
 
 			//m_pProfile = pProfile.m_pOrgProfile;
@@ -98,8 +98,8 @@ namespace AutoCA
 			//pApp.m_pOrgProfile.Save();
 
 
-			//var pCertsStock = pApp.m_pCertsStock;
-			//pCertsStock.Save()
+			//var pAuthority = pApp.m_pCertsStock;
+			//pAuthority.Save()
 
 
 			//var pProfile = pApp.m_pProfile;

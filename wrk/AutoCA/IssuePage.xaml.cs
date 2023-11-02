@@ -151,23 +151,19 @@ namespace AutoCA
 			{
 				return;
 			}
+			var pApp = App.Current as AutoCA.App;
+			var pSQLContext = pApp.GetSQLContext();
+			var pAuthority = Authority.Instance;
 
 			switch (CertType.SelectedIndex)
 			{
 			case 0:
 				//　サーバ証明書
-				var pApp = App.Current as AutoCA.App;
-				var pSQLContext = pApp.GetSQLContext();
-				var pCertsStock = CertsStock.Instance;
-				pCertsStock.CreateForServer(pSQLContext, m_pForm.m_pCommonName, m_pForm.m_pHostName);
-
-				var pServerCertificate = new ServerCert();
-				//pServerCertificate.Create(m_pFrom.m_pCommonName, m_pFrom.m_pHostName);
+				pAuthority.CreateForServer(pSQLContext, m_pForm.m_pCommonName, m_pForm.m_pHostName);
 				break;
 			case 1:
 				//　メール証明書
-				var pClientCertificate = new ClientCert();
-				//pClientCertificate.Create(m_pFrom.m_pCommonName,m_pFrom.m_pMailAddress);
+				pAuthority.CreateForClient(pSQLContext, m_pForm.m_pCommonName, m_pForm.m_pMailAddress);
 				break;
 			}
 
