@@ -34,6 +34,12 @@ namespace Arteria_s.DB.Base
 			m_pConnection.Open();
 		}
 
+		//　トランザクションを開始
+		public NpgsqlTransaction BeginTransaction()
+		{
+			return(m_pConnection.BeginTransaction());
+		}
+
 		//　
 		~SQLContext()
 		{

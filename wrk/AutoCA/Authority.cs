@@ -3,6 +3,7 @@ using Microsoft.Data.Sqlite;
 using Npgsql;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.Design.Serialization;
 using System.Data;
 using System.Globalization;
@@ -28,20 +29,20 @@ namespace AutoCA
 
 		public static Authority Instance { get; set; } = new Authority();
 
-		public Certificate	pTrustCAItem;
-		public Certificate	pIssueCAItem;
+		public Certificate	m_pTrustCAItem; 	//　ルート認証局証明書
+		public Certificate	m_pIssueCAItem;		//　発行認証局証明書
 
 		public bool Validate()
 		{
-			if ((pTrustCAItem == null)|| (pIssueCAItem == null))
+			if ((m_pTrustCAItem == null)|| (m_pIssueCAItem == null))
 			{
 				return (false);
 			}
-			if (pTrustCAItem.Validate() == false)
+			if (m_pTrustCAItem.Validate() == false)
 			{
 				return(false);
 			}
-			if (pIssueCAItem.Validate() == false)
+			if (m_pIssueCAItem.Validate() == false)
 			{
 				return (false);
 			}
@@ -66,33 +67,33 @@ namespace AutoCA
 				if (m_pOrgProfile.Validate() == true)
 				{
 					//　ルート認証局の証明書データを入力
-					pTrustCAItem = new Certificate();
+					m_pTrustCAItem = new Certificate();
 					var pTrustCAName = m_pIdentity.AuthorityName + "-RCA";
-					if (pTrustCAItem.Load(pSQLContext, pTrustCAName) == false)
+					if (m_pTrustCAItem.Load(pSQLContext, pTrustCAName) == false)
 					{
 						//　ルート認証局の証明書を作成
-						if (pTrustCAItem.CreateCA(m_pOrgProfile, pTrustCAName, null) == false)
+						if (m_pTrustCAItem.CreateForAuthority(m_pOrgProfile, pTrustCAName, null) == false)
 						{
 							//　異常系：証明書の作成に失敗
 							return(false);
 						}
-						if (pTrustCAItem.Save(pSQLContext) == false)
+						if (m_pTrustCAItem.Save(pSQLContext) == false)
 						{
 							return (false);
 						}
 					}
 
 					//　発行認証局の証明書データを入力
-					pIssueCAItem = new Certificate();
+					m_pIssueCAItem = new Certificate();
 					var pIssueCAName = m_pIdentity.AuthorityName + "-ICA";
-					if (pIssueCAItem.Load(pSQLContext, pIssueCAName) == false)
+					if (m_pIssueCAItem.Load(pSQLContext, pIssueCAName) == false)
 					{
-						if (pIssueCAItem.CreateCA(m_pOrgProfile, pIssueCAName, pTrustCAItem) == false)
+						if (m_pIssueCAItem.CreateForAuthority(m_pOrgProfile, pIssueCAName, m_pTrustCAItem) == false)
 						{
 							//　異常系：証明書の作成に失敗
 							return (false);
 						}
-						if (pIssueCAItem.Save(pSQLContext) == false)
+						if (m_pIssueCAItem.Save(pSQLContext) == false)
 						{
 							return (false);
 						}
@@ -107,7 +108,7 @@ namespace AutoCA
 		public bool CreateForServer(SQLContext pSQLContext, string pCommonName, string pFQDN)
 		{
 			var pCertificate = new Certificate();
-			if (pCertificate.CreateForServer(m_pOrgProfile, pCommonName, pFQDN, pIssueCAItem) == false)
+			if (pCertificate.CreateForServer(m_pOrgProfile, pCommonName, pFQDN, m_pIssueCAItem) == false)
 			{
 				return(false);
 			}
@@ -123,7 +124,7 @@ namespace AutoCA
 		public bool CreateForClient(SQLContext pSQLContext, string pCommonName, string pMailAddress)
 		{
 			var pCertificate = new Certificate();
-			if (pCertificate.CreateForClient(m_pOrgProfile, pCommonName, pMailAddress, pIssueCAItem) == false)
+			if (pCertificate.CreateForClient(m_pOrgProfile, pCommonName, pMailAddress, m_pIssueCAItem) == false)
 			{
 				return (false);
 			}
@@ -132,6 +133,32 @@ namespace AutoCA
 				return (false);
 			}
 
+			return (true);
+		}
+
+		// <summary>有効期限を延長した証明書を発行</summary>
+		// <param>pBaseCertificate：元にする証明書</param>
+		public bool Update(SQLContext pSQLContext, Certificate pBaseCertificate)
+		{
+			var pCertificate = new Certificate();
+			if (pCertificate.CreateForUpdate(m_pOrgProfile, pBaseCertificate, m_pIssueCAItem) == false)
+			{
+				return (false);
+			}
+			if (pCertificate.Save(pSQLContext) == false)
+			{
+				return (false);
+			}
+			return (true);
+		}
+
+		//　証明書を失効
+		public bool Revoke(SQLContext pSQLContext, Certificate pCertificate)
+		{
+			if (pCertificate.Revoke(pSQLContext) == false)
+			{
+				return (false);
+			}
 			return (true);
 		}
 
@@ -186,9 +213,9 @@ namespace AutoCA
 		}
 
 		//　
-		public List<Certificate>	Listup(SQLContext pSQLContext)
+		public ObservableCollection<Certificate>	Listup(SQLContext pSQLContext)
 		{
-			var pCertificates = new List<Certificate>();
+			var pCertificates = new ObservableCollection<Certificate>();
 
 			var pSQL = "SELECT SequenceNumber, SerialNumber, CommonName, TypeOf, Revoked, LaunchAt, ExpireAt, PemData, KeyData FROM TIssuedCerts WHERE Revoked = FALSE AND LaunchAt <= now() AND now() < ExpireAt;";
 			using (var pCommand = new NpgsqlCommand(pSQL, pSQLContext.m_pConnection))
@@ -222,7 +249,7 @@ namespace AutoCA
 			return (pCertificates);
 		}
 
-		//　シリアル番号で証明書を取得
+		//　<summary>シリアル番号で証明書を取得</summary>
 		public Certificate Fetch(SQLContext pSQLContext, string pSerialNumber)
 		{
 			var pCertificate = new Certificate();
@@ -257,18 +284,6 @@ namespace AutoCA
 			}
 
 			return (pCertificate);
-		}
-
-		//　有効期限を延長した証明書を発行
-		public void Update(SQLContext pSQLContext, Certificate pCertificate)
-		{
-			;
-		}
-
-		//　証明書を失効
-		public void Revoke(SQLContext pSQLContext, Certificate pCertificate)
-		{
-			pCertificate.Revoke(pSQLContext);
 		}
 
 		//　認証局情報を保存

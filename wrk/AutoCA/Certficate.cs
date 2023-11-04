@@ -25,7 +25,7 @@ namespace AutoCA
 		Client,
 	}
 
-	public class Certificate
+	public class Certificate : IEquatable<Certificate>
 	{
 		public Certificate()
 		{
@@ -159,7 +159,7 @@ namespace AutoCA
 		//　
 		//　pCommonName：
 		//　pCACertificate：署名する認証局の証明書データ
-		public bool CreateCA(OrgProfile pOrgProfile, string pCommonName, Certificate pCACertificate)
+		public bool CreateForAuthority(OrgProfile pOrgProfile, string pCommonName, Certificate pCACertificate)
 		{
 			//　秘密鍵を生成（楕円曲線方式）
 			ECDsaCng pKeys = new ECDsaCng();
@@ -275,8 +275,47 @@ namespace AutoCA
 			return (true);
 		}
 
+		//　指定された証明書データに基づいて有効期限を延長した証明書を作成する。
+		//　for Updateとあるが、Oracleの行ロックとは関係ない。
+		//　pBaseCertificate：転記元の証明書
+		public bool CreateForUpdate(OrgProfile pOrgProfile, Certificate pBaseCertificate, Certificate pCACertificate)
+		{
+			//　認証局の証明書データが指定されていない時はエラー
+			if ((pCACertificate == null) || (pCACertificate.m_pCertificate == null))
+			{
+				return (false);
+			}
+			//　継承元の証明書が指定されていない時もエラー
+			if ((pBaseCertificate == null) || (pBaseCertificate.m_pCertificate == null))
+			{
+				return (false);
+			}
+
+			//　秘密鍵を生成（楕円曲線方式）
+			ECDsaCng pKeys = new ECDsaCng();
+
+			//　メール証明書用の署名要求を生成
+			var pRequest = CertificateProvider.CreateSignRequestForUpdate(pKeys, pOrgProfile, pBaseCertificate.m_pCertificate);
+			if (pRequest == null)
+			{
+				return (false);
+			}
+			//　指定された認証局の証明書で署名
+			var iLifeDays = 365 * 1;
+			var pCertificate = CertificateProvider.CreateCertificate(pRequest, pCACertificate, iLifeDays, pOrgProfile.ServerName);
+			if (pCertificate == null)
+			{
+				return (false);
+			}
+
+			//　証明書記載情報の主要なものをキャッシュ
+			FetchProperties(pCertificate, pKeys, pBaseCertificate.CommonName, pBaseCertificate.TypeOf);
+
+			return (true);
+		}
+
 		//　証明書を失効
-		public void Revoke(SQLContext pSQLContext)
+		public bool Revoke(SQLContext pSQLContext)
 		{
 			var pSQL = "UPDATE TIssuedCerts SET Revoked = @Revoked WHERE SerialNumber = @SerialNumber";
 			using (var pCommand = new NpgsqlCommand(pSQL, pSQLContext.m_pConnection))
@@ -289,7 +328,7 @@ namespace AutoCA
 				pCommand.ExecuteNonQuery();
 			}
 
-			return;
+			return (true);
 		}
 
 		public bool	Validate()
@@ -370,6 +409,16 @@ namespace AutoCA
 			var pTextOfKey1 = pKeys.ExportPkcs8PrivateKey();
 			var pText1 = Convert.ToBase64String(pTextOfKey1);
 			Debug.WriteLine("PrivateKey(PKCS#8):" + pText1);
+		}
+
+		public bool Equals(Certificate pOther)
+		{
+			if (pOther.SerialNumber != SerialNumber)
+			{
+				return false;
+			}
+
+			return(true);
 		}
 	}
 }

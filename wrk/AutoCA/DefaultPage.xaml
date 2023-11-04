@@ -29,7 +29,7 @@
 			<TextBlock Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource CaptionText}"></TextBlock>
 		</Grid>
 		<StackPanel Grid.Column="0" Grid.Row="1" Orientation="Horizontal" Padding="1, 1, 1, 1" Style="{StaticResource CardStyleStackPanel}">
-			<Button x:Name="RevokeButton" Margin="4, 8, 4, 8" Style="{StaticResource ButtonRevealStyle}">
+			<Button x:Name="RevokeButton" Margin="4, 8, 4, 8" Style="{StaticResource ButtonRevealStyle}" Click="RevokeButton_Click">
 				<StackPanel Orientation="Horizontal">
 					<SymbolIcon Symbol="Cancel" />
 					<TextBlock Margin="12, 0, 0, 0" Text="失効" />
@@ -47,10 +47,16 @@
 					<TextBlock Margin="12, 0, 0, 0" Text="ファイルに出力" />
 				</StackPanel>
 			</Button>
-			<Button x:Name="ReloadButton" Margin="4, 8, 4, 8" Style="{StaticResource ButtonRevealStyle}">
+			<Button x:Name="ReloadButton" Margin="4, 8, 4, 8" Style="{StaticResource ButtonRevealStyle}" Click="ReloadButton_Click" >
 				<StackPanel Orientation="Horizontal">
 					<SymbolIcon Symbol="Refresh" />
 					<TextBlock Margin="12, 0, 0, 0" Text="再表示" />
+				</StackPanel>
+			</Button>
+			<Button x:Name="AppendButton" Margin="4, 8, 4, 8" Style="{StaticResource ButtonRevealStyle}" Click="AppendButton_Click" >
+				<StackPanel Orientation="Horizontal">
+					<SymbolIcon Symbol="Refresh" />
+					<TextBlock Margin="12, 0, 0, 0" Text="追加" />
 				</StackPanel>
 			</Button>
 		</StackPanel>
@@ -77,17 +83,17 @@
 		</CommandBar>
 		-->
 
-		<ListView x:Name="CertsList" Grid.Column="0" Grid.Row="3" SelectionMode="Single" IsMultiSelectCheckBoxEnabled="False" Background="#242424" ItemsSource="{x:Bind pCertificates}" SelectionChanged="CertsList_SelectionChanged" >
+		<ListView x:Name="CertsList" Grid.Column="0" Grid.Row="3" SelectionMode="Single" IsMultiSelectCheckBoxEnabled="False" Background="#242424" ItemsSource="{x:Bind m_pCertificates}" SelectionChanged="CertsList_SelectionChanged" >
 			<ListView.ItemTemplate>
 				<DataTemplate x:DataType="local:Certificate">
 					<Grid>
 						<Grid.ColumnDefinitions>
 							<ColumnDefinition Width="Auto"/>
-							<ColumnDefinition Width="160"/>
+							<ColumnDefinition Width="0.6*"/>
 							<ColumnDefinition Width="200"/>
 							<ColumnDefinition Width="180"/>
 							<ColumnDefinition Width="180"/>
-							<ColumnDefinition Width="*"/>
+							<ColumnDefinition Width="0.4*"/>
 						</Grid.ColumnDefinitions>
 						<Grid.RowDefinitions>
 							<RowDefinition Height="Auto"/>

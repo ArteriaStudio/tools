@@ -10,7 +10,8 @@
 
 	<NavigationView PaneDisplayMode="Left" IsPaneOpen="False" SelectionChanged="NavigationView_SelectionChanged">
 		<NavigationView.PaneHeader>
-			<Image Name="PaneHeader" Source="ms-appx:///Assets/AutoCA.png" />
+			<!-- 高さは、32[ppx]、水平幅は任意 -->
+			<Image Name="PaneHeader" Source="ms-appx:///Assets/EasyCA.png" />
 		</NavigationView.PaneHeader>
 		<NavigationView.MenuItems>
 			<NavigationViewItem Tag="ListupCertificate" Icon="Home" Content="発行履歴と失効処理"/>
@@ -21,6 +22,7 @@
 					<NavigationViewItem Tag="Signing" Icon="Accept" Content="署名を実行"/>
 				</NavigationViewItem.MenuItems>
 			</NavigationViewItem>
+			<NavigationViewItemSeparator />
 			<NavigationViewItem Tag="Identity" Icon="ShowResults" Content="認証局主体者情報"/>
 		</NavigationView.MenuItems>
 
