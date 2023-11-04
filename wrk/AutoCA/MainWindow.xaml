@@ -8,7 +8,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-	<NavigationView PaneDisplayMode="Left" IsPaneOpen="False" SelectionChanged="NavigationView_SelectionChanged">
+	<!-- 左端に設置、戻るボタンを非表示、ペインは閉じる -->
+	<NavigationView PaneDisplayMode="Left" IsBackButtonVisible="Collapsed" IsPaneOpen="False" SelectionChanged="NavigationView_SelectionChanged">
 		<NavigationView.PaneHeader>
 			<!-- 高さは、32[ppx]、水平幅は任意 -->
 			<Image Name="PaneHeader" Source="ms-appx:///Assets/EasyCA.png" />
