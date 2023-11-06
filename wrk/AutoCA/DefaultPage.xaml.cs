@@ -394,6 +394,32 @@ namespace AutoCA
 			return;
 		}
 
+		//　CRL を最新に更新
+		private void RefreshButton_Click(object sender, RoutedEventArgs e)
+		{
+			//　
+			var pApp = App.Current as AutoCA.App;
+			var pSQLContext = pApp.GetSQLContext();
+			var pAuthority = Authority.Instance;
+
+			//　DBコネクションにおいてトランザクジョンを開始
+			// ※ このトランザクションクラスは、リスナパタンでかなり使いやすい設計。
+			var pTransaction = pSQLContext.BeginTransaction();
+			try
+			{
+				//　失効リストを生成する。
+				pAuthority.GenerateCRL(pSQLContext);
+
+				pTransaction.Commit();
+			}
+			catch (Exception)
+			{
+				pTransaction.Rollback();
+			}
+
+			return;
+		}
+
 		//　証明書一覧を再表示
 		private void ReloadButton_Click(object sender, RoutedEventArgs e)
 		{
@@ -436,5 +462,6 @@ namespace AutoCA
 			pItem.CommonName = "placeholder";
 			m_pCertificates.Add(pItem);
 		}
-	}
+
+    }
 }

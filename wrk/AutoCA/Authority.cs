@@ -286,6 +286,20 @@ namespace AutoCA
 			return (pCertificate);
 		}
 
+		//
+		public void GenerateCRL(SQLContext pSQLContext)
+		{
+			var pBuilder = new CertificateRevocationListBuilder();
+
+
+
+
+
+
+
+			return;
+		}
+
 		//　認証局情報を保存
 		public void SaveIdentity(SQLContext pSQLContext)
 		{

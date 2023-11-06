@@ -47,16 +47,24 @@
 					<TextBlock Margin="12, 0, 0, 0" Text="ファイルに出力" />
 				</StackPanel>
 			</Button>
+			<Button x:Name="AppendButton" Margin="4, 8, 4, 8" Style="{StaticResource ButtonRevealStyle}" Click="AppendButton_Click" >
+				<StackPanel Orientation="Horizontal">
+					<SymbolIcon Symbol="Add" />
+					<TextBlock Margin="12, 0, 0, 0" Text="追加" />
+				</StackPanel>
+			</Button>
+			<Button x:Name="RefreshButton" Margin="4, 8, 4, 8" Style="{StaticResource ButtonRevealStyle}" Click="RefreshButton_Click" >
+				<StackPanel Orientation="Horizontal">
+					<SymbolIcon Symbol="Admin" />
+					<TextBlock Margin="12, 0, 0, 0" Text="CRLを更新" />
+				</StackPanel>
+			</Button>
+			<!-- セパレータ（仮実装：おそらく右端に整列させる） -->
+			<Rectangle Width="24" Height="Auto" />
 			<Button x:Name="ReloadButton" Margin="4, 8, 4, 8" Style="{StaticResource ButtonRevealStyle}" Click="ReloadButton_Click" >
 				<StackPanel Orientation="Horizontal">
 					<SymbolIcon Symbol="Refresh" />
 					<TextBlock Margin="12, 0, 0, 0" Text="再表示" />
-				</StackPanel>
-			</Button>
-			<Button x:Name="AppendButton" Margin="4, 8, 4, 8" Style="{StaticResource ButtonRevealStyle}" Click="AppendButton_Click" >
-				<StackPanel Orientation="Horizontal">
-					<SymbolIcon Symbol="Refresh" />
-					<TextBlock Margin="12, 0, 0, 0" Text="追加" />
 				</StackPanel>
 			</Button>
 		</StackPanel>
