@@ -27,7 +27,17 @@
 			<NavigationViewItem Tag="Identity" Icon="ShowResults" Content="認証局主体者情報"/>
 		</NavigationView.MenuItems>
 
-		<Frame x:Name="ContentFrame"/>
+		<Grid>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*"/>
+			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="*"/>
+				<RowDefinition Height="0.3*"/>
+			</Grid.RowDefinitions>
+			<Frame Grid.Row="0" x:Name="ContentFrame" />
+			<Frame Grid.Row="1" x:Name="MessageFrame" />
+		</Grid>
 	</NavigationView>
 
 </Window>

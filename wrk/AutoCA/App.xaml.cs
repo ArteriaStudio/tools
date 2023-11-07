@@ -41,7 +41,7 @@ namespace AutoCA
 		}
 
 		//　環境の前提条件の状態を検査
-		public void Check(Profile pProfile, Authority pAuthority)
+		public void Check(SQLContext pSQLContext, Profile pProfile, Authority pAuthority)
 		{
 			//　データベース接続情報が登録されているか？
 			if (pProfile.m_pDbParams == null)
@@ -72,7 +72,7 @@ namespace AutoCA
 			}
 
 			//　有効な認証局証明書が存在するか？
-			if ((pAuthority == null) || (pAuthority.Validate() == false))
+			if ((pAuthority == null) || (pAuthority.Validate(pSQLContext) == false))
 			{
 				bExistAuthority = false;
 			}
@@ -119,7 +119,7 @@ namespace AutoCA
 				m_pCertsStock.Load(m_pSQLContext);
 			}
 			m_pPrepareFlags = new PrepareFlags();
-			m_pPrepareFlags.Check(m_pProfile, m_pCertsStock);
+			m_pPrepareFlags.Check(m_pSQLContext, m_pProfile, m_pCertsStock);
 
 			m_pWindow = new MainWindow();
 			m_pWindow.Title = "EasyCA";

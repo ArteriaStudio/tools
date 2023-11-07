@@ -408,7 +408,12 @@ namespace AutoCA
 			try
 			{
 				//　失効リストを生成する。
-				pAuthority.GenerateCRL(pSQLContext);
+				var iCrlDays = 128;
+				var pBytes = pAuthority.GenerateCRL(pSQLContext, iCrlDays);
+
+				//　ダウンロードフォルダにファイルを出力する。
+				var pExportFolder = System.Environment.GetEnvironmentVariable("USERPROFILE") + "\\Downloads";
+				pAuthority.ExportCRL(pExportFolder, pBytes);
 
 				pTransaction.Commit();
 			}

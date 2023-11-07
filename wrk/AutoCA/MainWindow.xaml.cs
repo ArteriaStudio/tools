@@ -51,6 +51,7 @@ namespace AutoCA
 				//@Šù’è‚Ì‰Šú‰æ–Ê‚É‘JˆÚ
 				this.ContentFrame.Navigate(typeof(DefaultPage));
 			}
+			this.MessageFrame.Navigate(typeof(MessagesPage));
 		}
 
 		private void createRootCert_Click(object sender, RoutedEventArgs e)
@@ -145,6 +146,12 @@ namespace AutoCA
 				ContentFrame.Navigate(typeof(SettingsPage));
 				break;
 			}
+		}
+
+		public void AddMessage(Message pMessage)
+		{
+			var pMessagesPage = MessageFrame.Content as MessagesPage;
+			pMessagesPage.AddMessage(pMessage);
 		}
 	}
 }

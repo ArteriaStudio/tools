@@ -151,19 +151,27 @@ namespace AutoCA
 				return;
 			}
 			var pApp = App.Current as AutoCA.App;
+			var pWindow = pApp.m_pWindow as MainWindow;
 			var pSQLContext = pApp.GetSQLContext();
 			var pAuthority = Authority.Instance;
 
-			switch (CertType.SelectedIndex)
+			try
 			{
-			case 0:
-				//　サーバ証明書
-				pAuthority.CreateForServer(pSQLContext, m_pForm.m_pCommonName, m_pForm.m_pHostName);
-				break;
-			case 1:
-				//　メール証明書
-				pAuthority.CreateForClient(pSQLContext, m_pForm.m_pCommonName, m_pForm.m_pMailAddress);
-				break;
+				switch (CertType.SelectedIndex)
+				{
+				case 0:
+					//　サーバ証明書
+					pAuthority.CreateForServer(pSQLContext, m_pForm.m_pCommonName, m_pForm.m_pHostName);
+					break;
+				case 1:
+					//　メール証明書
+					pAuthority.CreateForClient(pSQLContext, m_pForm.m_pCommonName, m_pForm.m_pMailAddress);
+					break;
+				}
+			}
+			catch (AppException pException)
+			{
+				pWindow.AddMessage(new Message(pException.m_eFacility, pException.GetText()));
 			}
 		}
 	}

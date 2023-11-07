@@ -4,16 +4,28 @@ CREATE DATABASE AutoCA WITH OWNER = bkowner;
 CREATE SEQUENCE SQ_CERTS;
 GRANT USAGE ON SEQUENCE SQ_CERTS TO aploper
 
+/* カウンタ */
+DROP TABLE TCounters;
+CREATE TABLE TCounters (
+  CrlNumber TEXT NOT NULL
+);
+INSERT INTO TCounters (CrlNumber) VALUES ('0');
+GRANT SELECT, UPDATE, DELETE ON TCounters TO aploper;
+/*　行の追加を予防するため、INSERTパーミッションを付与しない。　*/
+
+
 /* 発行した証明書 */
 DROP TABLE TIssuedCerts;
 CREATE TABLE TIssuedCerts (
   SequenceNumber INTEGER NOT NULL,
   SerialNumber   VARCHAR(48) NOT NULL,
-  CommonName     VARCHAR(256) NOT NULL,
+  SubjectName    VARCHAR(256) NOT NULL,
+  CommonName     VARCHAR(128) NOT NULL,
   TypeOf         INTEGER NOT NULL,
   Revoked        BOOLEAN NOT NULL,
   LaunchAt       TIMESTAMP NOT NULL,
   ExpireAt       TIMESTAMP NOT NULL,
+  RevokeAt       TIMESTAMP NULL,
   PemData        TEXT NOT NULL,
   KeyData        TEXT NULL,
   PRIMARY KEY (SequenceNumber),

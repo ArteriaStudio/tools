@@ -31,6 +31,7 @@ namespace AutoCA
 		{
 			SequenceNumber = -1;
 			SerialNumber   = "";
+			SubjectName    = "";
 			CommonName     = "";
 			TypeOf         = 0;
 			Revoked        = false;
@@ -40,6 +41,7 @@ namespace AutoCA
 
 		public long 				SequenceNumber { get; set; }
 		public string				SerialNumber { get; set; }
+		public string				SubjectName { get; set; }
 		public string				CommonName { get; set; }
 		public CertificateType		TypeOf { get; set; }
 		public bool 				Revoked { get; set; }
@@ -52,7 +54,7 @@ namespace AutoCA
 		//　共通名が一致する証明書を入力
 		public bool Load(SQLContext pSQLContext, string pCommonName)
 		{
-			var pSQL = "SELECT SequenceNumber, SerialNumber, CommonName, TypeOf, Revoked, LaunchAt, ExpireAt, PemData, KeyData FROM TIssuedCerts WHERE CommonName = @CommonName AND Revoked = FALSE AND LaunchAt <= now() AND now() < ExpireAt;";
+			var pSQL = "SELECT SequenceNumber, SerialNumber, SubjectName, CommonName, TypeOf, Revoked, LaunchAt, ExpireAt, PemData, KeyData FROM TIssuedCerts WHERE CommonName = @CommonName AND Revoked = FALSE AND LaunchAt <= now() AND now() < ExpireAt;";
 			using (var pCommand = new NpgsqlCommand(pSQL, pSQLContext.m_pConnection))
 			{
 				pCommand.Parameters.Clear();
@@ -64,13 +66,14 @@ namespace AutoCA
 					{
 						SequenceNumber = pReader.GetInt64(0);
 						SerialNumber   = pReader.GetString(1);
-						CommonName     = pReader.GetString(2);
-						TypeOf         = (CertificateType)pReader.GetInt32(3);
-						Revoked        = pReader.GetBoolean(4);
-						LaunchAt       = pReader.GetDateTime(5);
-						ExpireAt       = pReader.GetDateTime(6);
-						PemData        = pReader.GetString(7);
-						KeyData		   = pReader.GetString(8);
+						SubjectName    = pReader.GetString(2);
+						CommonName     = pReader.GetString(3);
+						TypeOf         = (CertificateType)pReader.GetInt32(4);
+						Revoked        = pReader.GetBoolean(5);
+						LaunchAt       = pReader.GetDateTime(6);
+						ExpireAt       = pReader.GetDateTime(7);
+						PemData        = pReader.GetString(8);
+						KeyData		   = pReader.GetString(9);
 
 						if ((KeyData != null) && (KeyData.Length > 0))
 						{
@@ -112,13 +115,14 @@ namespace AutoCA
 		{
 			SequenceNumber = pReader.GetInt64(0);
 			SerialNumber   = pReader.GetString(1);
-			CommonName     = pReader.GetString(2);
-			TypeOf         = (CertificateType)pReader.GetInt32(3);
-			Revoked        = pReader.GetBoolean(4);
-			LaunchAt       = pReader.GetDateTime(5);
-			ExpireAt       = pReader.GetDateTime(6);
-			PemData        = pReader.GetString(7);
-			KeyData        = pReader.GetString(8);
+			SubjectName    = pReader.GetString(2);
+			CommonName     = pReader.GetString(3);
+			TypeOf         = (CertificateType)pReader.GetInt32(4);
+			Revoked        = pReader.GetBoolean(5);
+			LaunchAt       = pReader.GetDateTime(6);
+			ExpireAt       = pReader.GetDateTime(7);
+			PemData        = pReader.GetString(8);
+			KeyData        = pReader.GetString(9);
 
 			if ((KeyData != null) && (KeyData.Length > 0))
 			{
@@ -135,13 +139,17 @@ namespace AutoCA
 		//　
 		public bool Save(SQLContext pSQLContext)
 		{
-			var pSQL = "INSERT INTO TIssuedCerts VALUES (NEXTVAL('SQ_CERTS'), @SerialNumber, @CommonName, @TypeOf, @Revoked, @LaunchAt, @ExpireAt, @PemData, @KeyData)";
-			pSQL += " ON CONFLICT ON CONSTRAINT tissuedcerts_pkey DO UPDATE SET SerialNumber = @SerialNumber, CommonName = @CommonName, TypeOf = @TypeOf, Revoked = @Revoked, LaunchAt = @LaunchAt , ExpireAt = @ExpireAt, PemData = @PemData, KeyData = @KeyData;";
+			var pSQL = "INSERT INTO TIssuedCerts (SequenceNumber, SerialNumber, SubjectName, CommonName, TypeOf, Revoked, LaunchAt, ExpireAt, PemData, KeyData)";
+			pSQL += " VALUES (NEXTVAL('SQ_CERTS'), @SerialNumber, @SubjectName, @CommonName, @TypeOf, @Revoked, @LaunchAt, @ExpireAt, @PemData, @KeyData)";
+			pSQL += " ON CONFLICT ON CONSTRAINT tissuedcerts_pkey DO UPDATE SET";
+			pSQL += " SerialNumber = @SerialNumber, SubjectName = @SubjectName, CommonName = @CommonName, TypeOf = @TypeOf, Revoked = @Revoked,";
+			pSQL += " LaunchAt = @LaunchAt, ExpireAt = @ExpireAt, PemData = @PemData, KeyData = @KeyData;";
 			using (var pCommand = new NpgsqlCommand(pSQL, pSQLContext.m_pConnection))
 			{
 				pCommand.Parameters.Clear();
 				pCommand.Parameters.AddWithValue("SequenceNumber", SequenceNumber);
 				pCommand.Parameters.AddWithValue("SerialNumber", SerialNumber);
+				pCommand.Parameters.AddWithValue("SubjectName", SubjectName);
 				pCommand.Parameters.AddWithValue("CommonName", CommonName);
 				pCommand.Parameters.AddWithValue("TypeOf", (int)TypeOf);
 				pCommand.Parameters.AddWithValue("Revoked", Revoked);
@@ -220,11 +228,14 @@ namespace AutoCA
 				return (false);
 			}
 
+			//　証明書のサブジェクト名を生成
+			string pSubjectName = GenerateSubjectName(pOrgProfile, pCommonName);
+
 			//　秘密鍵を生成（楕円曲線方式）
 			ECDsaCng pKeys = new ECDsaCng();
 
 			//　サーバ証明書用の署名要求を生成
-			var pRequest = CertificateProvider.CreateSignRequestForServer(pKeys, pOrgProfile, pCommonName, pFQDN);
+			var pRequest = CertificateProvider.CreateSignRequestForServer(pKeys, pOrgProfile, pSubjectName, pCommonName, pFQDN);
 			if (pRequest == null)
 			{
 				return (false);
@@ -252,11 +263,14 @@ namespace AutoCA
 				return (false);
 			}
 
+			//　証明書のサブジェクト名を生成
+			string pSubjectName = GenerateSubjectName(pOrgProfile, pCommonName);
+
 			//　秘密鍵を生成（楕円曲線方式）
 			ECDsaCng pKeys = new ECDsaCng();
 
 			//　メール証明書用の署名要求を生成
-			var pRequest = CertificateProvider.CreateSignRequestForClient(pKeys, pOrgProfile, pCommonName, pMailAddress);
+			var pRequest = CertificateProvider.CreateSignRequestForClient(pKeys, pOrgProfile, pSubjectName, pCommonName, pMailAddress);
 			if (pRequest == null)
 			{
 				return (false);
@@ -317,7 +331,7 @@ namespace AutoCA
 		//　証明書を失効
 		public bool Revoke(SQLContext pSQLContext)
 		{
-			var pSQL = "UPDATE TIssuedCerts SET Revoked = @Revoked WHERE SerialNumber = @SerialNumber";
+			var pSQL = "UPDATE TIssuedCerts SET Revoked = @Revoked, RevokeAt = now() WHERE SerialNumber = @SerialNumber";
 			using (var pCommand = new NpgsqlCommand(pSQL, pSQLContext.m_pConnection))
 			{
 				Revoked = true;
@@ -331,12 +345,19 @@ namespace AutoCA
 			return (true);
 		}
 
-		public bool	Validate()
+		//　証明書データの有効性を検査
+		public bool	Validate(SQLContext pSQLContext)
 		{
 			if (SequenceNumber == -1)
 			{
 				return(false);
 			}
+			//　認証局が発行した有効な証明書の中にサブジェクト名の重複がないことを検査
+			if (IsExistSubject(pSQLContext, SerialNumber, SubjectName) == true)
+			{
+				return (false);
+			}
+
 			return(true);
 		}
 
@@ -345,8 +366,8 @@ namespace AutoCA
 		{
 			SequenceNumber = 0;
 			SerialNumber   = pCertificate.SerialNumber;
+			SubjectName    = pCertificate.SubjectName.Name;
 			CommonName     = pCommonName;
-			//CommonName   = m_pCertificate.SubjectName.Name;//　これは証明書のサブジェクト
 			TypeOf         = eTypeOf;
 			Revoked        = false;
 			LaunchAt       = pCertificate.NotBefore;
@@ -400,6 +421,38 @@ namespace AutoCA
 					Debug.WriteLine("UnMatch");
 				}
 			}
+		}
+
+		//　サブジェクト名を生成
+		protected string GenerateSubjectName(OrgProfile pOrgProfile, string pCommonName)
+		{
+			return($"C={pOrgProfile.CountryName},L={pOrgProfile.LocalityName},O={pOrgProfile.OrgName},CN={pCommonName}");
+		}
+
+		//　有効な証明祖の中に同一のサブジェクト名を持つ要素が存在するか検査
+		protected bool IsExistSubject(SQLContext pSQLContext, string pSerialNumber, string pSubjectName)
+		{
+			var pSQL = "SELECT SequenceNumber, SerialNumber, SubjectName FROM TIssuedCerts WHERE SerialNumber <> @SerialNumber AND SubjectName = @SubjectName AND Revoked = FALSE AND LaunchAt <= now() AND now() < ExpireAt;";
+			using (var pCommand = new NpgsqlCommand(pSQL, pSQLContext.m_pConnection))
+			{
+				pCommand.Parameters.Clear();
+				pCommand.Parameters.AddWithValue("SerialNumber", pSerialNumber);
+				pCommand.Parameters.AddWithValue("SubjectName", pSubjectName);
+				using (var pReader = pCommand.ExecuteReader())
+				{
+					int iCount = 0;
+					while (pReader.Read())
+					{
+						iCount++;
+					}
+					if (iCount == 0)
+					{
+						return(false);
+					}
+				}
+			}
+
+			return (true);
 		}
 
 		//　鍵をダンプ（デバッグ用）

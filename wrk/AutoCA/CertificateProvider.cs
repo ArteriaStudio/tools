@@ -28,7 +28,7 @@ namespace AutoCA
 			//　CA制約：証明書が認証局であるか否かを指定する。
 			pRequest.CertificateExtensions.Add(new X509BasicConstraintsExtension(true, true, 2, true));
 			pRequest.CertificateExtensions.Add(new X509SubjectKeyIdentifierExtension(pRequest.PublicKey, false));
-			var pKeyUsageFlags = X509KeyUsageFlags.NonRepudiation | X509KeyUsageFlags.KeyCertSign | X509KeyUsageFlags.DigitalSignature | X509KeyUsageFlags.EncipherOnly;
+			var pKeyUsageFlags = X509KeyUsageFlags.NonRepudiation | X509KeyUsageFlags.KeyCertSign | X509KeyUsageFlags.DigitalSignature | X509KeyUsageFlags.EncipherOnly | X509KeyUsageFlags.CrlSign;
 			pRequest.CertificateExtensions.Add(new X509KeyUsageExtension(pKeyUsageFlags, false));
 			/*
 			OidCollection pEnhancedKeyUsageFlags = new OidCollection
@@ -45,12 +45,10 @@ namespace AutoCA
 		}
 
 		//　署名要求（メール証明書）を生成
-		public static CertificateRequest CreateSignRequestForClient(ECDsaCng pKeys, OrgProfile pOrgProfile, string pCommonName, string pEmail)
+		public static CertificateRequest CreateSignRequestForClient(ECDsaCng pKeys, OrgProfile pOrgProfile, string pSubjectName, string pCommonName, string pEmail)
 		{
-			string pSubject = $"C={pOrgProfile.CountryName},L={pOrgProfile.LocalityName},O={pOrgProfile.OrgName},CN={pCommonName},";
-			
 			//　署名要求を生成（der形式）
-			CertificateRequest pRequest = new CertificateRequest(pSubject, pKeys, HashAlgorithmName.SHA256);
+			CertificateRequest pRequest = new CertificateRequest(pSubjectName, pKeys, HashAlgorithmName.SHA256);
 
 			//　CA制約：証明書が認証局であるか否かを指定する。
 			pRequest.CertificateExtensions.Add(new X509BasicConstraintsExtension(true, true, 2, true));
@@ -73,13 +71,10 @@ namespace AutoCA
 		}
 
 		//　署名要求（サーバ証明書）を生成
-		public static CertificateRequest CreateSignRequestForServer(ECDsaCng pKeys, OrgProfile pOrgProfile, string pCommonName, string pDnsName)
+		public static CertificateRequest CreateSignRequestForServer(ECDsaCng pKeys, OrgProfile pOrgProfile, string pSubjectName, string pCommonName, string pDnsName)
 		{
-			//　注意：署名要求に記載する組織名が「必ず自組織」となる前提。通常は発行先は別組織の可能性があり、社会全体でみれば後者の方が多いと思われる。（2023/11/04）
-			string pSubject = $"C={pOrgProfile.CountryName},L={pOrgProfile.LocalityName},O={pOrgProfile.OrgName},CN={pCommonName},";
-
 			//　署名要求を生成（der形式）
-			CertificateRequest pRequest = new CertificateRequest(pSubject, pKeys, HashAlgorithmName.SHA256);
+			CertificateRequest pRequest = new CertificateRequest(pSubjectName, pKeys, HashAlgorithmName.SHA256);
 
 			//　CA制約：証明書が認証局であるか否かを指定する。
 			pRequest.CertificateExtensions.Add(new X509BasicConstraintsExtension(true, true, 2, true));
@@ -141,8 +136,8 @@ namespace AutoCA
 		//　署名要求（証明書記載事項を転記）を生成
 		public static CertificateRequest CreateSignRequestForUpdate(ECDsaCng pKeys, OrgProfile pOrgProfile, X509Certificate2 pBaseCertificate)
 		{
+			//　証明書のサブジェクトを複写
 			string pSubject = pBaseCertificate.Subject;
-			//string pSubject = $"C={pOrgProfile.CountryName},L={pOrgProfile.LocalityName},O={pOrgProfile.OrgName},CN={pCommonName},";
 
 			//　署名要求を生成（der形式）
 			CertificateRequest pRequest = new CertificateRequest(pSubject, pKeys, HashAlgorithmName.SHA256);
@@ -152,24 +147,6 @@ namespace AutoCA
 			{
 				pRequest.CertificateExtensions.Add(pBaseExtension);
 			}
-			/*
-			//　CA制約：証明書が認証局であるか否かを指定する。
-			pRequest.CertificateExtensions.Add(new X509BasicConstraintsExtension(true, true, 2, true));
-			pRequest.CertificateExtensions.Add(new X509SubjectKeyIdentifierExtension(pRequest.PublicKey, false));
-			var pKeyUsageFlags = X509KeyUsageFlags.NonRepudiation | X509KeyUsageFlags.KeyCertSign | X509KeyUsageFlags.DigitalSignature | X509KeyUsageFlags.EncipherOnly;
-			pRequest.CertificateExtensions.Add(new X509KeyUsageExtension(pKeyUsageFlags, false));
-			OidCollection pEnhancedKeyUsageFlags = new OidCollection
-			{
-				// https://oidref.com/1.3.6.1.5.5.7.3.2
-				new Oid("1.3.6.1.5.5.7.3.4"),	//　emailProtection
-			};
-			pRequest.CertificateExtensions.Add(new X509EnhancedKeyUsageExtension(pEnhancedKeyUsageFlags, false));
-
-			var pBuilder = new SubjectAlternativeNameBuilder();
-			pBuilder.AddEmailAddress(pEmail);
-			var pExtBuilt = pBuilder.Build(true);
-			pRequest.CertificateExtensions.Add(new X509SubjectAlternativeNameExtension(pExtBuilt.RawData));
-			*/
 
 			return (pRequest);
 		}

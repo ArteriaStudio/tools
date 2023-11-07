@@ -7,14 +7,18 @@ using System.Collections.ObjectModel;
 using System.ComponentModel.Design.Serialization;
 using System.Data;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Security.AccessControl;
+using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Windows.Security.Authentication.OnlineId;
 using Windows.System;
+using static AutoCA.AppException;
 
 namespace AutoCA
 {
@@ -32,17 +36,17 @@ namespace AutoCA
 		public Certificate	m_pTrustCAItem; 	//　ルート認証局証明書
 		public Certificate	m_pIssueCAItem;		//　発行認証局証明書
 
-		public bool Validate()
+		public bool Validate(SQLContext pSQLContext)
 		{
 			if ((m_pTrustCAItem == null)|| (m_pIssueCAItem == null))
 			{
 				return (false);
 			}
-			if (m_pTrustCAItem.Validate() == false)
+			if (m_pTrustCAItem.Validate(pSQLContext) == false)
 			{
 				return(false);
 			}
-			if (m_pIssueCAItem.Validate() == false)
+			if (m_pIssueCAItem.Validate(pSQLContext) == false)
 			{
 				return (false);
 			}
@@ -77,6 +81,10 @@ namespace AutoCA
 							//　異常系：証明書の作成に失敗
 							return(false);
 						}
+						if (m_pTrustCAItem.Validate(pSQLContext) == false)
+						{
+							return (false);
+						}
 						if (m_pTrustCAItem.Save(pSQLContext) == false)
 						{
 							return (false);
@@ -91,6 +99,10 @@ namespace AutoCA
 						if (m_pIssueCAItem.CreateForAuthority(m_pOrgProfile, pIssueCAName, m_pTrustCAItem) == false)
 						{
 							//　異常系：証明書の作成に失敗
+							return (false);
+						}
+						if (m_pIssueCAItem.Validate(pSQLContext) == false)
+						{
 							return (false);
 						}
 						if (m_pIssueCAItem.Save(pSQLContext) == false)
@@ -110,11 +122,15 @@ namespace AutoCA
 			var pCertificate = new Certificate();
 			if (pCertificate.CreateForServer(m_pOrgProfile, pCommonName, pFQDN, m_pIssueCAItem) == false)
 			{
-				return(false);
+				throw (new AppException(AppError.FailureCreateCertificate, AppFacility.Error, AppFlow.CreateCertificateForServer));
+			}
+			if (pCertificate.Validate(pSQLContext) == false)
+			{
+				throw (new AppException(AppError.ExistSameCertificate, AppFacility.Error, AppFlow.CreateCertificateForServer));
 			}
 			if (pCertificate.Save(pSQLContext) == false)
 			{
-				return (false);
+				throw (new AppException(AppError.FailreSaveCertificate, AppFacility.Error, AppFlow.CreateCertificateForServer));
 			}
 
 			return (true);
@@ -126,11 +142,15 @@ namespace AutoCA
 			var pCertificate = new Certificate();
 			if (pCertificate.CreateForClient(m_pOrgProfile, pCommonName, pMailAddress, m_pIssueCAItem) == false)
 			{
-				return (false);
+				throw (new AppException(AppError.FailureCreateCertificate, AppFacility.Error, AppFlow.CreateCertificateForClient));
+			}
+			if (pCertificate.Validate(pSQLContext) == false)
+			{
+				throw (new AppException(AppError.ExistSameCertificate, AppFacility.Error, AppFlow.CreateCertificateForClient));
 			}
 			if (pCertificate.Save(pSQLContext) == false)
 			{
-				return (false);
+				throw (new AppException(AppError.FailreSaveCertificate, AppFacility.Error, AppFlow.CreateCertificateForClient));
 			}
 
 			return (true);
@@ -142,6 +162,10 @@ namespace AutoCA
 		{
 			var pCertificate = new Certificate();
 			if (pCertificate.CreateForUpdate(m_pOrgProfile, pBaseCertificate, m_pIssueCAItem) == false)
+			{
+				return (false);
+			}
+			if (pCertificate.Validate(pSQLContext) == false)
 			{
 				return (false);
 			}
@@ -286,16 +310,64 @@ namespace AutoCA
 			return (pCertificate);
 		}
 
-		//
-		public void GenerateCRL(SQLContext pSQLContext)
+		//　CRLを生成
+		public byte[] GenerateCRL(SQLContext pSQLContext, int iDays)
 		{
+			byte[]	pBytes;
 			var pBuilder = new CertificateRevocationListBuilder();
 
+			var pSQL = "SELECT SerialNumber, RevokeAt FROM TIssuedCerts WHERE Revoked = TRUE;";
+			using (var pCommand = new NpgsqlCommand(pSQL, pSQLContext.m_pConnection))
+			{
+				pCommand.Parameters.Clear();
+				using (var pReader = pCommand.ExecuteReader())
+				{
+					while (pReader.Read())
+					{
+						var SerialNumber = Convert.FromHexString(pReader.GetString(0));
+						var RevokeAt     = pReader.GetDateTime(1);
+						pBuilder.AddEntry(SerialNumber, RevokeAt);
+					}
+				}
+			}
 
+			BigInteger iCRLNumber = 0;
 
+			//　CRL番号を取得
+			pSQL = "SELECT CRLNumber FROM TCounters;";
+			using (var pCommand = new NpgsqlCommand(pSQL, pSQLContext.m_pConnection))
+			{
+				pCommand.Parameters.Clear();
+				using (var pReader = pCommand.ExecuteReader())
+				{
+					while (pReader.Read())
+					{
+						var pNumber = pReader.GetString(0);
+						iCRLNumber = BigInteger.Parse(pNumber, NumberStyles.HexNumber);
+						iCRLNumber ++;
+						break;
+					}
+				}
+				DateTimeOffset pNextUpdate = DateTimeOffset.Now.AddDays(iDays);
+				pBytes = pBuilder.Build(m_pIssueCAItem.m_pCertificate, iCRLNumber, pNextUpdate, HashAlgorithmName.SHA512);
+			}
 
+			//　CRLNumberのカウンタを更新
+			pSQL = "UPDATE TCounters SET CrlNumber = @CrlNumber;";
+			using (var pCommand = new NpgsqlCommand(pSQL, pSQLContext.m_pConnection))
+			{
+				var pNumber = iCRLNumber.ToString("X");
+				pCommand.Parameters.Clear();
+				pCommand.Parameters.AddWithValue("CrlNumber", pNumber);
+				pCommand.ExecuteNonQuery();
+			}
 
+			return (pBytes);
+		}
 
+		public void ExportCRL(string pExportFolder, byte[] pBytesOfCrl)
+		{
+			File.WriteAllBytes(pExportFolder + "\\" + m_pIssueCAItem.CommonName + ".crl", pBytesOfCrl);
 
 			return;
 		}
