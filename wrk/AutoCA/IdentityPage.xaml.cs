@@ -12,6 +12,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Networking;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -90,7 +91,7 @@ namespace AutoCA
 			pApp.SaveOrgProfile();
 			pApp.SaveIdentity();
 
-			Save.IsEnabled = false;
+			//Save.IsEnabled = false;
 		}
 
 
@@ -98,14 +99,49 @@ namespace AutoCA
 		{
 			if (Validate() == false)
 			{
-				Save.IsEnabled = false;
+				//Save.IsEnabled = false;
 			}
 			else
 			{
-				Save.IsEnabled = true;
+				//Save.IsEnabled = true;
 			}
 
 			return;
 		}
+
+		
+		private void IdentityParameters_LostFocus(object sender, RoutedEventArgs e)
+		{
+			if (m_bWriteable == false)
+			{
+				return;
+			}
+			if (Validate() == false)
+			{
+				return;
+			}
+
+			var pApp = App.Current as AutoCA.App;
+			pApp.SaveOrgProfile();
+			pApp.SaveIdentity();
+		}
+
+		public void IsWriteable(bool? bWriteable)
+		{
+			if (bWriteable == null)
+			{
+				return;
+			}
+			AuthorityName.IsReadOnly = !bWriteable.Value;
+			OrgName.IsReadOnly       = !bWriteable.Value;
+			OrgUnitName.IsReadOnly   = !bWriteable.Value;
+			LocalityName.IsReadOnly  = !bWriteable.Value;
+			ProvinceName.IsReadOnly  = !bWriteable.Value;
+			CountryName.IsReadOnly   = !bWriteable.Value;
+			ServerName.IsReadOnly    = !bWriteable.Value;
+
+			m_bWriteable = bWriteable.Value;
+		}
+		private bool m_bWriteable = false;
 	}
 }

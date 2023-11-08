@@ -379,15 +379,17 @@ namespace AutoCA
 		}
 
 		//　指定したフォルダに証明書と鍵をファイル形式で出力
-		public bool Export(string pExportFolder)
+		public string Export(string pExportFolder)
 		{
 			var pBytesOfKey = m_pCertificate.GetECDsaPrivateKey().ExportECPrivateKey();
-			File.WriteAllBytes(pExportFolder + "\\" + CommonName + ".key", pBytesOfKey);
+			var pExportFilepathOfKey = pExportFolder + "\\" + CommonName + ".key";
+			File.WriteAllBytes(pExportFilepathOfKey, pBytesOfKey);
 
 			var pBytesOfCrt = m_pCertificate.Export(X509ContentType.Cert);
-			File.WriteAllBytes(pExportFolder + "\\" + CommonName + ".crt", pBytesOfCrt);
+			var pExportFilepathOfCrt = pExportFolder + "\\" + CommonName + ".crt";
+			File.WriteAllBytes(pExportFilepathOfCrt, pBytesOfCrt);
 
-			return (true);
+			return (pExportFilepathOfCrt);
 		}
 
 		//　秘密鍵と証明書をファイルに出力

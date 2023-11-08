@@ -122,15 +122,15 @@ namespace AutoCA
 			var pCertificate = new Certificate();
 			if (pCertificate.CreateForServer(m_pOrgProfile, pCommonName, pFQDN, m_pIssueCAItem) == false)
 			{
-				throw (new AppException(AppError.FailureCreateCertificate, AppFacility.Error, AppFlow.CreateCertificateForServer));
+				throw (new AppException(AppError.FailureCreateCertificate, AppFacility.Error, AppFlow.CreateCertificateForServer, pCommonName));
 			}
 			if (pCertificate.Validate(pSQLContext) == false)
 			{
-				throw (new AppException(AppError.ExistSameCertificate, AppFacility.Error, AppFlow.CreateCertificateForServer));
+				throw (new AppException(AppError.ExistSameCertificate, AppFacility.Error, AppFlow.CreateCertificateForServer, pCommonName));
 			}
 			if (pCertificate.Save(pSQLContext) == false)
 			{
-				throw (new AppException(AppError.FailreSaveCertificate, AppFacility.Error, AppFlow.CreateCertificateForServer));
+				throw (new AppException(AppError.FailreSaveCertificate, AppFacility.Error, AppFlow.CreateCertificateForServer, pCommonName));
 			}
 
 			return (true);
@@ -142,15 +142,15 @@ namespace AutoCA
 			var pCertificate = new Certificate();
 			if (pCertificate.CreateForClient(m_pOrgProfile, pCommonName, pMailAddress, m_pIssueCAItem) == false)
 			{
-				throw (new AppException(AppError.FailureCreateCertificate, AppFacility.Error, AppFlow.CreateCertificateForClient));
+				throw (new AppException(AppError.FailureCreateCertificate, AppFacility.Error, AppFlow.CreateCertificateForClient, pCommonName));
 			}
 			if (pCertificate.Validate(pSQLContext) == false)
 			{
-				throw (new AppException(AppError.ExistSameCertificate, AppFacility.Error, AppFlow.CreateCertificateForClient));
+				throw (new AppException(AppError.ExistSameCertificate, AppFacility.Error, AppFlow.CreateCertificateForClient, pCommonName));
 			}
 			if (pCertificate.Save(pSQLContext) == false)
 			{
-				throw (new AppException(AppError.FailreSaveCertificate, AppFacility.Error, AppFlow.CreateCertificateForClient));
+				throw (new AppException(AppError.FailreSaveCertificate, AppFacility.Error, AppFlow.CreateCertificateForClient, pCommonName));
 			}
 
 			return (true);
@@ -163,16 +163,17 @@ namespace AutoCA
 			var pCertificate = new Certificate();
 			if (pCertificate.CreateForUpdate(m_pOrgProfile, pBaseCertificate, m_pIssueCAItem) == false)
 			{
-				return (false);
+				throw (new AppException(AppError.FailureCreateCertificate, AppFacility.Error, AppFlow.CreateCertificateForUpdate, pBaseCertificate.CommonName));
 			}
 			if (pCertificate.Validate(pSQLContext) == false)
 			{
-				return (false);
+				throw (new AppException(AppError.ExistSameCertificate, AppFacility.Error, AppFlow.CreateCertificateForUpdate, pBaseCertificate.CommonName));
 			}
 			if (pCertificate.Save(pSQLContext) == false)
 			{
-				return (false);
+				throw (new AppException(AppError.FailreSaveCertificate, AppFacility.Error, AppFlow.CreateCertificateForUpdate, pBaseCertificate.CommonName));
 			}
+
 			return (true);
 		}
 
@@ -181,8 +182,9 @@ namespace AutoCA
 		{
 			if (pCertificate.Revoke(pSQLContext) == false)
 			{
-				return (false);
+				throw (new AppException(AppError.FailreSaveCertificate, AppFacility.Error, AppFlow.Revoke, pCertificate.CommonName));
 			}
+
 			return (true);
 		}
 
@@ -365,11 +367,12 @@ namespace AutoCA
 			return (pBytes);
 		}
 
-		public void ExportCRL(string pExportFolder, byte[] pBytesOfCrl)
+		public string ExportCRL(string pExportFolder, byte[] pBytesOfCrl)
 		{
-			File.WriteAllBytes(pExportFolder + "\\" + m_pIssueCAItem.CommonName + ".crl", pBytesOfCrl);
+			var pFilepath = pExportFolder + "\\" + m_pIssueCAItem.CommonName + ".crl";
+			File.WriteAllBytes(pFilepath, pBytesOfCrl);
 
-			return;
+			return (pFilepath);
 		}
 
 		//　認証局情報を保存

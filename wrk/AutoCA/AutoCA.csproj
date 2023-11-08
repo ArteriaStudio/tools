@@ -19,7 +19,9 @@
     <None Remove="MessagesPage.xaml" />
     <None Remove="RequestPage.xaml" />
     <None Remove="Settings.xaml" />
+    <None Remove="SettingsPage.xaml" />
     <None Remove="SigningPage.xaml" />
+    <None Remove="VersionPage.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -62,6 +64,16 @@
     <Content Update="Assets\EasyCA.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="VersionPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="SettingsPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="MessagesPage.xaml">

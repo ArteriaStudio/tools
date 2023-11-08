@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.ApplicationModel.Preview.Notes;
 using Windows.Foundation;
@@ -25,6 +26,8 @@ namespace AutoCA
 	{
 		Unknown = 0,
 		Error,
+		Info,
+		Complete,
 	}
 
 	/// <summary>
@@ -37,12 +40,16 @@ namespace AutoCA
 		public string		DateAt;		//　
 		public string		TimeAt;		//　
 		public string		Text;		//　メッセージ
+		public string		Which;		//　対象の識別子
+		public string		Where;      //　対象の場所
 
-		public Message(AppFacility eFacility, string pText) 
+		public Message(AppFacility eFacility, string pText, string pWhich, string pWhere = null)
 		{
-			Facility = eFacility;
-			CreateAt = DateTime.Now;
-			Text     = pText;
+			Facility  = eFacility;
+			CreateAt  = DateTime.Now;
+			Text      = pText;
+			Which     = pWhich;
+			Where     = pWhere;
 
 			DateAt = CreateAt.ToString("yyyy/MM/dd");
 			TimeAt = CreateAt.ToString("HH:mm:ss.fff");
@@ -77,9 +84,9 @@ namespace AutoCA
 		}
 
 		//　利用者向けメッセージを追加
-		public void	AddMessage(AppFacility eFacility, string pText)
+		public void	AddMessage(AppFacility eFacility, string pText, string pWhich, string pWhere)
 		{
-			var pMessage = new Message(eFacility, pText);
+			var pMessage = new Message(eFacility, pText, pWhich, pWhere);
 			m_pMessages.Insert(0, pMessage);
 
 			return;

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Window
-    x:Class="AutoCA.MainWindow"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:AutoCA"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
+	x:Class="AutoCA.MainWindow"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:local="using:AutoCA"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	mc:Ignorable="d">
 
 	<!-- 左端に設置、戻るボタンを非表示、ペインは閉じる -->
 	<NavigationView PaneDisplayMode="Left" IsBackButtonVisible="Collapsed" IsPaneOpen="False" SelectionChanged="NavigationView_SelectionChanged">
@@ -23,9 +23,10 @@
 					<NavigationViewItem Tag="Signing" Icon="Accept" Content="署名を実行"/>
 				</NavigationViewItem.MenuItems>
 			</NavigationViewItem>
-			<NavigationViewItemSeparator />
-			<NavigationViewItem Tag="Identity" Icon="ShowResults" Content="認証局主体者情報"/>
 		</NavigationView.MenuItems>
+		<NavigationView.FooterMenuItems>
+			<NavigationViewItem Tag="Author" Icon="ContactInfo" Content="著作権表示"/>
+		</NavigationView.FooterMenuItems>
 
 		<Grid>
 			<Grid.ColumnDefinitions>

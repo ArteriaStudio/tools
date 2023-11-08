@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="AutoCA.VersionPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:AutoCA"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+	<Grid Margin="16, 16, 16, 16" >
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*" />
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="*" />
+		</Grid.RowDefinitions>
+
+		<TextBlock Grid.Row="0" Grid.RowSpan="1" Grid.Column="0" Margin="8, 8, 8, 8" Text="バージョン情報" Style="{StaticResource SubtitleTextBlockStyle}" />
+		<Grid Grid.Row="1" Grid.Column="0">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="64" />
+				<ColumnDefinition Width="*" />
+			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto" />
+			</Grid.RowDefinitions>
+			
+			<Image Grid.Row="0" Grid.Column="0" Source="Assets/AutoCA.png" Width="64" Height="64" />
+			<Grid Grid.Row="0" Grid.Column="1" >
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*" />
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+				</Grid.RowDefinitions>
+
+				<TextBlock Grid.Row="0" Grid.Column="0" Margin="16, 4, 8, 4" VerticalAlignment="Center" Text="Easy CA"     Style="{StaticResource BaseTextBlockStyle}" />
+				<TextBlock Grid.Row="1" Grid.Column="0" Margin="16, 4, 8, 4" VerticalAlignment="Center" Text="Ver 0.1.0.1" Style="{StaticResource BodyTextBlockStyle}" />
+			</Grid>
+		</Grid>
+	</Grid>
+</Page>

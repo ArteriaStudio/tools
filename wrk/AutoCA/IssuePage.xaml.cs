@@ -168,10 +168,12 @@ namespace AutoCA
 					pAuthority.CreateForClient(pSQLContext, m_pForm.m_pCommonName, m_pForm.m_pMailAddress);
 					break;
 				}
+
+				pWindow.AddMessage(new Message(AppFacility.Complete, "èÿñæèëÇî≠çsÇµÇ‹ÇµÇΩÅB", m_pForm.m_pCommonName));
 			}
 			catch (AppException pException)
 			{
-				pWindow.AddMessage(new Message(pException.m_eFacility, pException.GetText()));
+				pWindow.AddMessage(new Message(pException.m_eFacility, pException.GetText(), pException.GetParameter()));
 			}
 		}
 	}

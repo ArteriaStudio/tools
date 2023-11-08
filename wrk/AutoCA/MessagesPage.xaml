@@ -27,18 +27,20 @@
 					<Grid>
 						<Grid.ColumnDefinitions>
 							<ColumnDefinition Width="Auto"/>
-							<ColumnDefinition Width="0.1*"/>
-							<ColumnDefinition Width="0.15*"/>
+							<ColumnDefinition Width="0.25*"/>
+							<ColumnDefinition Width="0.30*"/>
 							<ColumnDefinition Width="*"/>
+							<ColumnDefinition Width="0.35*"/>
+							<ColumnDefinition Width="0.80*"/>
 						</Grid.ColumnDefinitions>
 						<Grid.RowDefinitions>
 							<RowDefinition Height="Auto"/>
-							<RowDefinition Height="Auto"/>
 						</Grid.RowDefinitions>
-						<TextBlock Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="8, 4, 8, 4" Text="{x:Bind Facility}" Style="{ThemeResource BodyStrongTextBlockStyle}"/>
-						<TextBlock Grid.Column="2" Grid.Row="0" Grid.RowSpan="1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="8, 0, 8, 4" Text="{x:Bind DateAt}"   Style="{ThemeResource BodyTextBlockStyle}"/>
-						<TextBlock Grid.Column="2" Grid.Row="1" Grid.RowSpan="1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="8, 0, 8, 4" Text="{x:Bind TimeAt}"   Style="{ThemeResource BodyTextBlockStyle}"/>
-						<TextBlock Grid.Column="3" Grid.Row="0" Grid.RowSpan="2" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="8, 0, 8, 4" Text="{x:Bind Text}"     Style="{ThemeResource BodyTextBlockStyle}"/>
+						<TextBlock Grid.Column="1" Grid.Row="0" Grid.RowSpan="1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="8, 4, 8, 4" TextWrapping="NoWrap" Text="{x:Bind Facility}" Style="{ThemeResource BodyStrongTextBlockStyle}"/>
+						<TextBlock Grid.Column="2" Grid.Row="1" Grid.RowSpan="1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="8, 0, 8, 4" TextWrapping="NoWrap" Text="{x:Bind TimeAt}"   Style="{ThemeResource BodyTextBlockStyle}"/>
+						<TextBlock Grid.Column="3" Grid.Row="0" Grid.RowSpan="1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="8, 0, 8, 4" TextWrapping="NoWrap" Text="{x:Bind Text}"     Style="{ThemeResource BodyTextBlockStyle}"/>
+						<TextBlock Grid.Column="4" Grid.Row="0" Grid.RowSpan="1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="8, 0, 8, 4" TextWrapping="NoWrap" Text="{x:Bind Which}"    Style="{ThemeResource BodyTextBlockStyle}"/>
+						<TextBlock Grid.Column="5" Grid.Row="0" Grid.RowSpan="1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="8, 0, 8, 4" TextWrapping="NoWrap" Text="{x:Bind Where}"    Style="{ThemeResource BodyTextBlockStyle}"/>
 					</Grid>
 				</DataTemplate>
 			</ListView.ItemTemplate>

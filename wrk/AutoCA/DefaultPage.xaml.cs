@@ -20,6 +20,7 @@ using Windows.Foundation.Collections;
 using Windows.Security.Cryptography.Certificates;
 using Windows.Storage;
 using Windows.UI;
+using static AutoCA.AppException;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -191,13 +192,16 @@ namespace AutoCA
 				return;
 			}
 			var pApp = App.Current as AutoCA.App;
+			var pWindow = pApp.m_pWindow as MainWindow;
 			var pSQLContext = pApp.GetSQLContext();
 			var pAuthority = Authority.Instance;
 			var pCertificate = pAuthority.Fetch(pSQLContext, pSerialNumber);
 
 			//　ダウンロードフォルダにファイルを出力する。
 			var pExportFolder = System.Environment.GetEnvironmentVariable("USERPROFILE") + "\\Downloads";
-			pCertificate.Export(pExportFolder);
+			var pExportFilepath = pCertificate.Export(pExportFolder);
+
+			pWindow.AddMessage(new Message(AppFacility.Complete, "証明書をファイルに出力しました。", pCertificate.CommonName, pExportFilepath));
 		}
 
 		//　選択した証明書をファイルに出力する。
@@ -253,6 +257,7 @@ namespace AutoCA
 
 			//　
 			var pApp = App.Current as AutoCA.App;
+			var pWindow = pApp.m_pWindow as MainWindow;
 			var pSQLContext = pApp.GetSQLContext();
 			var pAuthority = Authority.Instance;
 
@@ -263,12 +268,17 @@ namespace AutoCA
 			{
 				//　選択された証明書データを獲得
 				var pCertificate = pAuthority.Fetch(pSQLContext, pSerialNumber);
-
-				//　有効期限を延長した証明書を発行する。
-				pAuthority.Update(pSQLContext, pCertificate);
+				if (pCertificate.Revoked == true)
+				{
+					//　失効した証明書を選択した。
+					throw (new AppException(AppError.InvalidCertificate, AppFacility.Error, AppFlow.CreateCertificateForUpdate, pCertificate.SerialNumber));
+				}
 
 				//　証明書を失効する。
 				pAuthority.Revoke(pSQLContext, pCertificate);
+
+				//　有効期限を延長した証明書を発行する。
+				pAuthority.Update(pSQLContext, pCertificate);
 
 				//　メモリ上のデータを更新する。
 				foreach (var pCert in m_pCertificates)
@@ -280,12 +290,14 @@ namespace AutoCA
 					}
 				}
 				pTransaction.Commit();
+				pWindow.AddMessage(new Message(AppFacility.Complete, "証明書の有効期限を延長しました。", pCertificate.CommonName));
 			}
-			catch (Exception)
+			catch (AppException pException)
 			{
 				pTransaction.Rollback();
+				pWindow.AddMessage(new Message(pException.m_eFacility, pException.GetText(), pException.GetParameter()));
 			}
-			
+
 			return;
 		}
 
@@ -342,6 +354,7 @@ namespace AutoCA
 
 			//　
 			var pApp = App.Current as AutoCA.App;
+			var pWindow = pApp.m_pWindow as MainWindow;
 			var pSQLContext = pApp.GetSQLContext();
 			var pAuthority = Authority.Instance;
 
@@ -352,6 +365,11 @@ namespace AutoCA
 			{
 				//　選択された証明書データを獲得する。
 				var pCertificate = pAuthority.Fetch(pSQLContext, pSerialNumber);
+				if (pCertificate.Revoked == true)
+				{
+					//　失効した証明書を選択した。
+					throw (new AppException(AppError.InvalidCertificate, AppFacility.Error, AppFlow.Revoke, pCertificate.SerialNumber));
+				}
 
 				//　証明書を失効する。
 				pAuthority.Revoke(pSQLContext, pCertificate);
@@ -366,6 +384,7 @@ namespace AutoCA
 					}
 				}
 				pTransaction.Commit();
+				pWindow.AddMessage(new Message(AppFacility.Complete, "証明書を失効しました。", pCertificate.CommonName));
 			}
 			catch (Exception)
 			{
@@ -399,6 +418,7 @@ namespace AutoCA
 		{
 			//　
 			var pApp = App.Current as AutoCA.App;
+			var pWindow = pApp.m_pWindow as MainWindow;
 			var pSQLContext = pApp.GetSQLContext();
 			var pAuthority = Authority.Instance;
 
@@ -413,9 +433,13 @@ namespace AutoCA
 
 				//　ダウンロードフォルダにファイルを出力する。
 				var pExportFolder = System.Environment.GetEnvironmentVariable("USERPROFILE") + "\\Downloads";
-				pAuthority.ExportCRL(pExportFolder, pBytes);
+				var pExportFilepath = pAuthority.ExportCRL(pExportFolder, pBytes);
 
 				pTransaction.Commit();
+
+				var pText = "次のパスにファイルを出力しました。";
+				var pMessage = new Message(AppFacility.Info, pText, pExportFilepath);
+				pWindow.AddMessage(pMessage);
 			}
 			catch (Exception)
 			{

@@ -10,64 +10,35 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="*"/>
-		</Grid.ColumnDefinitions>
-		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="*"/>
-		</Grid.RowDefinitions>
-
-		<Grid Grid.Column="0" Grid.Row="0" Style="{StaticResource CaptionPane}">
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="*"/>
-				<ColumnDefinition Width="*"/>
-			</Grid.ColumnDefinitions>
-			<TextBlock Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Style="{StaticResource CaptionText}">設定</TextBlock>
-			<TextBlock Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource CaptionText}"></TextBlock>
-		</Grid>
-		<StackPanel Grid.Column="0" Grid.Row="1" Orientation="Vertical" Style="{StaticResource CardStyleStackPanel}">
-			<TextBlock Margin="8,8,8,8" HorizontalAlignment="Left" VerticalAlignment="Center" Style="{StaticResource SubtitleTextBlockStyle}">データベース接続情報</TextBlock>
-			<TextBox x:Name="HostName"     Margin="8,8,8,8" Header="サーバのホスト名（HostName）" PlaceholderText="" Text="{x:Bind m_pDbParams.HostName, Mode=TwoWay}" TextChanged="Settings_TextChanged" />
-			<TextBox x:Name="InstanceName" Margin="8,8,8,8" Header="インスタンス名（InstanceName）" PlaceholderText="" Text="{x:Bind m_pDbParams.InstanceName, Mode=TwoWay}" TextChanged="Settings_TextChanged" />
-			<TextBox x:Name="SchemaName"   Margin="8,8,8,8" Header="スキーマ名（SchemaName）" PlaceholderText=""  Text="{x:Bind m_pDbParams.SchemaName, Mode=TwoWay}" TextChanged="Settings_TextChanged" />
-			<Grid>
-				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="*"/>
-					<ColumnDefinition Width="Auto"/>
-				</Grid.ColumnDefinitions>
-				<Grid.RowDefinitions>
-					<RowDefinition Height="*"/>
-				</Grid.RowDefinitions>
-				<TextBox x:Name="ClientKey"      Grid.Column="0" Margin="8,8,8,8" Header="クライアント秘密鍵（ClientSecretKey）" PlaceholderText=""  Text="{x:Bind m_pDbParams.ClientKey, Mode=TwoWay}" TextChanged="Settings_TextChanged" />
-				<Button x:Name="BrowseClientKey" Grid.Column="1" Margin="8,8,8,8" Click="BrowseClientKey_Click" Content="ファイルを選択"/>
-			</Grid>
-			<Grid>
-				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="*"/>
-					<ColumnDefinition Width="Auto"/>
-				</Grid.ColumnDefinitions>
-				<Grid.RowDefinitions>
-					<RowDefinition Height="*"/>
-				</Grid.RowDefinitions>
-				<TextBox x:Name="ClientCrt"      Grid.Column="0" Margin="8,8,8,8" Header="クライアント証明書（ClientCertificate）" PlaceholderText=""  Text="{x:Bind m_pDbParams.ClientCrt, Mode=TwoWay}" TextChanged="Settings_TextChanged" />
-				<Button x:Name="BrowseClientCrt" Grid.Column="1" Margin="8,8,8,8" Click="BrowseClienCrt_Click" Content="ファイルを選択"/>
-			</Grid>
-			<Grid>
-				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="*"/>
-					<ColumnDefinition Width="Auto"/>
-				</Grid.ColumnDefinitions>
-				<Grid.RowDefinitions>
-					<RowDefinition Height="*"/>
-				</Grid.RowDefinitions>
-				<TextBox x:Name="RootCACrt"      Grid.Column="0" Margin="8,8,8,8" Header="ルート（＝信頼端点）証明書（RootCertificate）" PlaceholderText=""  Text="{x:Bind m_pDbParams.TrustCrt, Mode=TwoWay}" TextChanged="Settings_TextChanged" />
-				<Button x:Name="BrowseRootCACrt" Grid.Column="1" Margin="8,8,8,8" Click="BrowseRootCACrt_Click" Content="ファイルを選択"/>
-			</Grid>
-			<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-				<Button Name="Save" Margin="8,8,8,8" IsEnabled="False" Style="{StaticResource AccentButtonStyle}" Content="保存" Click="Save_Click" />
-			</StackPanel>
-		</StackPanel>
+		<TabView Name="ParametersTab" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsAddTabButtonVisible="False" SelectionChanged="ParametersTab_SelectionChanged" >
+			<TabViewItem Header="データベース接続" IsClosable="False">
+				<TabViewItem.IconSource>
+					<SymbolIconSource Symbol="Home" />
+				</TabViewItem.IconSource>
+				<Frame Name="ConnectionTab" />
+			</TabViewItem>
+			<TabViewItem Header="基本認証局情報" IsClosable="False">
+				<TabViewItem.IconSource>
+					<SymbolIconSource Symbol="Contact" />
+				</TabViewItem.IconSource>
+				<Frame Name="AuthorityTag" />
+			</TabViewItem>
+			<TabViewItem Header="ファイル出力先" IsClosable="False">
+				<TabViewItem.IconSource>
+					<SymbolIconSource Symbol="OutlineStar" />
+				</TabViewItem.IconSource>
+				<Frame Name="ExportTag" />
+			</TabViewItem>
+			<TabView.TabStripHeader>
+				<Grid x:Name="ShellTitlebarInset" Background="Transparent" />
+			</TabView.TabStripHeader>
+			<TabView.TabStripFooter>
+				<Grid x:Name="CustomDragRegion" Background="Transparent">
+					<StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right">
+						<ToggleButton  Name="Lock" Margin="8,8,8,8" IsEnabled="True" Style="{StaticResource AccentButtonStyle}" Content="編集" Click="Lock_Click" />
+					</StackPanel>
+				</Grid>
+			</TabView.TabStripFooter>
+		</TabView>
 	</Grid>
 </Page>
