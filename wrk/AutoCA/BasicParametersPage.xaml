@@ -19,9 +19,9 @@
 
 		<ScrollViewer x:Name="BasicParameters" Grid.Column="0" Grid.Row="0" Padding="4, 4, 4, 4" LostFocus="BasicParameters_LostFocus">
 			<StackPanel Orientation="Vertical" Style="{StaticResource CardStyleStackPanel}">
-				<TextBox x:Name="HostName"     Margin="8,8,8,8" IsReadOnly="True" Header="サーバのホスト名（HostName）" PlaceholderText="" Text="{x:Bind m_pDbParams.HostName, Mode=TwoWay}" TextChanged="Settings_TextChanged" />
-				<TextBox x:Name="InstanceName" Margin="8,8,8,8" IsReadOnly="True" Header="インスタンス名（InstanceName）" PlaceholderText="" Text="{x:Bind m_pDbParams.InstanceName, Mode=TwoWay}" TextChanged="Settings_TextChanged" />
-				<TextBox x:Name="SchemaName"   Margin="8,8,8,8" IsReadOnly="True" Header="スキーマ名（SchemaName）" PlaceholderText=""  Text="{x:Bind m_pDbParams.SchemaName, Mode=TwoWay}" TextChanged="Settings_TextChanged" />
+				<TextBox x:Uid="HostName"     x:Name="HostName"     Margin="8,8,8,8" IsReadOnly="True" Header="サーバのホスト名（HostName）" PlaceholderText="" Text="{x:Bind m_pDbParams.HostName, Mode=TwoWay}" TextChanged="Settings_TextChanged" />
+				<TextBox x:Uid="InstanceName" x:Name="InstanceName" Margin="8,8,8,8" IsReadOnly="True" Header="インスタンス名（InstanceName）" PlaceholderText="" Text="{x:Bind m_pDbParams.InstanceName, Mode=TwoWay}" TextChanged="Settings_TextChanged" />
+				<TextBox x:Uid="SchemaName"   x:Name="SchemaName"   Margin="8,8,8,8" IsReadOnly="True" Header="スキーマ名（SchemaName）" PlaceholderText=""  Text="{x:Bind m_pDbParams.SchemaName, Mode=TwoWay}" TextChanged="Settings_TextChanged" />
 				<Grid>
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="*"/>
@@ -30,8 +30,8 @@
 					<Grid.RowDefinitions>
 						<RowDefinition Height="*"/>
 					</Grid.RowDefinitions>
-					<TextBox x:Name="ClientKey"      Grid.Column="0" Margin="8,8,8,8" IsReadOnly="True" Header="クライアント秘密鍵（ClientSecretKey）" PlaceholderText=""  Text="{x:Bind m_pDbParams.ClientKey, Mode=TwoWay}" TextChanged="Settings_TextChanged" />
-					<Button x:Name="BrowseClientKey" Grid.Column="1" Margin="8,8,8,8" IsEnabled="False" Click="BrowseClientKey_Click" Content="ファイルを選択"/>
+					<TextBox x:Uid="ClientKey"       x:Name="ClientKey"       Grid.Column="0" Margin="8,8,8,8" IsReadOnly="True" Header="クライアント秘密鍵（ClientSecretKey）" PlaceholderText=""  Text="{x:Bind m_pDbParams.ClientKey, Mode=TwoWay}" TextChanged="Settings_TextChanged" />
+					<Button  x:Uid="BrowseClientKey" x:Name="BrowseClientKey" Grid.Column="1" Margin="8,8,8,8" IsEnabled="False" Click="BrowseClientKey_Click" Content="ファイルを選択"/>
 				</Grid>
 				<Grid>
 					<Grid.ColumnDefinitions>
@@ -41,8 +41,8 @@
 					<Grid.RowDefinitions>
 						<RowDefinition Height="*"/>
 					</Grid.RowDefinitions>
-					<TextBox x:Name="ClientCrt"      Grid.Column="0" Margin="8,8,8,8" IsReadOnly="True" Header="クライアント証明書（ClientCertificate）" PlaceholderText=""  Text="{x:Bind m_pDbParams.ClientCrt, Mode=TwoWay}" TextChanged="Settings_TextChanged" />
-					<Button x:Name="BrowseClientCrt" Grid.Column="1" Margin="8,8,8,8" IsEnabled="False" Click="BrowseClienCrt_Click" Content="ファイルを選択"/>
+					<TextBox x:Name="ClientCrt"       Grid.Column="0" Margin="8,8,8,8" IsReadOnly="True" Header="クライアント証明書（ClientCertificate）" PlaceholderText=""  Text="{x:Bind m_pDbParams.ClientCrt, Mode=TwoWay}" TextChanged="Settings_TextChanged" />
+					<Button  x:Name="BrowseClientCrt" Grid.Column="1" Margin="8,8,8,8" IsEnabled="False" Click="BrowseClienCrt_Click" Content="ファイルを選択"/>
 				</Grid>
 				<Grid>
 					<Grid.ColumnDefinitions>

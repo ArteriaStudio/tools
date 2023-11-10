@@ -17,6 +17,7 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Globalization;
 using Windows.Security.Authentication.OnlineId;
 using Windows.Storage;
 
@@ -99,6 +100,9 @@ namespace AutoCA
 		public App()
 		{
 			this.InitializeComponent();
+
+			Windows.ApplicationModel.Resources.Core.ResourceContext.SetGlobalQualifierValue("Language", "de-DE");
+			Windows.Globalization.ApplicationLanguages.PrimaryLanguageOverride = "de-DE";
 		}
 
 		/// <summary>

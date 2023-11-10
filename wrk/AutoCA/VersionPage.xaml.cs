@@ -7,6 +7,7 @@ using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -18,14 +19,19 @@ using Windows.Foundation.Collections;
 
 namespace AutoCA
 {
+
 	/// <summary>
 	/// An empty page that can be used on its own or navigated to within a Frame.
 	/// </summary>
 	public sealed partial class VersionPage : Page
 	{
+		public string m_pLanguage;
+
 		public VersionPage()
 		{
 			this.InitializeComponent();
+
+			m_pLanguage = CultureInfo.CurrentCulture.DisplayName;
 		}
 	}
 }

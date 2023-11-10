@@ -55,6 +55,12 @@
 								<Setter Property="Shadow" Value="{StaticResource CardShadow}" />
 							</Style>
 
+							<Style x:Key="CardStyleGrid" TargetType="Grid">
+								<Setter Property="Background" Value="{ThemeResource CardBackgroundFillColorDefault}" />
+								<Setter Property="CornerRadius" Value="6" />
+								<Setter Property="Shadow" Value="{StaticResource CardShadow}" />
+							</Style>
+
 							<Style x:Key="CardStyleListView" TargetType="ListView">
 								<Setter Property="Background" Value="{ThemeResource CardBackgroundFillColorDefault}" />
 								<Setter Property="CornerRadius" Value="6" />
@@ -116,6 +122,12 @@
 								   TintOpacity="0.20"/>
 
 							<Style x:Key="CardStyleStackPanel" TargetType="StackPanel">
+								<Setter Property="Background" Value="{ThemeResource CardBackground}" />
+								<Setter Property="CornerRadius" Value="6" />
+								<Setter Property="Shadow" Value="{StaticResource CardShadow}" />
+							</Style>
+
+							<Style x:Key="CardStyleGrid" TargetType="Grid">
 								<Setter Property="Background" Value="{ThemeResource CardBackground}" />
 								<Setter Property="CornerRadius" Value="6" />
 								<Setter Property="Shadow" Value="{StaticResource CardShadow}" />
