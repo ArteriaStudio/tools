@@ -31,6 +31,7 @@ namespace AutoCA
 		{
 			this.InitializeComponent();
 			var pApp = App.Current as AutoCA.App;
+            /*
 			if (pApp.m_pPrepareFlags.bExistDbParams == false)
 			{
 				//　設定情報（接続情報入力画面）に遷移
@@ -46,6 +47,7 @@ namespace AutoCA
 				//　既定の初期画面に遷移
 				this.ContentFrame.Navigate(typeof(DefaultPage));
 			}
+			*/
 			this.MessageFrame.Navigate(typeof(MessagesPage));
 		}
 

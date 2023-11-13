@@ -20,7 +20,7 @@
 			<RowDefinition Height="*"/>
 		</Grid.RowDefinitions>
 
-		<Grid Grid.Column="0" Grid.Row="0" Style="{StaticResource CaptionPane}">
+		<Grid Grid.Column="0" Grid.Row="0" >
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="*"/>
 				<ColumnDefinition Width="*"/>
@@ -91,7 +91,7 @@
 		</CommandBar>
 		-->
 
-		<ListView x:Name="CertsList" Grid.Column="0" Grid.Row="3" SelectionMode="Single" IsMultiSelectCheckBoxEnabled="False" Background="#242424" ItemsSource="{x:Bind m_pCertificates}" SelectionChanged="CertsList_SelectionChanged" >
+		<ListView x:Name="CertsList" Grid.Column="0" Grid.Row="3" SelectionMode="Single" IsMultiSelectCheckBoxEnabled="False" ItemsSource="{x:Bind m_pCertificates}" SelectionChanged="CertsList_SelectionChanged" >
 			<ListView.ItemTemplate>
 				<DataTemplate x:DataType="local:Certificate">
 					<Grid>

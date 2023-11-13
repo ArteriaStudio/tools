@@ -8,10 +8,14 @@ using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using Microsoft.UI.Xaml.Shapes;
+using Microsoft.Windows.ApplicationModel.Resources;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Resources;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
@@ -55,15 +59,16 @@ namespace AutoCA
 			}
 
 			//　認証局の主体情報が登録されているか？
-			if (pAuthority.m_pIdentity == null)
-			{
+			if ((pAuthority == null) || (pAuthority.m_pIdentity == null))
+
+            {
 				bExistIdentity = false;
 			}
 			else
 			{
 				bExistIdentity = pAuthority.m_pIdentity.Validate();
 			}
-			if (pAuthority.m_pOrgProfile == null)
+            if ((pAuthority == null) || (pAuthority.m_pOrgProfile == null))
 			{
 				bExistOrgProfile = false;
 			}
@@ -99,10 +104,40 @@ namespace AutoCA
 		/// </summary>
 		public App()
 		{
-			this.InitializeComponent();
+			//　WinUI3かつUnpackagedのアプリケーションは、動的に表示言語を変更する機能はないと思われる。（2023/11/13：said stack overflow...）
+			//Debug.WriteLine(Windows.Globalization.ApplicationLanguages.PrimaryLanguageOverride);
+			//Windows.Globalization.ApplicationLanguages.PrimaryLanguageOverride = "ja-JP";
+			//Windows.ApplicationModel.Resources.Core.ResourceContext.SetGlobalQualifierValue("Language", "de-DE");
+			//ApplicationLanguages.PrimaryLanguageOverride
+			//Windows.Globalization.ApplicationLanguages.PrimaryLanguageOverride = "ja";
 
-			Windows.ApplicationModel.Resources.Core.ResourceContext.SetGlobalQualifierValue("Language", "de-DE");
-			Windows.Globalization.ApplicationLanguages.PrimaryLanguageOverride = "de-DE";
+			this.InitializeComponent();
+			/*
+			//
+			var resourceManager = new Microsoft.Windows.ApplicationModel.Resources.ResourceManager();
+			var resourceContext = resourceManager.CreateResourceContext();
+			var iCount = resourceContext.QualifierValues.Count;
+
+			var pMap = resourceManager.MainResourceMap;
+			//pMap.GetSubtree();
+
+
+			resourceContext.QualifierValues["Language"] = "en-US";
+			var resourceMap = resourceManager.MainResourceMap.GetSubtree("Resources");
+			//resourceMap.
+
+
+			var pText = resourceMap.GetValue("ExportTag.Header", resourceContext).ValueAsString;
+			*/
+			//　
+			//InspectEnviroment();
+			Debug.WriteLine(CultureInfo.CurrentUICulture.Name);
+
+
+			//
+			// https://learn.microsoft.com/ja-jp/windows/apps/winui/winui3/localize-winui3-app
+			// https://learn.microsoft.com/ja-jp/windows/uwp/app-resources/localize-strings-ui-manifest#localize-the-string-resources
+			// https://nicksnettravels.builttoroam.com/mrtcore-unpackaged/
 		}
 
 		/// <summary>

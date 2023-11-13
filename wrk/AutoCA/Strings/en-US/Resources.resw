@@ -120,20 +120,32 @@
   <data name="Acknowledgment.Text" xml:space="preserve">
     <value>Acknowledgment</value>
   </data>
+  <data name="AuthorityTag.Header" xml:space="preserve">
+    <value>Authority Information</value>
+  </data>
   <data name="ClientCrt.Header" xml:space="preserve">
     <value>Client Certificate</value>
   </data>
   <data name="ClientKey.Header" xml:space="preserve">
     <value>Client Scecret Key</value>
   </data>
+  <data name="ConnectionTab.Header" xml:space="preserve">
+    <value>Database Connection</value>
+  </data>
   <data name="DisplayLanguage.Text" xml:space="preserve">
     <value>Display Language</value>
+  </data>
+  <data name="ExportTag.Header" xml:space="preserve">
+    <value>Export File Parameters</value>
   </data>
   <data name="HostName.Header" xml:space="preserve">
     <value>Database Host Name</value>
   </data>
   <data name="InstanceName.Header" xml:space="preserve">
     <value>Database Instance Name</value>
+  </data>
+  <data name="Lock.Content" xml:space="preserve">
+    <value>Editable</value>
   </data>
   <data name="RootCACrt" xml:space="preserve">
     <value>Root Certificate</value>

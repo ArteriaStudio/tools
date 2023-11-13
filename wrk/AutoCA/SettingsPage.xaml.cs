@@ -8,6 +8,7 @@ using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -26,7 +27,13 @@ namespace AutoCA
 	{
 		public SettingsPage()
 		{
-			this.InitializeComponent();
+			try
+			{
+				this.InitializeComponent();
+			} catch (Exception ex)
+			{
+				Debug.WriteLine(ex);
+			}
 
 			ConnectionTab.Navigate(typeof(BasicParametersPage));
 			AuthorityTag.Navigate(typeof(IdentityPage));

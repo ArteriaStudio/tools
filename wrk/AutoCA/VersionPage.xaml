@@ -23,7 +23,7 @@
 			<RowDefinition Height="*" />
 		</Grid.RowDefinitions>
 
-		<TextBlock x:Uid="VersionInfo" Grid.Column="0" Grid.Row="0" Margin="8, 8, 8, 8" VerticalAlignment="Center" Text="バージョン情報" Style="{StaticResource SubtitleTextBlockStyle}" />
+		<TextBlock x:Uid="VersionInfo" Grid.Column="0" Grid.Row="0" Margin="8, 8, 8, 8" VerticalAlignment="Center" Style="{StaticResource SubtitleTextBlockStyle}" />
 		<Grid Grid.Column="0" Grid.Row="1" Margin="8, 8, 8, 8">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="64" />
@@ -50,6 +50,7 @@
 				<TextBlock Grid.Row="1" Grid.Column="0" Margin="16, 4, 8, 4" VerticalAlignment="Center" Text="Ver 0.1.0.1"            Style="{StaticResource BodyTextBlockStyle}" />
 			</Grid>
 		</Grid>
+        
 		<StackPanel Grid.Column="0" Grid.Row="2" Margin="0, 2, 0, 2" Style="{StaticResource CardStyleStackPanel}">
 			<TextBlock x:Uid="Acknowledgment" Name="Acknowledgment" Margin="16,8,16,8" Style="{StaticResource SubtitleTextBlockStyle}" />
 			<TextBlock Margin="16,8,16,8" Style="{StaticResource BodyTextBlockStyle}" Text="This application works thanks to the application described below." />
