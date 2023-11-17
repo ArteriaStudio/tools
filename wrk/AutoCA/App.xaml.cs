@@ -138,6 +138,12 @@ namespace AutoCA
 			// https://learn.microsoft.com/ja-jp/windows/apps/winui/winui3/localize-winui3-app
 			// https://learn.microsoft.com/ja-jp/windows/uwp/app-resources/localize-strings-ui-manifest#localize-the-string-resources
 			// https://nicksnettravels.builttoroam.com/mrtcore-unpackaged/
+			// （非パッケージ化のWinUI3アプリケーションは、手動でPRIファイルを生成する必要がある様子：2023/11/17）
+			// https://learn.microsoft.com/en-us/windows/apps/windows-app-sdk/mrtcore/localize-strings
+			// https://learn.microsoft.com/ja-jp/windows/uwp/app-resources/makepri-exe-configuration
+			// https://tera1707.com/entry/2023/07/31/225012
+			//
+			// https://learn.microsoft.com/en-us/windows/apps/winui/winui3/localize-winui3-app
 		}
 
 		/// <summary>
