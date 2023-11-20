@@ -135,15 +135,20 @@ namespace AutoCA
 
 
 			//
+			// https://learn.microsoft.com/en-us/windows/apps/winui/winui3/localize-winui3-app
+			// https://learn.microsoft.com/en-us/windows/apps/windows-app-sdk/mrtcore/localize-strings
 			// https://learn.microsoft.com/ja-jp/windows/apps/winui/winui3/localize-winui3-app
-			// https://learn.microsoft.com/ja-jp/windows/uwp/app-resources/localize-strings-ui-manifest#localize-the-string-resources
+			// https://learn.microsoft.com/ja-jp/windows/apps/windows-app-sdk/mrtcore/localize-strings
 			// https://nicksnettravels.builttoroam.com/mrtcore-unpackaged/
 			// （非パッケージ化のWinUI3アプリケーションは、手動でPRIファイルを生成する必要がある様子：2023/11/17）
-			// https://learn.microsoft.com/en-us/windows/apps/windows-app-sdk/mrtcore/localize-strings
-			// https://learn.microsoft.com/ja-jp/windows/uwp/app-resources/makepri-exe-configuration
 			// https://tera1707.com/entry/2023/07/31/225012
+			// （グローバリゼーション）
+			// https://learn.microsoft.com/ja-jp/windows/apps/design/globalizing/globalizing-portal
 			//
-			// https://learn.microsoft.com/en-us/windows/apps/winui/winui3/localize-winui3-app
+			// https://learn.microsoft.com/ja-jp/windows/uwp/app-resources/localize-strings-ui-manifest#localize-the-string-resources
+			// https://learn.microsoft.com/ja-jp/windows/uwp/app-resources/makepri-exe-configuration
+			//（実装サンプル）
+			// https://xamlbrewer.wordpress.com/category/windows-app-sdk/
 		}
 
 		/// <summary>
