@@ -15,20 +15,10 @@
 		</Grid.ColumnDefinitions>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="*"/>
 		</Grid.RowDefinitions>
 
-		<Grid Grid.Column="0" Grid.Row="0" >
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="*"/>
-				<ColumnDefinition Width="*"/>
-			</Grid.ColumnDefinitions>
-			<TextBlock Grid.Column="0" HorizontalAlignment="Left"  VerticalAlignment="Center" Style="{StaticResource CaptionText}">発行した証明書の一覧</TextBlock>
-			<TextBlock Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource CaptionText}"></TextBlock>
-		</Grid>
-		<StackPanel Grid.Column="0" Grid.Row="1" Orientation="Horizontal" Padding="1, 1, 1, 1" Style="{StaticResource CardStyleStackPanel}">
+		<StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal" Padding="1, 1, 1, 1" Style="{StaticResource CardStyleStackPanel}">
 			<Button x:Name="RevokeButton" Margin="4, 8, 4, 8" Style="{StaticResource ButtonRevealStyle}" Click="RevokeButton_Click">
 				<StackPanel Orientation="Horizontal">
 					<SymbolIcon Symbol="Cancel" />
@@ -69,29 +59,7 @@
 			</Button>
 		</StackPanel>
 
-		<!--
-		<MenuBar Grid.Column="0" Grid.Row="1">
-			<MenuBarItem Title="操作">
-				<MenuFlyoutItem Text="失効" IsTapEnabled="True" Click="Revoke_Click" />
-				<MenuFlyoutItem Text="４" IsTapEnabled="True" Click="MenuFlyoutItem_Click" />
-				<MenuFlyoutItem Text="２" IsTapEnabled="True" Click="MenuFlyoutItem_Click" />
-			</MenuBarItem>
-			<MenuBarItem Title="2" Tapped="MenuBarItem_Tapped" />
-		</MenuBar>
-		<CommandBar Grid.Column="0" Grid.Row="2" ClosedDisplayMode="Compact" OverflowButtonVisibility="Collapsed" IsOpen="False" DefaultLabelPosition="Bottom">
-			<CommandBar.Content>
-				<TextBlock />
-			</CommandBar.Content>
-			<CommandBar.PrimaryCommands>
-				<AppBarButton Icon="Refresh" Label="Refresh" IsEnabled="True" />
-				<AppBarButton Icon="Cancel" Label="Revoke" IsEnabled="False" />
-			</CommandBar.PrimaryCommands>
-			<CommandBar.SecondaryCommands>
-			</CommandBar.SecondaryCommands>
-		</CommandBar>
-		-->
-
-		<ListView x:Name="CertsList" Grid.Column="0" Grid.Row="3" SelectionMode="Single" IsMultiSelectCheckBoxEnabled="False" ItemsSource="{x:Bind m_pCertificates}" SelectionChanged="CertsList_SelectionChanged" >
+		<ListView x:Name="CertsList" Grid.Column="0" Grid.Row="1" SelectionMode="Single" IsMultiSelectCheckBoxEnabled="False" ItemsSource="{x:Bind m_pCertificates}" SelectionChanged="CertsList_SelectionChanged" >
 			<ListView.ItemTemplate>
 				<DataTemplate x:DataType="local:Certificate">
 					<Grid>

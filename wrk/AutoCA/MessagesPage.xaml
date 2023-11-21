@@ -20,7 +20,7 @@
 		</Grid.RowDefinitions>
 
 		<Rectangle Grid.Row="0" Fill="Gray" Height="1" StrokeThickness="4" />
-		<TextBlock Grid.Row="1" Margin="8, 8, 8, 0" Style="{StaticResource ItemCaptionTextBlockStyle}" Text="メッセージログ" />
+		<TextBlock Grid.Row="1" Margin="8, 8, 8, 0" Style="{StaticResource ItemCaptionTextBlockStyle}" x:Uid="MessageLog" />
 		<ListView Grid.Row="2" Margin="8, 4, 8, 4" ItemsSource="{x:Bind m_pMessages}" >
 			<ListView.ItemTemplate>
 				<DataTemplate x:DataType="local:Message">

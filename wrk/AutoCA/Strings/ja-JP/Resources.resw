@@ -120,6 +120,9 @@
   <data name="Acknowledgment.Text" xml:space="preserve">
     <value>謝辞</value>
   </data>
+  <data name="Author.Content" xml:space="preserve">
+    <value>著作権表示</value>
+  </data>
   <data name="AuthorityTag.Header" xml:space="preserve">
     <value>基本認証局情報</value>
   </data>
@@ -131,6 +134,9 @@
   </data>
   <data name="ConnectionTab.Header" xml:space="preserve">
     <value>データベース接続</value>
+  </data>
+  <data name="CreateCertificate.Content" xml:space="preserve">
+    <value>証明書を作成</value>
   </data>
   <data name="DisplayLanguage.Text" xml:space="preserve">
     <value>表示言語</value>
@@ -144,14 +150,32 @@
   <data name="InstanceName.Header" xml:space="preserve">
     <value>データベース名</value>
   </data>
+  <data name="ListupCertificate.Content" xml:space="preserve">
+    <value>発行履歴と失効処理</value>
+  </data>
   <data name="Lock.Content" xml:space="preserve">
     <value>編集</value>
+  </data>
+  <data name="MessageLog.Text" xml:space="preserve">
+    <value>メッセージログ</value>
+  </data>
+  <data name="PrimitiveProcedure.Content" xml:space="preserve">
+    <value>詳細な処理</value>
+  </data>
+  <data name="Request.Content" xml:space="preserve">
+    <value>署名要求を作成</value>
   </data>
   <data name="RootCACrt" xml:space="preserve">
     <value>ルート認証局証明書</value>
   </data>
   <data name="SchemaName.Header" xml:space="preserve">
     <value>データベース接続ユーザー名</value>
+  </data>
+  <data name="Settings.Content" xml:space="preserve">
+    <value>設定</value>
+  </data>
+  <data name="Signing.Content" xml:space="preserve">
+    <value>署名を実行</value>
   </data>
   <data name="VersionInfo.Text" xml:space="preserve">
     <value>バージョン表示</value>

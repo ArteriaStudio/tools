@@ -8,17 +8,14 @@ using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using Microsoft.UI.Xaml.Shapes;
-using Microsoft.Windows.ApplicationModel.Resources;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Resources;
 using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.ApplicationModel;
-using Windows.ApplicationModel.Activation;
+using Microsoft.Windows.ApplicationModel.Resources;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Globalization;
@@ -61,14 +58,14 @@ namespace AutoCA
 			//　認証局の主体情報が登録されているか？
 			if ((pAuthority == null) || (pAuthority.m_pIdentity == null))
 
-            {
+			{
 				bExistIdentity = false;
 			}
 			else
 			{
 				bExistIdentity = pAuthority.m_pIdentity.Validate();
 			}
-            if ((pAuthority == null) || (pAuthority.m_pOrgProfile == null))
+			if ((pAuthority == null) || (pAuthority.m_pOrgProfile == null))
 			{
 				bExistOrgProfile = false;
 			}
@@ -134,6 +131,9 @@ namespace AutoCA
 			Debug.WriteLine(CultureInfo.CurrentUICulture.Name);
 
 
+			//（これがマスター）
+			//　https://learn.microsoft.com/ja-jp/windows/apps/windows-app-sdk/deploy-unpackaged-apps
+			//　https://learn.microsoft.com/en-us/windows/apps/windows-app-sdk/deploy-unpackaged-apps
 			//
 			// https://learn.microsoft.com/en-us/windows/apps/winui/winui3/localize-winui3-app
 			// https://learn.microsoft.com/en-us/windows/apps/windows-app-sdk/mrtcore/localize-strings

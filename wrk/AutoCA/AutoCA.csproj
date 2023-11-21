@@ -11,6 +11,7 @@
     <UseWinUI>true</UseWinUI>
     <EnableMsixTooling>true</EnableMsixTooling>
     <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
+    <NeutralLanguage>en</NeutralLanguage>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="DefaultPage.xaml" />
@@ -120,6 +121,10 @@
     <Page Update="DefaultPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <PRIResource Include="Strings/en-US/Resources.resw" />
+    <PRIResource Include="Strings/ja-JP/Resources.resw" />
   </ItemGroup>
 
   <!-- 

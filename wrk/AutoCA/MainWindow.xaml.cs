@@ -16,6 +16,7 @@ using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Microsoft.Windows.ApplicationModel.Resources;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -30,24 +31,26 @@ namespace AutoCA
 		public MainWindow()
 		{
 			this.InitializeComponent();
+
 			var pApp = App.Current as AutoCA.App;
-            /*
 			if (pApp.m_pPrepareFlags.bExistDbParams == false)
 			{
 				//　設定情報（接続情報入力画面）に遷移
-				this.ContentFrame.Navigate(typeof(SettingsPage));
+				TransitPage("Settings");
+				//this.ContentFrame.Navigate(typeof(SettingsPage));
 			}
 			else if (pApp.m_pPrepareFlags.bExistIdentity == false)
 			{
 				//　設定情報（認証局主体者情報入力画面）に遷移
-				this.ContentFrame.Navigate(typeof(SettingsPage));
+				TransitPage("Settings");
+				//this.ContentFrame.Navigate(typeof(SettingsPage));
 			}
 			else
 			{
 				//　既定の初期画面に遷移
-				this.ContentFrame.Navigate(typeof(DefaultPage));
+				TransitPage("ListupCertificate");
+				//this.ContentFrame.Navigate(typeof(DefaultPage));
 			}
-			*/
 			this.MessageFrame.Navigate(typeof(MessagesPage));
 		}
 
@@ -60,15 +63,17 @@ namespace AutoCA
 			Console.WriteLine(resultsFalse);
 		}
 
-		private void NavigationView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
+		private void TransitPage(string pTag)
 		{
-			var clickedItem = args.SelectedItem;
-			var clickedItemContainer = args.SelectedItemContainer;
+			var pResourceLoader = new ResourceLoader();
+			var pIdent = pTag.ToString() + "/Content";
+			var pCaption = pResourceLoader.GetString(pIdent);
 
-			var pItem = clickedItem as NavigationViewItem;
-			Debug.WriteLine("Tag=" + pItem.Tag);
+			Caption.Text = pCaption;
+			//Location.Text = pLocation;
 
-			switch (pItem.Tag.ToString()) {
+			switch (pTag)
+			{
 			case "ListupCertificate":
 				ContentFrame.Navigate(typeof(DefaultPage));
 				break;
@@ -88,6 +93,18 @@ namespace AutoCA
 				ContentFrame.Navigate(typeof(VersionPage));
 				break;
 			}
+		}
+
+		private void NavigationView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
+		{
+			var clickedItem = args.SelectedItem;
+			var clickedItemContainer = args.SelectedItemContainer;
+			
+			var pItem = clickedItem as NavigationViewItem;
+			var pTag = pItem.Tag as string;
+			Debug.WriteLine("Tag=" + pTag);
+
+			TransitPage(pTag);
 		}
 
 		public void AddMessage(Message pMessage)
