@@ -126,6 +126,12 @@
   <data name="AuthorityTag.Header" xml:space="preserve">
     <value>Authority Information</value>
   </data>
+  <data name="BrowseClientCrt.Content" xml:space="preserve">
+    <value>Browse</value>
+  </data>
+  <data name="BrowseClientKey.Content" xml:space="preserve">
+    <value>Browse</value>
+  </data>
   <data name="ClientCrt.Header" xml:space="preserve">
     <value>Client Certificate</value>
   </data>
@@ -144,8 +150,8 @@
   <data name="ExportTag.Header" xml:space="preserve">
     <value>Export File Parameters</value>
   </data>
-  <data name="HostName.Header" xml:space="preserve">
-    <value>Database Host Name</value>
+  <data name="DatabaseServerName.Header" xml:space="preserve">
+    <value>Database Server Name</value>
   </data>
   <data name="InstanceName.Header" xml:space="preserve">
     <value>Database Instance Name</value>
@@ -165,7 +171,7 @@
   <data name="Request.Content" xml:space="preserve">
     <value>Request</value>
   </data>
-  <data name="RootCACrt" xml:space="preserve">
+  <data name="RootCACrt.Header" xml:space="preserve">
     <value>Root Certificate</value>
   </data>
   <data name="SchemaName.Header" xml:space="preserve">
@@ -179,5 +185,74 @@
   </data>
   <data name="VersionInfo.Text" xml:space="preserve">
     <value>Version Information</value>
+  </data>
+  <data name="AuthorityName.Header" xml:space="preserve">
+    <value>authorityName</value>
+  </data>
+  <data name="OrgName.Header" xml:space="preserve">
+    <value>organizationName</value>
+  </data>
+  <data name="OrgUnitName.Header" xml:space="preserve">
+    <value>organizationalUnitName</value>
+  </data>
+  <data name="LocalityName.Header" xml:space="preserve">
+    <value>localityName</value>
+  </data>
+  <data name="ProvinceName.Header" xml:space="preserve">
+    <value>stateOrProvinceName</value>
+  </data>
+  <data name="CountryName.Header" xml:space="preserve">
+    <value>countryName</value>
+  </data>
+  <data name="ServerName.Header" xml:space="preserve">
+    <value>publishServerName</value>
+  </data>
+  <data name="ReloadList.Text" xml:space="preserve">
+    <value>Reload</value>
+  </data>
+  <data name="UpdateCRL.Text" xml:space="preserve">
+    <value>UpdateCRL</value>
+  </data>
+  <data name="AddCertificate.Text" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="ExportToFile.Text" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="UpdateCertificate.Text" xml:space="preserve">
+    <value>Update</value>
+  </data>
+  <data name="RevokeCertificate.Text" xml:space="preserve">
+    <value>Revoke</value>
+  </data>
+  <data name="CertificateType.Header" xml:space="preserve">
+    <value>Certificate Type</value>
+  </data>
+  <data name="ServerCertificate.Content" xml:space="preserve">
+    <value>Server Certificate</value>
+  </data>
+  <data name="ClientCertificate.Content" xml:space="preserve">
+    <value>Client Certificate</value>
+  </data>
+  <data name="CommonName.Header" xml:space="preserve">
+    <value>Common Name</value>
+  </data>
+  <data name="MailAddress.Header" xml:space="preserve">
+    <value>Mail Address</value>
+  </data>
+  <data name="IssueButton.Content" xml:space="preserve">
+    <value>Issue</value>
+  </data>
+  <data name="CommonName.PlaceholderText" xml:space="preserve">
+    <value>ex. www.aeonic.com, Company Name</value>
+  </data>
+  <data name="HostName.Header" xml:space="preserve">
+    <value>Host Name</value>
+  </data>
+  <data name="HostName.PlaceholderText" xml:space="preserve">
+    <value>ex. www.neucom.net</value>
+  </data>
+  <data name="MailAddress.PlaceholderText" xml:space="preserve">
+    <value>ex. raven@neucom.net</value>
   </data>
 </root>

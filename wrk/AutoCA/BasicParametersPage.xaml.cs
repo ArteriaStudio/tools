@@ -55,7 +55,7 @@ namespace AutoCA
 
 		private bool Varidate()
 		{
-			if (IsNotNull(HostName.Text) == false)
+			if (IsNotNull(DatabaseServerName.Text) == false)
 			{
 				return(false);
 			}
@@ -226,12 +226,12 @@ namespace AutoCA
 			{
 				return;
 			}
-			HostName.IsReadOnly     = !bWriteable.Value;
-			InstanceName.IsReadOnly = !bWriteable.Value;
-			SchemaName.IsReadOnly   = !bWriteable.Value;
-			ClientKey.IsReadOnly    = !bWriteable.Value;
-			ClientCrt.IsReadOnly    = !bWriteable.Value;
-			RootCACrt.IsReadOnly    = !bWriteable.Value;
+			DatabaseServerName.IsReadOnly = !bWriteable.Value;
+			InstanceName.IsReadOnly       = !bWriteable.Value;
+			SchemaName.IsReadOnly         = !bWriteable.Value;
+			ClientKey.IsReadOnly          = !bWriteable.Value;
+			ClientCrt.IsReadOnly          = !bWriteable.Value;
+			RootCACrt.IsReadOnly          = !bWriteable.Value;
 
 			BrowseClientKey.IsEnabled = bWriteable.Value;
 			BrowseClientCrt.IsEnabled = bWriteable.Value;

@@ -72,7 +72,7 @@ namespace AutoCA
 		{
 			bool IsEnabled = true;
 
-			if (CertType.SelectedIndex == -1)
+			if (CertificateType.SelectedIndex == -1)
 			{
 				IsEnabled = false;
 			}
@@ -83,7 +83,7 @@ namespace AutoCA
 			else
 			{
 				//　サーバ証明書
-				if (CertType.SelectedIndex == 0)
+				if (CertificateType.SelectedIndex == 0)
 				{
 					if (Data.IsValidFQDN(HostName.Text) == false)
 					{
@@ -91,7 +91,7 @@ namespace AutoCA
 					}
 				}
 				//　メール証明書
-				else if (CertType.SelectedIndex == 1)
+				else if (CertificateType.SelectedIndex == 1)
 				{
 					if (Data.IsValidMail(MailAddress.Text) == false)
 					{
@@ -112,7 +112,7 @@ namespace AutoCA
 			IssueButton.IsEnabled = IsValidForm();
 		}
 
-		private void CertType_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		private void CertificateType_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			IssueButton.IsEnabled = IsValidForm();
 
@@ -121,7 +121,7 @@ namespace AutoCA
 
 		private void UpdateFormState()
 		{
-			switch (CertType.SelectedIndex)
+			switch (CertificateType.SelectedIndex)
 			{
 				case 0:
 					//　サーバー証明書にメールアドレスは不要
@@ -157,7 +157,7 @@ namespace AutoCA
 
 			try
 			{
-				switch (CertType.SelectedIndex)
+				switch (CertificateType.SelectedIndex)
 				{
 				case 0:
 					//　サーバ証明書

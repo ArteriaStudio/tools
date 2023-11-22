@@ -19,13 +19,13 @@
 
 		<ScrollViewer x:Name="IdentityParameters" Grid.Column="0" Grid.Row="0" Padding="4, 4, 4, 4" LostFocus="IdentityParameters_LostFocus">
 			<StackPanel Orientation="Vertical" Style="{StaticResource CardStyleStackPanel}">
-				<TextBox x:Name="AuthorityName" Margin="8,8,8,8" IsReadOnly="True" Header="認証局名（authorityName）" PlaceholderText="" Text="{x:Bind m_pIdentity.AuthorityName, Mode=TwoWay}" TextChanged="Settings_TextChanged" />
-				<TextBox x:Name="OrgName"       Margin="8,8,8,8" IsReadOnly="True" Header="組織名（organizationName）" PlaceholderText="" Text="{x:Bind m_pOrgProfile.OrgName, Mode=TwoWay}" TextChanged="Settings_TextChanged" />
-				<TextBox x:Name="OrgUnitName"   Margin="8,8,8,8" IsReadOnly="True" Header="部署名（organizationalUnitName）" PlaceholderText=""  Text="{x:Bind m_pOrgProfile.OrgUnitName, Mode=TwoWay}" TextChanged="Settings_TextChanged" />
-				<TextBox x:Name="LocalityName"  Margin="8,8,8,8" IsReadOnly="True" Header="市町村（localityName）" PlaceholderText=""  Text="{x:Bind m_pOrgProfile.LocalityName, Mode=TwoWay}" TextChanged="Settings_TextChanged" />
-				<TextBox x:Name="ProvinceName"  Margin="8,8,8,8" IsReadOnly="True" Header="都道府県（stateOrProvinceName）" PlaceholderText=""  Text="{x:Bind m_pOrgProfile.ProvinceName, Mode=TwoWay}" TextChanged="Settings_TextChanged" />
-				<TextBox x:Name="CountryName"   Margin="8,8,8,8" IsReadOnly="True" Header="国名（countryName）" PlaceholderText=""  Text="{x:Bind m_pOrgProfile.CountryName, Mode=TwoWay}" TextChanged="Settings_TextChanged" />
-				<TextBox x:Name="ServerName"    Margin="8,8,8,8" IsReadOnly="True" Header="証明情報公開サーバ（publishServerName）" PlaceholderText=""  Text="{x:Bind m_pOrgProfile.ServerName, Mode=TwoWay}" TextChanged="Settings_TextChanged" />
+				<TextBox x:Uid="AuthorityName" x:Name="AuthorityName" Margin="8,8,8,8" IsReadOnly="True" Header="認証局名（authorityName）" PlaceholderText="" Text="{x:Bind m_pIdentity.AuthorityName, Mode=TwoWay}" TextChanged="Settings_TextChanged" />
+				<TextBox x:Uid="OrgName"       x:Name="OrgName"       Margin="8,8,8,8" IsReadOnly="True" Header="組織名（organizationName）" PlaceholderText="" Text="{x:Bind m_pOrgProfile.OrgName, Mode=TwoWay}" TextChanged="Settings_TextChanged" />
+				<TextBox x:Uid="OrgUnitName"   x:Name="OrgUnitName"   Margin="8,8,8,8" IsReadOnly="True" Header="部署名（organizationalUnitName）" PlaceholderText=""  Text="{x:Bind m_pOrgProfile.OrgUnitName, Mode=TwoWay}" TextChanged="Settings_TextChanged" />
+				<TextBox x:Uid="LocalityName"  x:Name="LocalityName"  Margin="8,8,8,8" IsReadOnly="True" Header="市町村（localityName）" PlaceholderText=""  Text="{x:Bind m_pOrgProfile.LocalityName, Mode=TwoWay}" TextChanged="Settings_TextChanged" />
+				<TextBox x:Uid="ProvinceName"  x:Name="ProvinceName"  Margin="8,8,8,8" IsReadOnly="True" Header="都道府県（stateOrProvinceName）" PlaceholderText=""  Text="{x:Bind m_pOrgProfile.ProvinceName, Mode=TwoWay}" TextChanged="Settings_TextChanged" />
+				<TextBox x:Uid="CountryName"   x:Name="CountryName"   Margin="8,8,8,8" IsReadOnly="True" Header="国名（countryName）" PlaceholderText=""  Text="{x:Bind m_pOrgProfile.CountryName, Mode=TwoWay}" TextChanged="Settings_TextChanged" />
+				<TextBox x:Uid="ServerName"    x:Name="ServerName"    Margin="8,8,8,8" IsReadOnly="True" Header="証明情報公開サーバ（publishServerName）" PlaceholderText=""  Text="{x:Bind m_pOrgProfile.ServerName, Mode=TwoWay}" TextChanged="Settings_TextChanged" />
 			</StackPanel>
 		</ScrollViewer>
 	</Grid>

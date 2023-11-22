@@ -130,10 +130,13 @@ namespace AutoCA
 
 			var pApp = App.Current as AutoCA.App;
 			var pSQLContext = pApp.GetSQLContext();
-			var pAuthority = Authority.Instance;
-			m_pCertificates = pAuthority.Listup(pSQLContext);
+			if (pSQLContext != null )
+			{
+                var pAuthority = Authority.Instance;
+                m_pCertificates = pAuthority.Listup(pSQLContext);
+            }
 
-			UpdateFormState();
+            UpdateFormState();
 		}
 
 		private void UpdateFormState()

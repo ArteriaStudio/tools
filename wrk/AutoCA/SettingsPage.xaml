@@ -35,7 +35,7 @@
 			<TabView.TabStripFooter>
 				<Grid x:Name="CustomDragRegion" Background="Transparent">
 					<StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right">
-						<ToggleButton x:Uid="Lock" Name="Lock" Margin="8,8,8,8" IsEnabled="True" Style="{StaticResource AccentButtonStyle}" Click="Lock_Click" />
+						<ToggleButton x:Uid="Lock" Name="Lock" Margin="8,8,8,8" IsEnabled="True" Style="{StaticResource ToggleButtonRevealStyle}" Click="Lock_Click" />
 					</StackPanel>
 				</Grid>
 			</TabView.TabStripFooter>

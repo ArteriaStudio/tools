@@ -126,6 +126,12 @@
   <data name="AuthorityTag.Header" xml:space="preserve">
     <value>基本認証局情報</value>
   </data>
+  <data name="BrowseClientCrt.Content" xml:space="preserve">
+    <value>ファイルを選択</value>
+  </data>
+  <data name="BrowseClientKey.Content" xml:space="preserve">
+    <value>ファイルを選択</value>
+  </data>
   <data name="ClientCrt.Header" xml:space="preserve">
     <value>クライアント証明書</value>
   </data>
@@ -144,7 +150,7 @@
   <data name="ExportTag.Header" xml:space="preserve">
     <value>ファイル出力先</value>
   </data>
-  <data name="HostName.Header" xml:space="preserve">
+  <data name="DatabaseServerName.Header" xml:space="preserve">
     <value>データベースサーバー名</value>
   </data>
   <data name="InstanceName.Header" xml:space="preserve">
@@ -165,7 +171,7 @@
   <data name="Request.Content" xml:space="preserve">
     <value>署名要求を作成</value>
   </data>
-  <data name="RootCACrt" xml:space="preserve">
+  <data name="RootCACrt.Header" xml:space="preserve">
     <value>ルート認証局証明書</value>
   </data>
   <data name="SchemaName.Header" xml:space="preserve">
@@ -179,5 +185,65 @@
   </data>
   <data name="VersionInfo.Text" xml:space="preserve">
     <value>バージョン表示</value>
+  </data>
+  <data name="AuthorityName.Header" xml:space="preserve">
+    <value>認証局名（authorityName）</value>
+  </data>
+  <data name="OrgName.Header" xml:space="preserve">
+    <value>組織名（organizationName）</value>
+  </data>
+  <data name="OrgUnitName.Header" xml:space="preserve">
+    <value>部署名（organizationalUnitName）</value>
+  </data>
+  <data name="LocalityName.Header" xml:space="preserve">
+    <value>市町村（localityName）</value>
+  </data>
+  <data name="ProvinceName.Header" xml:space="preserve">
+    <value>都道府県（stateOrProvinceName）</value>
+  </data>
+  <data name="CountryName.Header" xml:space="preserve">
+    <value>国名（countryName）</value>
+  </data>
+  <data name="ServerName.Header" xml:space="preserve">
+    <value>証明情報公開サーバ（publishServerName）</value>
+  </data>
+  <data name="ReloadList.Text" xml:space="preserve">
+    <value>再表示</value>
+  </data>
+  <data name="UpdateCRL.Text" xml:space="preserve">
+    <value>CRLを更新</value>
+  </data>
+  <data name="AddCertificate.Text" xml:space="preserve">
+    <value>追加</value>
+  </data>
+  <data name="ExportToFile.Text" xml:space="preserve">
+    <value>ファイルに出力</value>
+  </data>
+  <data name="UpdateCertificate.Text" xml:space="preserve">
+    <value>証明書を更新</value>
+  </data>
+  <data name="RevokeCertificate.Text" xml:space="preserve">
+    <value>失効</value>
+  </data>
+  <data name="CertificateType.Header" xml:space="preserve">
+    <value>証明書の種類</value>
+  </data>
+  <data name="ServerCertificate.Content" xml:space="preserve">
+    <value>サーバー証明書</value>
+  </data>
+  <data name="ClientCertificate.Content" xml:space="preserve">
+    <value>クライアント証明書</value>
+  </data>
+  <data name="CommonName.Header" xml:space="preserve">
+    <value>共通名</value>
+  </data>
+  <data name="MailAddress.Header" xml:space="preserve">
+    <value>メールアドレス</value>
+  </data>
+  <data name="IssueButton.Content" xml:space="preserve">
+    <value>発行</value>
+  </data>
+  <data name="HostName.Header" xml:space="preserve">
+    <value>ホスト名</value>
   </data>
 </root>

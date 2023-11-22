@@ -22,31 +22,31 @@
 			<Button x:Name="RevokeButton" Margin="4, 8, 4, 8" Style="{StaticResource ButtonRevealStyle}" Click="RevokeButton_Click">
 				<StackPanel Orientation="Horizontal">
 					<SymbolIcon Symbol="Cancel" />
-					<TextBlock Margin="12, 0, 0, 0" Text="失効" />
+					<TextBlock x:Uid="RevokeCertificate" Margin="12, 0, 0, 0" Text="失効" />
 				</StackPanel>
 			</Button>
 			<Button x:Name="UpdateButton" Margin="4, 8, 4, 8" Style="{StaticResource ButtonRevealStyle}" Click="UpdateButton_Click">
 				<StackPanel Orientation="Horizontal">
 					<SymbolIcon Symbol="Go" />
-					<TextBlock Margin="12, 0, 0, 0" Text="証明書を更新" />
+                    <TextBlock x:Uid="UpdateCertificate" Margin="12, 0, 0, 0" Text="証明書を更新" />
 				</StackPanel>
 			</Button>
 			<Button x:Name="ExportButton" Margin="4, 8, 4, 8" Style="{StaticResource ButtonRevealStyle}" Click="ExportButton_Click">
 				<StackPanel Orientation="Horizontal">
 					<SymbolIcon Symbol="Download" />
-					<TextBlock Margin="12, 0, 0, 0" Text="ファイルに出力" />
+                    <TextBlock x:Uid="ExportToFile" Margin="12, 0, 0, 0" Text="ファイルに出力" />
 				</StackPanel>
 			</Button>
 			<Button x:Name="AppendButton" Margin="4, 8, 4, 8" Style="{StaticResource ButtonRevealStyle}" Click="AppendButton_Click" >
 				<StackPanel Orientation="Horizontal">
 					<SymbolIcon Symbol="Add" />
-					<TextBlock Margin="12, 0, 0, 0" Text="追加" />
+                    <TextBlock x:Uid="AddCertificate" Margin="12, 0, 0, 0" Text="追加" />
 				</StackPanel>
 			</Button>
 			<Button x:Name="RefreshButton" Margin="4, 8, 4, 8" Style="{StaticResource ButtonRevealStyle}" Click="RefreshButton_Click" >
 				<StackPanel Orientation="Horizontal">
 					<SymbolIcon Symbol="Admin" />
-					<TextBlock Margin="12, 0, 0, 0" Text="CRLを更新" />
+                    <TextBlock x:Uid="UpdateCRL" Margin="12, 0, 0, 0" Text="CRLを更新" />
 				</StackPanel>
 			</Button>
 			<!-- セパレータ（仮実装：おそらく右端に整列させる） -->
@@ -54,7 +54,7 @@
 			<Button x:Name="ReloadButton" Margin="4, 8, 4, 8" Style="{StaticResource ButtonRevealStyle}" Click="ReloadButton_Click" >
 				<StackPanel Orientation="Horizontal">
 					<SymbolIcon Symbol="Refresh" />
-					<TextBlock Margin="12, 0, 0, 0" Text="再表示" />
+                    <TextBlock x:Uid="ReloadList" Margin="12, 0, 0, 0" Text="再表示" />
 				</StackPanel>
 			</Button>
 		</StackPanel>
