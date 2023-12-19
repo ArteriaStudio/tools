@@ -1,0 +1,10 @@
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <Fragment>
+    <ComponentGroup Id="ExampleComponents" Directory="INSTALLFOLDER">
+		<!-- https://learn.microsoft.com/ja-jp/windows/msix/desktop/desktop-to-uwp-third-party-installer -->
+      <Component>
+        <File Source="AutoCA.exe" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+</Wix>
